@@ -9,7 +9,6 @@ namespace Zchlachten
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private readonly ScreenManager _screenManager;
 
         public Zchlachten()
         {
@@ -17,7 +16,7 @@ namespace Zchlachten
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            _screenManager = new ScreenManager();
+            Globals.ScreenManager = new ScreenManager();
         }
 
         protected override void Initialize()
@@ -43,34 +42,36 @@ namespace Zchlachten
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            // * Update logic
             if (Keyboard.GetState().IsKeyDown(Keys.O)) // Press 'O' to go to play screen
                 LoadPlayScreen();
             else if (Keyboard.GetState().IsKeyDown(Keys.P)) // Press 'P' to go to menu screen
                 LoadMenuScreen();
+            
+            // * End update logic
 
-            _screenManager.Update(gameTime);
+            Globals.ScreenManager.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            // GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
 
-            _screenManager.Draw(gameTime);
+            Globals.ScreenManager.Draw(gameTime);
+
             base.Draw(gameTime);
         }
 
         private void LoadMenuScreen()
         {
-            _screenManager.LoadScreen(new MenuScreen(this));
+            Globals.ScreenManager.LoadScreen(new MenuScreen(this));
         }
 
         private void LoadPlayScreen()
         {
-            _screenManager.LoadScreen(new PlayScreen(this));
+            Globals.ScreenManager.LoadScreen(new PlayScreen(this));
         }
     }
 }

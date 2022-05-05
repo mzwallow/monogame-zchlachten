@@ -9,14 +9,18 @@ namespace Zchlachten.Screens
         public override void LoadContent()
         {
             base.LoadContent();
+
+            // TODO: use this.Content to load your game content here
         }
 
         public override void Update(GameTime gameTime)
         {
+            // TODO: Add your update logic here
         }
 
         public override void Draw(GameTime gameTime)
         {
+            // TODO: Add your drawing code here
             base.GraphicsDevice.Clear(Color.DarkSlateBlue);
         }
     }

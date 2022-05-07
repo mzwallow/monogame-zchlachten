@@ -43,11 +43,11 @@ namespace Zchlachten
                 Exit();
 
             // * Update logic
+            Globals.PreviousMouseState = Globals.CurrentMouseState;
+            Globals.CurrentMouseState = Mouse.GetState();
+
             if (Keyboard.GetState().IsKeyDown(Keys.O)) // Press 'O' to go to play screen
                 LoadPlayScreen();
-            else if (Keyboard.GetState().IsKeyDown(Keys.P)) // Press 'P' to go to menu screen
-                LoadMenuScreen();
-            
             // * End update logic
 
             Globals.ScreenManager.Update(gameTime);

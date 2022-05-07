@@ -3,21 +3,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Zchlachten.Entities
 {
-    public class Player : IGameEntity
+    public abstract class Player : IGameEntity
     {
-        public PlayerSide PlayerSide;
-        public Vector2 Position;
+        public PlayerSide PlayerSide { get; private set; }
+        public Vector2 Position { get; private set; }
 
-        private Texture2D _texture;
+        protected Texture2D _texture;
 
-        public void Update(GameTime gameTime)
+        protected Player(Texture2D texture, Vector2 position, PlayerSide playerSide)
         {
-            throw new System.NotImplementedException();
+            _texture = texture;
+            Position = position;
+            PlayerSide = playerSide;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public abstract void Update(GameTime gameTime);
+
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            throw new System.NotImplementedException();
+            spriteBatch.Draw(_texture, Position, Color.White);
         }
     }
 }

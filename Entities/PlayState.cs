@@ -1,10 +1,10 @@
 namespace Zchlachten.Entities
 {
-    public enum GameState
+    public enum PlayState
     {
         START,
         PRE_PLAY,
-        PLAY,
+        PLAYING,
         POST_PLAY,
         CHECK_WIN,
         END

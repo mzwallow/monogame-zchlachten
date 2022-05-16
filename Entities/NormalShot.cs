@@ -6,14 +6,13 @@ namespace Zchlachten.Entities
 {
     public class NormalShot : Weapon
     {
-        public NormalShot(
-            World world,
-            Texture2D texture, 
-            Vector2 position,
-            WeaponType weaponType,
-            int damage
-        ) : base(world, texture, position, weaponType, damage) {}
+        private const int NORMAL_SHOT_DAMAGE = 10;
 
-        public override void Update(GameTime gameTime) { }
+        public NormalShot(World world, Player player, Texture2D texture, Vector2 position)
+            : base(world, player, texture, position)
+        {
+            WeaponType = WeaponType.NORMAL;
+            Damage = NORMAL_SHOT_DAMAGE;
+        }
     }
 }

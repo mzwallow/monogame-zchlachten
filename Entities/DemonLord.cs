@@ -6,8 +6,11 @@ namespace Zchlachten.Entities
 {
     public class DemonLord : Player
     {
-        public DemonLord(World world, Texture2D texture, Vector2 position, PlayerSide playerSide)
-            : base(world, texture, position, playerSide) { }
+        public DemonLord(World world, Texture2D texture, Vector2 position)
+            : base(world, texture, position)
+        {
+            PlayerSide = PlayerSide.DEMON_LORD;
+        }
 
         public override void Update(GameTime gameTime) { }
     }

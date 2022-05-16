@@ -6,8 +6,11 @@ namespace Zchlachten.Entities
 {
     public class Brave : Player
     {
-        public Brave(World world, Texture2D texture, Vector2 position, PlayerSide playerSide)
-            : base(world, texture, position, playerSide) { }
+        public Brave(World world, Texture2D texture, Vector2 position)
+            : base(world, texture, position)
+        {
+            PlayerSide = PlayerSide.BRAVE;
+        }
 
         public override void Update(GameTime gameTime) { }
     }

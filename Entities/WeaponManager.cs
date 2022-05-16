@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
@@ -11,14 +12,17 @@ namespace Zchlachten.Entities
 
         private readonly World _world;
         private readonly EntityManager _entityManager;
+        private readonly PlayState _state;
         private readonly Player _demonLord, _brave;
 
         private Texture2D _normalTxr;
-        private Weapon _normalShot;
+        private PlayState _playState;
 
         public WeaponManager(
             World world,
             EntityManager entityManager, 
+            PlayState state,
+            PlayerTurn playerTurn,
             Player demonLord, 
             Player brave, 
             params Texture2D[] weaponsTxr
@@ -26,6 +30,7 @@ namespace Zchlachten.Entities
         {
             _world = world;
             _entityManager = entityManager;
+            _playState = state;
 
             _demonLord = demonLord;
             _brave = brave;
@@ -35,19 +40,28 @@ namespace Zchlachten.Entities
                 _normalTxr = txr;
             }
 
-            _normalShot = new NormalShot(
-                _world, 
+            var _normalShot = new NormalShot(
+                _world,
+                _demonLord,
                 _normalTxr, 
-                new Vector2(WEAPON_START_POS_X, WEAPON_START_POS_Y), 
-                WeaponType.NORMAL, 
-                10
+                new Vector2(WEAPON_START_POS_X, WEAPON_START_POS_Y)
             );
 
-            entityManager.AddEntry(_normalShot);
+            _entityManager.AddEntry(_normalShot);
         }
 
         public void Update(GameTime gameTime)
         {
+            
+
+            foreach (Weapon weapon in _entityManager.GetEntitiesOfType<Weapon>())
+            {
+                if (weapon.HasCollided)
+                {
+                    _world.Remove(weapon.Body);
+                    _entityManager.RemoveEntity(weapon);
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

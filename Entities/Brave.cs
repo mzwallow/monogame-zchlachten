@@ -4,9 +4,9 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class DemonLord : Player
+    public class Brave : Player
     {
-        public DemonLord(World world, Texture2D texture, Vector2 position, PlayerSide playerSide)
+        public Brave(World world, Texture2D texture, Vector2 position, PlayerSide playerSide)
             : base(world, texture, position, playerSide) { }
 
         public override void Update(GameTime gameTime) { }

@@ -1,36 +1,49 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
     public class PlayerManager : IGameEntity
     {
-        private const int DEMON_LORD_POS_X = 129;
-        private const int DEMON_LORD_POS_Y = 528;
+        private const float DEMON_LORD_POS_X = 149.5f;
+        private const float DEMON_LORD_POS_Y = 566f;
+        private const float BRAVE_POS_X = 1130.5f;
+        private const float BRAVE_POS_Y = 566f;
 
         private readonly EntityManager _entityManager;
+        private readonly World _world;
 
-        private Player _demonLord;
+        public Player DemonLord, Brave;
 
-        public PlayerManager(EntityManager entityManager, Texture2D demonLordTxr, Texture2D braveTxr)
+        public PlayerManager(World world, EntityManager entityManager, Texture2D demonLordTxr, Texture2D braveTxr)
         {
+            _world = world;
             _entityManager = entityManager;
-            _demonLord = new DemonLord
-                (
-                    demonLordTxr, 
-                    new Vector2(DEMON_LORD_POS_X, DEMON_LORD_POS_Y), 
+
+            DemonLord = new DemonLord(
+                    _world,
+                    demonLordTxr,
+                    new Vector2(DEMON_LORD_POS_X, DEMON_LORD_POS_Y),
                     PlayerSide.DEMON_LORD
                 );
+            Brave = new Brave(
+                    _world,
+                    braveTxr,
+                    new Vector2(BRAVE_POS_X, BRAVE_POS_Y),
+                    PlayerSide.BRAVE
+                );
 
-            _entityManager.AddEntry(_demonLord);
+            _entityManager.AddEntry(DemonLord);
+            _entityManager.AddEntry(Brave);
         }
 
         public void Update(GameTime gameTime)
-        { 
+        {
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch) 
-        { 
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
         }
     }
 }

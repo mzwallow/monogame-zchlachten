@@ -1,28 +1,46 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class Weapon : IGameEntity
+    public abstract class Weapon : IGameEntity
     {
+        private readonly World _world;
+
         public WeaponType WeaponType { get; protected set; }
-        public Vector2 Position { get; set; }
         public int Damage { get; protected set; }
+        public Body Body { get; set; }
 
         private Texture2D _texture;
-        private int _width;
-        private int _height;
+        private Vector2 _textureOrigin;
 
-        public Weapon() { }
-
-        public void Update(GameTime gameTime)
+        protected Weapon(
+            World world,
+            Texture2D texture,
+            Vector2 position,
+            WeaponType weaponType,
+            int damage
+        )
         {
-            throw new System.NotImplementedException();
+            _world = world;
+
+            _texture = texture;
+            _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+            Body = _world.CreateBody(position, 0f, BodyType.Dynamic);
+            var weaponFixture = Body.CreateCircle(_texture.Width / 2f, 1f);
+            weaponFixture.Restitution = 0.3f;
+            weaponFixture.Friction = 0.5f;
+
+            WeaponType = weaponType;
+            Damage = damage;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public abstract void Update(GameTime gameTime);
+
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            throw new System.NotImplementedException();
+            spriteBatch.Draw(_texture, Body.Position, null, Color.White, Body.Rotation, _textureOrigin, 1f, SpriteEffects.None, 0f);
         }
     }
 }

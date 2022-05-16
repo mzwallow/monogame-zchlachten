@@ -15,6 +15,8 @@ namespace Zchlachten.Entities
 
         public IEnumerable<IGameEntity> Entities => new ReadOnlyCollection<IGameEntity>(_entities);
 
+        public EntityManager() { }
+
         public void Update(GameTime gameTime)
         {
             foreach (IGameEntity entity in _entities)

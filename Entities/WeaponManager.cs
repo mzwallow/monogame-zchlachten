@@ -25,7 +25,7 @@ namespace Zchlachten.Entities
             PlayerTurn playerTurn,
             Player demonLord, 
             Player brave, 
-            params Texture2D[] weaponsTxr
+            params Texture2D[] weaponsTxrs
         )
         {
             _world = world;
@@ -35,7 +35,7 @@ namespace Zchlachten.Entities
             _demonLord = demonLord;
             _brave = brave;
             
-            foreach (var txr in weaponsTxr)
+            foreach (var txr in weaponsTxrs)
             {
                 _normalTxr = txr;
             }
@@ -47,7 +47,15 @@ namespace Zchlachten.Entities
                 new Vector2(WEAPON_START_POS_X, WEAPON_START_POS_Y)
             );
 
+            var _normalShot1 = new NormalShot(
+                _world,
+                _brave,
+                _normalTxr, 
+                new Vector2(1130.5f, WEAPON_START_POS_Y)
+            );
+
             _entityManager.AddEntry(_normalShot);
+            _entityManager.AddEntry(_normalShot1);
         }
 
         public void Update(GameTime gameTime)

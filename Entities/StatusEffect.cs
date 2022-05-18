@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public abstract class Player : IGameEntity
+    public abstract class StatusEffect : IGameEntity
     {
         private readonly World _world;
 
@@ -13,14 +12,7 @@ namespace Zchlachten.Entities
         private Vector2 _textureOrigin;
         private Body _body;
 
-        public PlayerSide PlayerSide;
-        public int HP = 150;
-        public int BloodThirstGauge = 0;
-
-        public Weapon InHandWeapon { get; set; }
-        public List<Weapon> WeaponsBag { get; set; }
-
-        protected Player(World world, Texture2D texture, Vector2 position)
+        public StatusEffect(World world, Texture2D texture, Vector2 position)
         {
             _world = world;
 
@@ -29,10 +21,8 @@ namespace Zchlachten.Entities
 
             _body = _world.CreateBody(position, 0f, BodyType.Static);
 
-            var playerFixture = _body.CreateRectangle(_texture.Width, _texture.Height, 1f, Vector2.Zero);
-            playerFixture.Restitution = 0.3f;
-            playerFixture.Friction = 0.5f;
-            playerFixture.Tag = "players";
+            var statusEffectFixture = _body.CreateCircle(_texture.Width, 1f);
+            statusEffectFixture.Tag = "statusEffects";
         }
 
         public abstract void Update(GameTime gameTime);
@@ -50,11 +40,6 @@ namespace Zchlachten.Entities
                 SpriteEffects.None,
                 0f
             );
-        }
-
-        public void Hit(int damage)
-        {
-            HP -= damage;
         }
     }
 }

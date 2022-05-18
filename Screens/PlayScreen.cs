@@ -18,6 +18,7 @@ namespace Zchlachten.Screens
 
         private Texture2D _demonLordTxr, _braveTxr;
         private Texture2D _demonEyeTxr;
+        private Texture2D _buffTxr;
         private Texture2D _groundTxr;
         private Texture2D[] _weaponTxrs;
 
@@ -26,6 +27,7 @@ namespace Zchlachten.Screens
         private EntityManager _entityManager;
         private PlayerManager _playerManager;
         private WeaponManager _weaponManager;
+        private StatusEffectManager _statusEffectManager;
 
         private DebugUI _debugUI;
 
@@ -78,6 +80,14 @@ namespace Zchlachten.Screens
                 _playerManager.DemonLord,
                 _playerManager.Brave,
                 _weaponTxrs
+            );
+
+            // Load buffs & debuffs
+            _buffTxr = base.Content.Load<Texture2D>("StatusEffects/Buff");
+            _statusEffectManager = new StatusEffectManager(
+                _world,
+                _entityManager,
+                _state
             );
 
             // Load environments

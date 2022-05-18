@@ -88,7 +88,7 @@ namespace Zchlachten.Screens
             base.GraphicsDevice.Clear(Color.DarkViolet);
             _spriteBatch.Begin();
 
-            _spriteBatch.DrawString(_storyFont, _story, new Vector2((Globals.SCREEN_WIDTH / 2) - _storyFont.MeasureString("   ในโลกแฟนตาซีแห่งหนึ่งมีความขัดแย้งของสองเผ่าพันธุ์มาอย่างยาวนานโดยทั้ง 2 เผ่า").X / 2, 200), Color.DarkGray);
+            _spriteBatch.DrawString(_storyFont, _story, new Vector2((Globals.SCREEN_WIDTH / 2) - _storyFont.MeasureString("   ในโลกแฟนตาซีแห่งหนึ่งมีความขัดแย้งของสองเผ่าพันธุ์มาอย่างยาวนานโดยทั้ง 2 เผ่า").X / 2, 200), Color.Black);
 
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);
@@ -96,12 +96,6 @@ namespace Zchlachten.Screens
             _spriteBatch.End();
         }
 
-        void MediaPlayer_ActiveSongChanged(object sender, System.
-                                           EventArgs e)
-        {
-            this.song = Content.Load<Song>("Sound/Win");
-            MediaPlayer.Play(song);
-        }
 
         private void backToMenuButtonClick(object sender, EventArgs e)
         {

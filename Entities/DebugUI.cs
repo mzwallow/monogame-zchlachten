@@ -8,7 +8,6 @@ namespace Zchlachten.Entities
         private const int TEXTURE_POS_X = 100;
         private const int TEXTURE_POS_Y = 100;
 
-        private readonly PlayState _state;
         private readonly PlayerTurn _playerTurn;
         private readonly Player _demonLord, _brave;
 
@@ -18,8 +17,6 @@ namespace Zchlachten.Entities
         public DebugUI(
             Texture2D texture, 
             SpriteFont font,
-            PlayState state,
-            PlayerTurn playerTurn,
             Player demonLord, 
             Player brave
         )
@@ -27,20 +24,19 @@ namespace Zchlachten.Entities
             _texture = texture;
             _font = font;
 
-            _state = state;
-            _playerTurn = playerTurn;
-
             _demonLord = demonLord;
             _brave = brave;
         }
 
-        public void Update(GameTime gameTime) { }
+        public void Update(GameTime gameTime) 
+        {
+        }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch) 
         {
             var text = "";
 
-            text = "Play State: " + _state;
+            text = "Play State: " + Globals.GameState;
             spriteBatch.DrawString(_font, text, new Vector2(5f, 5f), Color.White);
 
             text = "Player Turn: " + _playerTurn;

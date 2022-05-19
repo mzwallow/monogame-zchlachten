@@ -1,4 +1,4 @@
-namespace Zchlachten.Entities
+namespace Zchlachten
 {
     public enum PlayerTurn
     {

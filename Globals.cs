@@ -9,7 +9,11 @@ namespace Zchlachten
         public static int SCREEN_HEIGHT { get; } = 720;
 
         public static MouseState CurrentMouseState, PreviousMouseState;
+        public static KeyboardState CurrentKeyboardState, PreviousKeyboardState;
 
         public static ScreenManager ScreenManager;
+
+        public static GameState GameState;
+        public static PlayerTurn PlayerTurn;
     }
 }

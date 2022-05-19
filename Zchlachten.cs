@@ -45,8 +45,10 @@ namespace Zchlachten
             // * Update logic
             Globals.PreviousMouseState = Globals.CurrentMouseState;
             Globals.CurrentMouseState = Mouse.GetState();
+            Globals.PreviousKeyboardState = Globals.CurrentKeyboardState;
+            Globals.CurrentKeyboardState = Keyboard.GetState();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.O)) // Press 'O' to go to play screen
+            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.O)) // Press 'O' to go to play screen
                 LoadPlayScreen();
             // * End update logic
 

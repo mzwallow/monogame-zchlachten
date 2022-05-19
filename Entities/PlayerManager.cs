@@ -13,20 +13,17 @@ namespace Zchlachten.Entities
 
         private readonly EntityManager _entityManager;
         private readonly World _world;
-        private readonly PlayState _state;
 
         public Player DemonLord, Brave;
 
         public PlayerManager(
             World world, 
             EntityManager entityManager,
-            PlayState state,
             Texture2D demonLordTxr, 
             Texture2D braveTxr)
         {
             _world = world;
             _entityManager = entityManager;
-            _state = state;
 
             DemonLord = new DemonLord(
                     _world,

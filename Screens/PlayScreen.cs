@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using tainicom.Aether.Physics2D.Dynamics;
 using Zchlachten.Entities;
 
@@ -11,8 +13,6 @@ namespace Zchlachten.Screens
         private SpriteBatch _spriteBatch;
 
         private World _world;
-        private PlayState _state;
-        private PlayerTurn _playerTurn;
 
         private SpriteFont _debugFont;
 
@@ -37,12 +37,9 @@ namespace Zchlachten.Screens
 
             _entityManager = new EntityManager();
 
-            _state = PlayState.START;
-            if (_state == PlayState.START)
-            {
-                var values = Enum.GetValues(typeof(PlayerTurn));
-                _playerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
-            } 
+            Globals.GameState = GameState.START;
+            var values = Enum.GetValues(typeof(PlayerTurn));
+                Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
         }
 
         public override void LoadContent()
@@ -60,7 +57,6 @@ namespace Zchlachten.Screens
             _playerManager = new PlayerManager(
                 _world, 
                 _entityManager,
-                _state,
                 _demonLordTxr, 
                 _braveTxr
             );
@@ -75,8 +71,6 @@ namespace Zchlachten.Screens
             _weaponManager = new WeaponManager(
                 _world,
                 _entityManager,
-                _state,
-                _playerTurn,
                 _playerManager.DemonLord,
                 _playerManager.Brave,
                 _weaponTxrs
@@ -86,8 +80,7 @@ namespace Zchlachten.Screens
             _buffTxr = base.Content.Load<Texture2D>("StatusEffects/Buff");
             _statusEffectManager = new StatusEffectManager(
                 _world,
-                _entityManager,
-                _state
+                _entityManager
             );
 
             // Load environments
@@ -98,8 +91,6 @@ namespace Zchlachten.Screens
             _debugUI = new DebugUI(
                 _groundTxr, 
                 _debugFont,
-                _state,
-                _playerTurn,
                 _playerManager.DemonLord, 
                 _playerManager.Brave
             );
@@ -117,8 +108,17 @@ namespace Zchlachten.Screens
 
             _entityManager.Update(gameTime);
 
-            if (_state == PlayState.START)
-                _state = PlayState.PRE_PLAY;
+            if (Globals.GameState == GameState.START)
+                Globals.GameState = GameState.PRE_PLAY;
+
+            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.Z))
+                Globals.GameState = GameState.PRE_PLAY;
+            else if (Globals.CurrentKeyboardState.IsKeyDown(Keys.X))
+                Globals.GameState = GameState.PLAYING;
+            else if (Globals.CurrentKeyboardState.IsKeyDown(Keys.C))
+                Globals.GameState = GameState.POST_PLAY;
+            else if (Globals.CurrentKeyboardState.IsKeyDown(Keys.V))
+                Globals.GameState = GameState.END;
         }
 
         public override void Draw(GameTime gameTime)

@@ -19,11 +19,13 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width/2, _texture.Height/2);
+            
             Body = _world.CreateBody(
                 new Vector2(_textureOrigin.X, Globals.SCREEN_HEIGHT - _textureOrigin.Y),
                 0f,
                 BodyType.Static
             );
+
             var groundFixture = Body.CreateRectangle(
                 (float)_texture.Width, 
                 (float)_texture.Height, 
@@ -39,7 +41,17 @@ namespace Zchlachten.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Body.Position, null, Color.White, Body.Rotation, _textureOrigin, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(
+                _texture, 
+                Body.Position, 
+                null, 
+                Color.White, 
+                Body.Rotation, 
+                _textureOrigin, 
+                1f, 
+                SpriteEffects.None, 
+                0f
+            );
         }
     }
 }

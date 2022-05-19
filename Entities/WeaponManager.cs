@@ -7,22 +7,20 @@ namespace Zchlachten.Entities
 {
     public class WeaponManager : IGameEntity
     {
-        private const float WEAPON_START_POS_X = 149.5f;
-        private const float WEAPON_START_POS_Y = 100f;
+        private const float DEMON_LORD_WEAPON_START_POS_X = 180.5f;
+        private const float DEMON_LORD_WEAPON_START_POS_Y = 501.5f;
+        private const float BRAVE_WEAPON_START_POS_X = 149.5f;
+        private const float BRAVE_WEAPON_START_POS_Y = 100f;
 
         private readonly World _world;
         private readonly EntityManager _entityManager;
-        private readonly PlayState _state;
         private readonly Player _demonLord, _brave;
 
         private Texture2D _normalTxr;
-        private PlayState _playState;
 
         public WeaponManager(
             World world,
-            EntityManager entityManager, 
-            PlayState state,
-            PlayerTurn playerTurn,
+            EntityManager entityManager,
             Player demonLord, 
             Player brave, 
             params Texture2D[] weaponsTxrs
@@ -30,7 +28,6 @@ namespace Zchlachten.Entities
         {
             _world = world;
             _entityManager = entityManager;
-            _playState = state;
 
             _demonLord = demonLord;
             _brave = brave;
@@ -39,28 +36,25 @@ namespace Zchlachten.Entities
             {
                 _normalTxr = txr;
             }
-
-            var _normalShot = new NormalShot(
-                _world,
-                _demonLord,
-                _normalTxr, 
-                new Vector2(WEAPON_START_POS_X, WEAPON_START_POS_Y)
-            );
-
-            var _normalShot1 = new NormalShot(
-                _world,
-                _brave,
-                _normalTxr, 
-                new Vector2(1130.5f, WEAPON_START_POS_Y)
-            );
-
-            _entityManager.AddEntry(_normalShot);
-            _entityManager.AddEntry(_normalShot1);
         }
 
         public void Update(GameTime gameTime)
         {
-            
+            switch (Globals.GameState)
+            {
+                case GameState.PLAYING:
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    {
+                        var _normalShot = new NormalShot(
+                            _world,
+                            _brave,
+                            _normalTxr, 
+                            new Vector2(DEMON_LORD_WEAPON_START_POS_X, DEMON_LORD_WEAPON_START_POS_Y)
+                        );
+                    }
+
+                    break;
+            }
 
             foreach (Weapon weapon in _entityManager.GetEntitiesOfType<Weapon>())
             {

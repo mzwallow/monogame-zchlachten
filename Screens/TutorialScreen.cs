@@ -12,14 +12,14 @@ namespace Zchlachten.Screens
         private SpriteBatch _spriteBatch;
         private SpriteFont _buttonFont, _storyFont;
 
-        private Texture2D _buttonTexture, _blessingOfDevil, _guide, _blessingOfGod;
+        private Texture2D _buttonTexture, _blessingOfDevil, _guide, _blessingOfGod,_blessingOfWorld,_eyeBall;
         private List<Component> _menuComponents;
         private Button _backToMenuButton;
 
         private bool _isHovering;
 
         private MouseState _currentMouse, _previousMouse;
-        private Rectangle _rectTest,Rectangle;
+        private Rectangle _reactBlessDevil,Rectangle,_reactBlessGod,_reactBlessWorld,_reactEyeBall;
 
 
         private String _infoGuide = "คลิ้กและกดค้างเอาไว้ที่ตรงตัวละครของตัวละครที่เลือกในตาของตัวเอง\n    - หลอดพลังจะเพิ่มขึ้นจนกระทั้งปล่อย\n    - ดูทิศทางของเริ่มเพื่อนำมาใช้การประเมิณในการโจมตี\n    - เมื่อปล่อยเมาท์จะโจมตีหรือใช้ไอเทมที่เลือก\nคลิ้กสัญลักษณ์ข้างล่างเพื่อดูว่าไอเทมแต่ละชิ้นให้ความสามารถอะไร";
@@ -58,7 +58,13 @@ namespace Zchlachten.Screens
 
             _storyFont = base.Content.Load<SpriteFont>("Fonts/StoryText");
             _blessingOfDevil = base.Content.Load<Texture2D>("Controls/blessing_of_devil");
-            _rectTest = new Rectangle((Globals.SCREEN_WIDTH / 2) -  _blessingOfDevil.Width / 2 - 500, (Globals.SCREEN_HEIGHT / 2) -  _blessingOfDevil.Height / 2 + 200,  _blessingOfDevil.Width * 2,  _blessingOfDevil.Height * 2);
+            _blessingOfGod = base.Content.Load<Texture2D>("Controls/blessing_of_god");
+            _blessingOfWorld = base.Content.Load<Texture2D>("Controls/blessing_of_world_tree");
+            _eyeBall = base.Content.Load<Texture2D>("Controls/eyeBall");
+            _reactBlessDevil = new Rectangle((Globals.SCREEN_WIDTH / 2) -  _blessingOfDevil.Width / 2 - 500, (Globals.SCREEN_HEIGHT / 2) -  _blessingOfDevil.Height / 2 + 200,  _blessingOfDevil.Width * 2,  _blessingOfDevil.Height * 2);
+            _reactBlessGod = new Rectangle((Globals.SCREEN_WIDTH / 2) -  _blessingOfGod.Width / 2 - 400, (Globals.SCREEN_HEIGHT / 2) -  _blessingOfGod.Height / 2 + 200,  _blessingOfGod.Width * 2,  _blessingOfGod.Height * 2);
+            _reactBlessWorld = new Rectangle((Globals.SCREEN_WIDTH / 2) -  _blessingOfWorld.Width / 2 - 300, (Globals.SCREEN_HEIGHT / 2) -  _blessingOfWorld.Height / 2 + 200,  _blessingOfWorld.Width * 2,  _blessingOfWorld.Height * 2);
+            _reactEyeBall = new Rectangle((Globals.SCREEN_WIDTH / 2) -  _eyeBall.Width / 2 - 200, (Globals.SCREEN_HEIGHT / 2) -  _eyeBall.Height / 2 + 200,  _eyeBall.Width * 2,  _eyeBall.Height * 2);
             base.LoadContent();
         }
 
@@ -94,8 +100,10 @@ namespace Zchlachten.Screens
             _spriteBatch.Draw(_guide, new Rectangle((Globals.SCREEN_WIDTH / 2 - _buttonTexture.Width / 2) - 200, (Globals.SCREEN_HEIGHT / 2 - _buttonTexture.Height / 2) - 270, 950, _buttonTexture.Height), Color.White);
             _spriteBatch.DrawString(_buttonFont, "Guide", new Vector2(((Globals.SCREEN_WIDTH / 2 - _buttonTexture.Width / 2) + 275) - _buttonFont.MeasureString("Guide").X / 2, (Globals.SCREEN_HEIGHT / 2 - _buttonTexture.Height / 2) - 240 - _buttonFont.MeasureString("Guide").Y / 2), Color.Black);
             _spriteBatch.DrawString(_storyFont, _infoGuide, new Vector2((Globals.SCREEN_WIDTH / 2) - _storyFont.MeasureString("คลิ้กและกดค้างเอาไว้ที่ตรงตัวละครของตัวละครที่เลือกในตาของตัวเอง").X / 2, 200), Color.Black);
-            _spriteBatch.Draw( _blessingOfDevil, _rectTest, Color.White);
-            _spriteBatch.Draw(,Color.White);
+            _spriteBatch.Draw( _blessingOfDevil, _reactBlessDevil, Color.White);
+            _spriteBatch.Draw(_blessingOfGod,_reactBlessGod,Color.White);
+            _spriteBatch.Draw(_blessingOfWorld,_reactBlessWorld,Color.White);
+            _spriteBatch.Draw(_eyeBall,_reactEyeBall,Color.White);
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);
 

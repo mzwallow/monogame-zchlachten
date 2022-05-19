@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using Zchlachten.Screens;
 
 namespace Zchlachten
@@ -33,7 +34,6 @@ namespace Zchlachten
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -50,6 +50,8 @@ namespace Zchlachten
 
             if (Globals.CurrentKeyboardState.IsKeyDown(Keys.O)) // Press 'O' to go to play screen
                 LoadPlayScreen();
+            else if (Keyboard.GetState().IsKeyDown(Keys.P)) // Press 'P' to go to menu screen
+                LoadMenuScreen();
             // * End update logic
 
             Globals.ScreenManager.Update(gameTime);
@@ -68,6 +70,7 @@ namespace Zchlachten
 
         private void LoadMenuScreen()
         {
+
             Globals.ScreenManager.LoadScreen(new MenuScreen(this));
         }
 

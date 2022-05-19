@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using Zchlachten.Screens;
 
 namespace Zchlachten
@@ -10,6 +11,12 @@ namespace Zchlachten
 
         public static MouseState CurrentMouseState, PreviousMouseState;
         public static KeyboardState CurrentKeyboardState, PreviousKeyboardState;
+      
+        public static  SoundEffect bgm , soundFX;
+        public static SoundEffectInstance _bgmInstance, _soundFXInstance;
+        public static string song;
+
+        public static float MusicVolume=0.1f,SoundVolume=0.1f;
 
         public static ScreenManager ScreenManager;
 

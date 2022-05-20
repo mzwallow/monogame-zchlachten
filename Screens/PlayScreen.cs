@@ -23,7 +23,8 @@ namespace Zchlachten.Screens
         private Texture2D _demonEyeTxr;
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Texture2D _groundTxr;
-        private Texture2D[] _weaponTxrs, _allStatusEffectTxr;
+        private Texture2D _ItemTxr;
+        private Texture2D[] _weaponTxrs, _allStatusEffectTxr, _allItemTxr;
 
         private Ground _ground;
 
@@ -31,6 +32,7 @@ namespace Zchlachten.Screens
         private PlayerManager _playerManager;
         private WeaponManager _weaponManager;
         private StatusEffectManager _statusEffectManager;
+        private ItemManager _itemManager;
 
         private DebugUI _debugUI;
 
@@ -111,6 +113,19 @@ namespace Zchlachten.Screens
             _groundTxr = base.Content.Load<Texture2D>("Environments/Ground");
             _ground = new Ground(_groundTxr, _world);
 
+            // Load Items
+            _ItemTxr = base.Content.Load<Texture2D>("Items/BG_Item");
+            _allItemTxr = new Texture2D[]{
+                _ItemTxr
+            };
+            _itemManager = new ItemManager(
+                _world,
+                _entityManager,
+                _allItemTxr
+            );
+
+
+
             //Load debug UI
             _debugUI = new DebugUI(
                 base.Content,
@@ -127,6 +142,7 @@ namespace Zchlachten.Screens
             _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_statusEffectManager);
+            _entityManager.AddEntry(_itemManager);
         }
 
         public override void Update(GameTime gameTime)

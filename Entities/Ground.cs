@@ -29,7 +29,7 @@ namespace Zchlachten.Entities
             
             _body = _world.CreateBody(new Vector2(15f, (_texture.Height * _scale.Y)/2));
             _groundFixture = _body.CreateRectangle(
-                _size.X, 
+                1280f, 
                 _size.Y, 
                 1f, 
                 Vector2.Zero

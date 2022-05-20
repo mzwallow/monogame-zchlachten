@@ -121,10 +121,10 @@ namespace Zchlachten.Screens
             );
             _debugUI.LoadContent();
 
-            // _entityManager.AddEntry(_playerManager);
-            // _entityManager.AddEntry(_weaponManager);
+            _entityManager.AddEntry(_playerManager);
+            _entityManager.AddEntry(_weaponManager);
 
-            // _entityManager.AddEntry(_debugUI);
+            _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_ground);
         }
 
@@ -163,7 +163,6 @@ namespace Zchlachten.Screens
                 RasterizerState.CullNone,
                 _spriteEffect
             );
-            // _spriteBatch.Begin();
 
             _entityManager.Draw(gameTime, _spriteBatch);
 

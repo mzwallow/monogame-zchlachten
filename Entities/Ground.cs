@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
+using tainicom.Aether.Physics2D.Common;
 
 namespace Zchlachten.Entities
 {
@@ -9,6 +10,7 @@ namespace Zchlachten.Entities
         private readonly World _world;
 
         private Body _body;
+        private Fixture _groundFixture;
 
         private Texture2D _texture;
         private Vector2 _textureOrigin;
@@ -22,18 +24,17 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width/2, _texture.Height/2);
-
             _size = new Vector2(30f, 30f / (_texture.Width/_texture.Height));
             _scale = _size / new Vector2(_texture.Width, _texture.Height);
             
             _body = _world.CreateBody(new Vector2(15f, (_texture.Height * _scale.Y)/2));
-
-            var groundFixture = _body.CreateRectangle(
+            _groundFixture = _body.CreateRectangle(
                 _size.X, 
                 _size.Y, 
                 1f, 
                 Vector2.Zero
             );
+            _groundFixture.Tag = "ground";
         }
 
         public void Update(GameTime gameTime) { }
@@ -51,6 +52,8 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically, 
                 0f
             );
+
+            Globals.DebugView.DrawShape(_groundFixture, new Transform(_body.Position, _body.Rotation), Color.Aqua);
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Zchlachten
 {
     public class Zchlachten : Game
     {
-        private GraphicsDeviceManager _graphics;
+        public GraphicsDeviceManager Graphics;
         private SpriteBatch _spriteBatch;
 
         public Zchlachten()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
@@ -22,9 +22,9 @@ namespace Zchlachten
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = Globals.SCREEN_WIDTH;
-            _graphics.PreferredBackBufferHeight = Globals.SCREEN_HEIGHT;
-            _graphics.ApplyChanges();
+            Graphics.PreferredBackBufferWidth = Globals.SCREEN_WIDTH;
+            Graphics.PreferredBackBufferHeight = Globals.SCREEN_HEIGHT;
+            Graphics.ApplyChanges();
 
             base.Initialize();
 

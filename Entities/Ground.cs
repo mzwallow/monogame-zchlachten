@@ -8,10 +8,13 @@ namespace Zchlachten.Entities
     {
         private readonly World _world;
 
-        public Body Body;
+        private Body _body;
 
         private Texture2D _texture;
         private Vector2 _textureOrigin;
+
+        private Vector2 _size;
+        private Vector2 _scale;
 
         public Ground(Texture2D texture, World world)
         {
@@ -19,22 +22,18 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width/2, _texture.Height/2);
-            
-            Body = _world.CreateBody(
-                new Vector2(_textureOrigin.X, Globals.SCREEN_HEIGHT - _textureOrigin.Y),
-                0f,
-                BodyType.Static
-            );
 
-            var groundFixture = Body.CreateRectangle(
-                (float)_texture.Width, 
-                (float)_texture.Height, 
+            _size = new Vector2(30f, 30f / (_texture.Width/_texture.Height));
+            _scale = _size / new Vector2(_texture.Width, _texture.Height);
+            
+            _body = _world.CreateBody(new Vector2(15f, (_texture.Height * _scale.Y)/2));
+
+            var groundFixture = _body.CreateRectangle(
+                _size.X, 
+                _size.Y, 
                 1f, 
                 Vector2.Zero
             );
-            groundFixture.Restitution = 0.3f;
-            groundFixture.Friction = 0.5f;
-            // Body.Position = new Vector2(0, Globals.SCREEN_HEIGHT - texture.Height);
         }
 
         public void Update(GameTime gameTime) { }
@@ -43,13 +42,13 @@ namespace Zchlachten.Entities
         {
             spriteBatch.Draw(
                 _texture, 
-                Body.Position, 
+                _body.Position, 
                 null, 
                 Color.White, 
-                Body.Rotation, 
+                _body.Rotation, 
                 _textureOrigin, 
-                1f, 
-                SpriteEffects.None, 
+                _scale, 
+                SpriteEffects.FlipVertically, 
                 0f
             );
         }

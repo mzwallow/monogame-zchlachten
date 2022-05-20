@@ -33,6 +33,8 @@ namespace Zchlachten.Entities
             playerFixture.Restitution = 0.3f;
             playerFixture.Friction = 0.5f;
             playerFixture.Tag = "players";
+
+            WeaponsBag = new List<Weapon>(2);
         }
 
         public abstract void Update(GameTime gameTime);

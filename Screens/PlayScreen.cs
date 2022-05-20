@@ -39,7 +39,7 @@ namespace Zchlachten.Screens
 
             Globals.GameState = GameState.START;
             var values = Enum.GetValues(typeof(PlayerTurn));
-                Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
+            Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
         }
 
         public override void LoadContent()
@@ -55,26 +55,29 @@ namespace Zchlachten.Screens
             _demonLordTxr = base.Content.Load<Texture2D>("Players/DemonLord");
             _braveTxr = base.Content.Load<Texture2D>("Players/Brave");
             _playerManager = new PlayerManager(
-                _world, 
+                _world,
                 _entityManager,
-                _demonLordTxr, 
+                _demonLordTxr,
                 _braveTxr
             );
 
             // Load weapons
             _demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
+            var _lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
             _weaponTxrs = new Texture2D[]
             {
-                _demonEyeTxr
+                _demonEyeTxr, _lightSwordTxr
             };
 
             _weaponManager = new WeaponManager(
+                base.Content,
                 _world,
                 _entityManager,
                 _playerManager.DemonLord,
                 _playerManager.Brave,
                 _weaponTxrs
             );
+            _weaponManager.LoadContent();
 
             // Load buffs & debuffs
             _buffTxr = base.Content.Load<Texture2D>("StatusEffects/Buff");
@@ -89,16 +92,18 @@ namespace Zchlachten.Screens
 
             // Load debug UI
             _debugUI = new DebugUI(
-                _groundTxr, 
+                base.Content,
+                _groundTxr,
                 _debugFont,
-                _playerManager.DemonLord, 
+                _playerManager.DemonLord,
                 _playerManager.Brave
             );
+            _debugUI.LoadContent();
 
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_weaponManager);
-            
+
             _entityManager.AddEntry(_debugUI);
         }
 

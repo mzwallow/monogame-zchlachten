@@ -4,8 +4,8 @@ namespace Zchlachten.Entities
     {
         NORMAL,
         BIG,
-        SPLASH,
         DOUBLE,
+        SPLIT,
         CHARM
     }
 }

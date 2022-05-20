@@ -21,7 +21,6 @@ namespace Zchlachten.Screens
         private SpriteFont _debugFont;
 
         private Texture2D _demonLordTxr, _braveTxr;
-        private Texture2D demonEyeTxr;
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Texture2D _groundTxr;
         private Texture2D[] _weaponTxrs, _allStatusEffectTxr;

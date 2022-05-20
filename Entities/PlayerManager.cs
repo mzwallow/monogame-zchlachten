@@ -6,10 +6,10 @@ namespace Zchlachten.Entities
 {
     public class PlayerManager : IGameEntity
     {
-        private const float DEMON_LORD_POS_X = 149.5f;
-        private const float DEMON_LORD_POS_Y = 566f;
-        private const float BRAVE_POS_X = 1130.5f;
-        private const float BRAVE_POS_Y = 566f;
+        private const float DEMON_LORD_POS_X = 3.50390625f;
+        private const float DEMON_LORD_POS_Y = 3.609375f;
+        private const float BRAVE_POS_X = 26.49609375f;
+        private const float BRAVE_POS_Y = 3.609375f;
 
         private readonly EntityManager _entityManager;
         private readonly World _world;

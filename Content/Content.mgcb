@@ -190,6 +190,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Text.spritefont
 
+#begin Players/Arrow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Players/Arrow.png
+
 #begin Players/Brave.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -291,6 +303,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/WeaponBag.png
+
+#begin Weapons/ball.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapons/ball.png
 
 #begin Weapons/DemonEye.png
 /importer:TextureImporter

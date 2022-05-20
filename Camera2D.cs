@@ -47,6 +47,13 @@ namespace Zchlachten
             return new Vector2(t.X, t.Y);
         }
 
+        public Vector2 ConvertScreenToWorld(Point location)
+        {
+            Vector3 t = new Vector3(location.X, location.Y, 0);
+            t = _graphics.Viewport.Unproject(t, Projection, View, Matrix.Identity);
+            return new Vector2(t.X, t.Y);
+        }
+
         public Vector2 ConvertWorldToScreen(Vector2 location)
         {
             Vector3 t = new Vector3(location, 0);

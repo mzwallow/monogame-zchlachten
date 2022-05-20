@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Zchlachten.Screens;
+using tainicom.Aether.Physics2D.Diagnostics;
 
 namespace Zchlachten
 {
@@ -22,5 +23,9 @@ namespace Zchlachten
 
         public static GameState GameState;
         public static PlayerTurn PlayerTurn;
+
+        public static Camera2D Camera;
+        
+        public static DebugView DebugView;
     }
 }

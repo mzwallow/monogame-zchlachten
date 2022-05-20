@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using tainicom.Aether.Physics2D.Dynamics;
+using tainicom.Aether.Physics2D.Diagnostics;
 using Zchlachten.Entities;
 
 namespace Zchlachten.Screens
@@ -20,7 +21,6 @@ namespace Zchlachten.Screens
         private SpriteFont _debugFont;
 
         private Texture2D _demonLordTxr, _braveTxr;
-        private Texture2D _demonEyeTxr;
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Texture2D _groundTxr;
         private Texture2D _ItemTxr;
@@ -44,6 +44,8 @@ namespace Zchlachten.Screens
             _camera.Position.X = _camera.Width / 2;
             _camera.Position.Y = _camera.Height / 2;
 
+            Globals.Camera = _camera;
+
             _world = new World(new Vector2(0, -9.8f));
 
             _entityManager = new EntityManager();
@@ -51,6 +53,10 @@ namespace Zchlachten.Screens
             Globals.GameState = GameState.START;
             var values = Enum.GetValues(typeof(PlayerTurn));
             Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
+
+            Globals.DebugView = new DebugView(_world);
+            Globals.DebugView.LoadContent(base.Game.Graphics.GraphicsDevice, base.Content);
+            Globals.DebugView.Enabled = true;
         }
 
         public override void LoadContent()
@@ -73,22 +79,23 @@ namespace Zchlachten.Screens
             );
 
             // Load weapons
-            _demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
-            var _lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
+            var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
+            // _demonEyeTxr = base.Content.Load<Texture2D>("Weapons/ball");
+            var lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
+            // var _lightSwordTxr = base.Content.Load<Texture2D>("Weapons/ball");
             _weaponTxrs = new Texture2D[]
             {
-                _demonEyeTxr, _lightSwordTxr
+                demonEyeTxr, lightSwordTxr
             };
 
             _weaponManager = new WeaponManager(
-                base.Content,
                 _world,
                 _entityManager,
                 _playerManager.DemonLord,
                 _playerManager.Brave,
                 _weaponTxrs
             );
-            _weaponManager.LoadContent();
+            _weaponManager.LoadContent(base.Content);
 
             // Load buffs & debuffs
             _buffGod = base.Content.Load<Texture2D>("Controls/blessing_of_god");
@@ -180,9 +187,19 @@ namespace Zchlachten.Screens
                 RasterizerState.CullNone,
                 _spriteEffect
             );
+            Globals.DebugView.BeginCustomDraw(
+                Globals.Camera.Projection, 
+                Globals.Camera.View,
+                null,
+                null,
+                null,
+                RasterizerState.CullNone,
+                1f
+            );
 
             _entityManager.Draw(gameTime, _spriteBatch);
 
+            Globals.DebugView.EndCustomDraw();
             _spriteBatch.End();
         }
     }

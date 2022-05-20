@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
+using tainicom.Aether.Physics2D.Common;
 
 namespace Zchlachten.Entities
 {
@@ -11,7 +12,10 @@ namespace Zchlachten.Entities
 
         private Texture2D _texture;
         private Vector2 _textureOrigin;
-        private Body _body;
+        public Vector2 Size;
+        private Vector2 _scale;
+        public Body Body;
+        private Fixture _playerFixture;
 
         public PlayerSide PlayerSide;
         public int HP = 150;
@@ -28,13 +32,12 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+            Size = new Vector2(0.9609375f, 2.0625f);
+            _scale = Size / new Vector2(_texture.Width, _texture.Height);
 
-            _body = _world.CreateBody(position, 0f, BodyType.Static);
-
-            var playerFixture = _body.CreateRectangle(_texture.Width, _texture.Height, 1f, Vector2.Zero);
-            playerFixture.Restitution = 0.3f;
-            playerFixture.Friction = 0.5f;
-            playerFixture.Tag = "players";
+            Body = _world.CreateBody(position);
+            _playerFixture = Body.CreateRectangle(Size.X, Size.Y, 1f, Vector2.Zero);
+            _playerFixture.Tag = "players";
 
             WeaponsBag = new List<Weapon>(2);
 
@@ -46,15 +49,17 @@ namespace Zchlachten.Entities
         {
             spriteBatch.Draw(
                 _texture,
-                _body.Position,
+                Body.Position,
                 null,
                 Color.White,
-                _body.Rotation,
+                Body.Rotation,
                 _textureOrigin,
-                1f,
+                _scale,
                 SpriteEffects.None,
                 0f
             );
+
+            Globals.DebugView.DrawShape(_playerFixture, new Transform(Body.Position, Body.Rotation), Color.Crimson);
         }
 
         public void Hit(int damage)

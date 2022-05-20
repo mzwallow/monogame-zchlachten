@@ -14,7 +14,7 @@ namespace Zchlachten.Entities
         private readonly World _world;
         private readonly EntityManager _entityManager;
 
-        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime, _test, _test1;
+        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
 
 
         public StatusEffect Buff, Buff1;

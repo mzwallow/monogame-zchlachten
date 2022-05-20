@@ -9,7 +9,7 @@ namespace Zchlachten.Entities
         public Buffs(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            // BuffType = BuffType.GOD_BlESSING;
+            
         }
 
         public override void Update(GameTime gameTime) { }

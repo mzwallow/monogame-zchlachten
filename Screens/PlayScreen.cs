@@ -105,9 +105,9 @@ namespace Zchlachten.Screens
             };
             _statusEffectManager = new StatusEffectManager(
                 _world,
-                _entityManager,
-                _allStatusEffectTxr
+                _entityManager
             );
+            _statusEffectManager.LoadContent(base.Content);
 
             // Load environments
             _groundTxr = base.Content.Load<Texture2D>("Environments/Ground");

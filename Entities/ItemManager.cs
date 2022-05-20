@@ -8,10 +8,12 @@ namespace Zchlachten.Entities
     {
         private readonly World _world;
         private readonly EntityManager _entityManager;
-        private const float DEMON_LORD_POS_X = 410;
-        private const float DEMON_LORD_POS_Y = 566f;
-        private const float BRAVE_POS_X = 1130.5f;
-        private const float BRAVE_POS_Y = 566f;
+        private const float WORLD_TREE_X = 410f;
+        private const float WORLD_TREE_Y = 626f;
+        private const float SHEILD_X = 458f;
+        private const float SHEILD_Y = 626f;
+        private const float HOLY_WATER_X = 506f;
+        private const float HOLY_WATER_Y = 626f;
         public ItemManager(
             World world,
             EntityManager entityManager,

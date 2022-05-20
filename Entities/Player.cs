@@ -40,7 +40,6 @@ namespace Zchlachten.Entities
             _playerFixture.Tag = "players";
 
             WeaponsBag = new List<Weapon>(2);
-
         }
 
         public abstract void Update(GameTime gameTime);

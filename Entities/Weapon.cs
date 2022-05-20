@@ -10,7 +10,7 @@ namespace Zchlachten.Entities
     public abstract class Weapon : IGameEntity
     {
         private readonly World _world;
-        private readonly Player _enemy;
+        private readonly Player _player, _enemy;
 
         private Texture2D _texture;
         private Vector2 _textureOrigin;
@@ -20,29 +20,30 @@ namespace Zchlachten.Entities
         private Vector2 _scale;
         public Vector2 Position;
 
-        public WeaponType WeaponType;
+        public WeaponType Type;
         public int Damage;
 
         public bool HasCollided = false;
 
-        protected Weapon(World world, Player enemy, Texture2D texture)
+        protected Weapon(World world, Player player, Player enemy, Texture2D texture)
         {
             _world = world;
+            _player = player;
             _enemy = enemy;
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
         }
 
-        protected Weapon(World world, Player enemy, Texture2D texture, Vector2 position)
+        protected Weapon(World world, Player player, Player enemy, Texture2D texture, Vector2 position)
         {
             _world = world;
+            _player = player;
             _enemy = enemy;
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
-            // _size = new Vector2(_texture.Width*0.0234375f, _texture.Height*0.0234375f);
-            // _scale = _size / new Vector2(_texture.Width, _texture.Height);
+
             _size = new Vector2(_texture.Width * 0.0234375f, _texture.Height * 0.0234375f);
             _scale = _size / new Vector2(_texture.Width, _texture.Height);
 
@@ -57,9 +58,7 @@ namespace Zchlachten.Entities
             _weaponFixture.OnCollision = OnCollisionEventHandler;
         }
 
-        public virtual void Update(GameTime gameTime)
-        {
-        }
+        public abstract void Update(GameTime gameTime);
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -80,13 +79,22 @@ namespace Zchlachten.Entities
 
         private bool OnCollisionEventHandler(Fixture sender, Fixture other, Contact contact)
         {
-            HasCollided = true;
-
-            Debug.WriteLine((string)sender.Tag + " hit " + (string)other.Tag);
+            if ((string)other.Tag == "statusEffects")
+            {
+                Debug.WriteLine("Hit status");
+                return false;
+            }
 
             if ((string)other.Tag == "players")
+            {
+                HasCollided = true;
                 _enemy.Hit(Damage);
+                _player.BloodThirstGauge++;
+            }
 
+            if ((string)other.Tag == "ground")
+                HasCollided = true;
+            
             return true;
         }
 

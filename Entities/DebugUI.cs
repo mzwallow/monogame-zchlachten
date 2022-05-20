@@ -106,10 +106,10 @@ namespace Zchlachten.Entities
             switch (_demonLord.WeaponsBag.Count)
             {
                 case 1:
-                    text = "Weapon bag: " + _demonLord.WeaponsBag[0];
+                    text = "Weapon bag: " + _demonLord.WeaponsBag[0].Type;
                     break;
                 case 2:
-                    text = "Weapon bag: " + _demonLord.WeaponsBag[0] + " " + _demonLord.WeaponsBag[1];
+                    text = "Weapon bag: " + _demonLord.WeaponsBag[0].Type + " " + _demonLord.WeaponsBag[1].Type;
                     break;
                 default:
                     text = "Weapon bag: empty";
@@ -119,6 +119,18 @@ namespace Zchlachten.Entities
                 _font, 
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 160f)),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                0.0234375f,
+                SpriteEffects.FlipVertically,
+                0f
+            );
+            text = "Blood thirst gauge: " + _demonLord.BloodThirstGauge;
+            spriteBatch.DrawString(
+                _font, 
+                text,
+                Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 180f)),
                 Color.White,
                 0f,
                 Vector2.Zero,
@@ -164,14 +176,13 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically,
                 0f
             );
-            // Globals.DebugView.DrawString(new Vector2(600f, 120f), text); 
             switch (_brave.WeaponsBag.Count)
             {
                 case 1:
-                    text = "Weapon bag: " + _brave.WeaponsBag[0];
+                    text = "Weapon bag: " + _brave.WeaponsBag[0].Type;
                     break;
                 case 2:
-                    text = "Weapon bag: " + _brave.WeaponsBag[0] + " " + _brave.WeaponsBag[1];
+                    text = "Weapon bag: " + _brave.WeaponsBag[0].Type + " " + _brave.WeaponsBag[1].Type;
                     break;
                 default:
                     text = "Weapon bag: empty";
@@ -188,7 +199,18 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically,
                 0f
             );
-            // Globals.DebugView.DrawString(new Vector2(600f, 140f), text); 
+            text = "Blood thirst gauge: " + _brave.BloodThirstGauge;
+            spriteBatch.DrawString(
+                _font, 
+                text,
+                Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 180f)),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                0.0234375f,
+                SpriteEffects.FlipVertically,
+                0f
+            );
 
             // Weapon
             

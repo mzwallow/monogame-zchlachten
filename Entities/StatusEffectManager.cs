@@ -59,6 +59,13 @@ namespace Zchlachten.Entities
                     _entityManager.AddEntry(newBuff1);
                     Globals.GameState = GameState.PLAYING;
                     break;
+                case GameState.POST_PLAY:
+                    foreach (StatusEffect buff in _entityManager.GetEntitiesOfType<StatusEffect>())
+                    {
+                        _world.Remove(buff.Body);
+                        _entityManager.RemoveEntity(buff);
+                    }
+                    break;
             }
 
             foreach (StatusEffect status in _entityManager.GetEntitiesOfType<StatusEffect>())

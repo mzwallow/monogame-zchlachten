@@ -13,7 +13,7 @@ namespace Zchlachten.Entities
         private readonly World _world;
         private readonly EntityManager _entityManager;
 
-        private Texture2D _buffGod,_buffDevil,_debuffDragon,_debuffGolden,_debuffSlime,_test,_test1;
+        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime, _test, _test1;
 
         //private Texture2D buffTxr;
 
@@ -33,8 +33,8 @@ namespace Zchlachten.Entities
             _debuffSlime = statusEffectTxrs[4];
             //Random bullshit go!!
             var values = Enum.GetValues(typeof(StatusEffectType));
-             StatusEffectType Type1 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
-             StatusEffectType Type2 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
+            StatusEffectType Type1 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
+            StatusEffectType Type2 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
             //Select Buff from random
             switch (Type1)
             {
@@ -73,52 +73,46 @@ namespace Zchlachten.Entities
                     _test1 = _debuffSlime;
                     break;
             }
-            positionX = r.Next(450, 800);
-            positionY = r.Next(100, 350);
-            positionX1 = r.Next(450, 800);
-            positionY1 = r.Next(100, 350);
-
+            positionX = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
+            positionY = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
+            positionX1 = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
+            positionY1 = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
 
             _world = world;
             _entityManager = entityManager;
-
-            Buff = new Buffs(
-                _world,
-                _test,
-                new Vector2(positionX, positionY)
-            );
-
-            Buff1 = new Buffs(
-                _world,
-                _test1,
-                new Vector2(positionX1, positionY1)
-            );
-
-            _entityManager.AddEntry(Buff);
-            _entityManager.AddEntry(Buff1);
-            // _entityManager.RemoveEntity(Buff1);
-            // _entityManager.RemoveEntity(Buff);
 
         }
 
         public void Update(GameTime gameTime)
         {
-            // switch (Globals.GameState)
-            // {
-            //     case GameState.PRE_PLAY:
-            //         Buff = new Buffs(
-            //             _world,
-            //             _txr,
-            //             new Vector2(positionX, positionY)
-            //         );
+            switch (Globals.GameState)
+            {
+                case GameState.PRE_PLAY:
+                    Buff = new Buffs(
+                        _world,
+                        _test,
+                        new Vector2(positionX, positionY)
+                    );
 
-            //         Buff1 = new Buffs(
-            //             _world,
-            //             _txr,
-            //             new Vector2(positionX1, positionY1)
-            //         );
-            //         break;
-            // }
+                    Buff1 = new Buffs(
+                        
+                        _world,
+                        _test1,
+                        new Vector2(positionX1, positionY1)
+                    );
+                    _entityManager.AddEntry(Buff);
+                    _entityManager.AddEntry(Buff1);
+                    break;
+            }
+
+            foreach (StatusEffect status in _entityManager.GetEntitiesOfType<StatusEffect>())
+            {
+                if (status.HasCollided)
+                {
+                    _world.Remove(status.Body);
+                    _entityManager.RemoveEntity(status);
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -119,7 +119,7 @@ namespace Zchlachten.Screens
             _groundTxr = base.Content.Load<Texture2D>("Environments/Ground");
             _ground = new Ground(_groundTxr, _world);
 
-            // Load debug UI
+            //Load debug UI
             _debugUI = new DebugUI(
                 base.Content,
                 _groundTxr,
@@ -134,6 +134,7 @@ namespace Zchlachten.Screens
 
             _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_ground);
+            _entityManager.AddEntry(_statusEffectManager);
         }
 
         public override void Update(GameTime gameTime)

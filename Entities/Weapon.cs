@@ -106,9 +106,8 @@ namespace Zchlachten.Entities
             _scale = _size / new Vector2(_texture.Width, _texture.Height);
 
             Body = _world.CreateBody(Position, 0f, BodyType.Dynamic);
+            Body.AngularVelocity = 10f;
             _weaponFixture = Body.CreateCircle(_size.X / 2, 1f);
-            _weaponFixture.Restitution = 0.5f;
-            _weaponFixture.Friction = 0.3f;
             _weaponFixture.Tag = "weapons";
 
             _weaponFixture.OnCollision = OnCollisionEventHandler;

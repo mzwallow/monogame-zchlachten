@@ -4,14 +4,14 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class NormalShot : Weapon
+    public class CharmShot : Weapon
     {
-        private const int NORMAL_SHOT_DAMAGE = 10;
+        private const int CHARM_SHOT_DAMAGE = 20;
 
-        public NormalShot(World world, Player player, Texture2D texture, Vector2 position)
+        public CharmShot(World world, Player player, Texture2D texture, Vector2 position)
             : base(world, player, texture, position)
         {
-            Damage = NORMAL_SHOT_DAMAGE;
+            Damage = CHARM_SHOT_DAMAGE;
         }
     }
 }

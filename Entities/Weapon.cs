@@ -8,7 +8,7 @@ namespace Zchlachten.Entities
     public abstract class Weapon : IGameEntity
     {
         private readonly World _world;
-        private readonly Player _player;
+        private readonly Player _enemy;
 
         private Texture2D _texture;
         private Vector2 _textureOrigin;
@@ -23,12 +23,12 @@ namespace Zchlachten.Entities
         protected Weapon(World world, Player player, Texture2D texture, Vector2 position)
         {
             _world = world;
-            _player = player;
+            _enemy = player;
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
 
-            Body = _world.CreateBody(position, 0f, BodyType.Dynamic);
+            Body = _world.CreateBody(position, 0f, BodyType.Static);
 
             _fixture = Body.CreateCircle(_texture.Width / 2f, 1f);
             _fixture.Restitution = 0.3f;
@@ -39,20 +39,21 @@ namespace Zchlachten.Entities
         }
 
         public virtual void Update(GameTime gameTime) 
-        { 
+        {
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
-                _texture, 
+                _texture,
                 Body.Position, 
                 null, 
                 Color.White, 
                 Body.Rotation, 
                 _textureOrigin, 
                 1f, 
-                SpriteEffects.None, 0f
+                SpriteEffects.FlipHorizontally, 
+                0f
             );
         }
 
@@ -61,7 +62,7 @@ namespace Zchlachten.Entities
             HasCollided = true;
             
             if ((string)other.Tag == "players")
-                _player.Hit(Damage);
+                _enemy.Hit(Damage);
 
             return true;
         }

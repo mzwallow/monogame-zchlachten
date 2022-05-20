@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Zchlachten.Entities
@@ -8,19 +9,24 @@ namespace Zchlachten.Entities
         private const int TEXTURE_POS_X = 100;
         private const int TEXTURE_POS_Y = 100;
 
-        private readonly PlayerTurn _playerTurn;
+        private readonly ContentManager _content;
         private readonly Player _demonLord, _brave;
 
         private Texture2D _texture;
         private SpriteFont _font;
 
+        
+
         public DebugUI(
-            Texture2D texture, 
+            ContentManager content,
+            Texture2D texture,
             SpriteFont font,
-            Player demonLord, 
+            Player demonLord,
             Player brave
         )
         {
+            _content = content;
+
             _texture = texture;
             _font = font;
 
@@ -28,24 +34,65 @@ namespace Zchlachten.Entities
             _brave = brave;
         }
 
-        public void Update(GameTime gameTime) 
+        public void LoadContent()
+        {
+            
+        }
+
+        public void Update(GameTime gameTime)
         {
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch) 
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var text = "";
 
             text = "Play State: " + Globals.GameState;
             spriteBatch.DrawString(_font, text, new Vector2(5f, 5f), Color.White);
 
-            text = "Player Turn: " + _playerTurn;
+            text = "Player Turn: " + Globals.PlayerTurn;
             spriteBatch.DrawString(_font, text, new Vector2(5f, 25f), Color.White);
 
+            // Demon Lord status
             text = "Demon Lord HP: " + _demonLord.HP;
-            spriteBatch.DrawString(_font, text, new Vector2(140f, 500f), Color.White);
+            spriteBatch.DrawString(_font, text, new Vector2(140f, 100f), Color.White);
+            text = "In-hand weapon: " + _demonLord.InHandWeapon;
+            spriteBatch.DrawString(_font, text, new Vector2(140f, 120f), Color.White);
+            switch (_demonLord.WeaponsBag.Count)
+            {
+                case 1:
+                    text = "Weapon bag: " + _demonLord.WeaponsBag[0];
+                    break;
+                case 2:
+                    text = "Weapon bag: " + _demonLord.WeaponsBag[0] + " " + _demonLord.WeaponsBag[1];
+                    break;
+                default:
+                    text = "Weapon bag: empty";
+                    break;
+            }
+            spriteBatch.DrawString(_font, text, new Vector2(140f, 140f), Color.White);
+
+            // Brave status
             text = "Brave HP: " + _brave.HP;
-            spriteBatch.DrawString(_font, text, new Vector2(1120f, 500f), Color.White);
+            spriteBatch.DrawString(_font, text, new Vector2(600f, 100f), Color.White);
+            text = "In-hand weapon: " + _brave.InHandWeapon;
+            spriteBatch.DrawString(_font, text, new Vector2(600f, 120f), Color.White);
+            switch (_brave.WeaponsBag.Count)
+            {
+                case 1:
+                    text = "Weapon bag: " + _brave.WeaponsBag[0];
+                    break;
+                case 2:
+                    text = "Weapon bag: " + _brave.WeaponsBag[0] + " " + _brave.WeaponsBag[1];
+                    break;
+                default:
+                    text = "Weapon bag: empty";
+                    break;
+            }
+            spriteBatch.DrawString(_font, text, new Vector2(600f, 140f), Color.White);
+
+            // Weapon
+            
         }
     }
 }

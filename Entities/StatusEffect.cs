@@ -12,6 +12,8 @@ namespace Zchlachten.Entities
         private Vector2 _textureOrigin;
         private Body _body;
 
+        public StatusEffectType statusEffectType;
+
         public StatusEffect(World world, Texture2D texture, Vector2 position)
         {
             _world = world;

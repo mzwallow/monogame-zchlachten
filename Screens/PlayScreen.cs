@@ -18,9 +18,9 @@ namespace Zchlachten.Screens
 
         private Texture2D _demonLordTxr, _braveTxr;
         private Texture2D _demonEyeTxr;
-        private Texture2D _buffTxr;
+        private Texture2D _buffGod,_buffDevil,_debuffDragon,_debuffGolden,_debuffSlime;
         private Texture2D _groundTxr;
-        private Texture2D[] _weaponTxrs;
+        private Texture2D[] _weaponTxrs,_allStatusEffectTxr;
 
         private Ground _ground;
 
@@ -40,6 +40,7 @@ namespace Zchlachten.Screens
             Globals.GameState = GameState.START;
             var values = Enum.GetValues(typeof(PlayerTurn));
                 Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
+
         }
 
         public override void LoadContent()
@@ -77,10 +78,22 @@ namespace Zchlachten.Screens
             );
 
             // Load buffs & debuffs
-            _buffTxr = base.Content.Load<Texture2D>("StatusEffects/Buff");
+            _buffGod = base.Content.Load<Texture2D>("Controls/blessing_of_god");
+            _buffDevil = base.Content.Load<Texture2D>("Controls/blessing_of_devil");
+            _debuffDragon = base.Content.Load<Texture2D>("Controls/fire_dragon_blood");
+            _debuffGolden = base.Content.Load<Texture2D>("Controls/golden_crow_bile");
+            _debuffSlime = base.Content.Load<Texture2D>("StatusEffects/Buff");
+            _allStatusEffectTxr = new Texture2D[]{
+                _buffGod,
+                _buffDevil,
+                _debuffDragon,
+                _debuffGolden,
+                _debuffSlime
+            };
             _statusEffectManager = new StatusEffectManager(
                 _world,
-                _entityManager
+                _entityManager,
+                _allStatusEffectTxr
             );
 
             // Load environments

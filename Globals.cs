@@ -16,7 +16,7 @@ namespace Zchlachten
         public static SoundEffectInstance _bgmInstance, _soundFXInstance;
         public static string song;
 
-        public static float MusicVolume=0.1f,SoundVolume=0.1f;
+        public static float MusicVolume=0.0f,SoundVolume=0.1f;
 
         public static ScreenManager ScreenManager;
 

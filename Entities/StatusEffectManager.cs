@@ -17,7 +17,6 @@ namespace Zchlachten.Entities
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
 
 
-        public StatusEffect Buff, Buff1;
 
 
         public StatusEffectManager(
@@ -46,10 +45,10 @@ namespace Zchlachten.Entities
             {
                 case GameState.PRE_PLAY:
                     //Random Bullshit
-                    positionX = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
-                    positionY = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
-                    positionX1 = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
-                    positionY1 = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
+                    positionX = r.Next(Convert.ToInt32((450 + _buffGod.Width/2) * 0.0234375f), Convert.ToInt32((800 + _buffGod.Width/2)* 0.0234375f));
+                    positionY = r.Next(Convert.ToInt32((370 + _buffGod.Width/2) * 0.0234375f), Convert.ToInt32((620 + _buffGod.Width/2) * 0.0234375f));
+                    positionX1 = r.Next(Convert.ToInt32((450 + _buffGod.Width/2)* 0.0234375f), Convert.ToInt32((800 + _buffGod.Width/2)* 0.0234375f));
+                    positionY1 = r.Next(Convert.ToInt32((370 + _buffGod.Width/2)* 0.0234375f), Convert.ToInt32((620 + _buffGod.Width/2)* 0.0234375f));
 
                     //Random Buff
                     var newBuff = RandomBuff(new Vector2(positionX, positionY));

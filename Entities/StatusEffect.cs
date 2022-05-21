@@ -15,7 +15,7 @@ namespace Zchlachten.Entities
         private Vector2 _textureOrigin;
         public Body Body;
         private Fixture _statusEffectFixture;
-        public StatusEffectType statusEffectType;
+        //public StatusEffectType statusEffectType;
         public bool HasCollided = false;
         private Vector2 _size;
         private Vector2 _scale;

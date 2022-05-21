@@ -24,7 +24,7 @@ namespace Zchlachten.Screens
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Texture2D _groundTxr;
         private Texture2D _ItemTxr;
-        private Texture2D[] _weaponTxrs, _allStatusEffectTxr, _allItemTxr;
+        private Texture2D[] _weaponTxrs;
 
         private Ground _ground;
 
@@ -103,13 +103,13 @@ namespace Zchlachten.Screens
             _debuffDragon = base.Content.Load<Texture2D>("Controls/fire_dragon_blood");
             _debuffGolden = base.Content.Load<Texture2D>("Controls/golden_crow_bile");
             _debuffSlime = base.Content.Load<Texture2D>("StatusEffects/Buff");
-            _allStatusEffectTxr = new Texture2D[]{
-                _buffGod,
-                _buffDevil,
-                _debuffDragon,
-                _debuffGolden,
-                _debuffSlime
-            };
+            // _allStatusEffectTxr = new Texture2D[]{
+            //     _buffGod,
+            //     _buffDevil,
+            //     _debuffDragon,
+            //     _debuffGolden,
+            //     _debuffSlime
+            // };
             _statusEffectManager = new StatusEffectManager(
                 _world,
                 _entityManager
@@ -122,14 +122,14 @@ namespace Zchlachten.Screens
 
             // Load Items
             _ItemTxr = base.Content.Load<Texture2D>("Items/BG_Item");
-            _allItemTxr = new Texture2D[]{
-                _ItemTxr
-            };
+            // _allItemTxr = new Texture2D[]{
+            //     _ItemTxr
+            // };
             _itemManager = new ItemManager(
                 _world,
-                _entityManager,
-                _allItemTxr
+                _entityManager
             );
+            _itemManager.LoadContent(base.Content);
 
 
 
@@ -145,7 +145,6 @@ namespace Zchlachten.Screens
 
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_weaponManager);
-
             _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_statusEffectManager);

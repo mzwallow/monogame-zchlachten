@@ -7,23 +7,34 @@ namespace Zchlachten.Entities
     public abstract class Items : IGameEntity
     {
         private readonly World _world;
-        private Texture2D _texture;
+        public Texture2D Texture;
         private Vector2 _textureOrigin;
         public Body Body;
+        private readonly EntityManager _entityManager;
         // private Fixture _itemsFixture;
         private Vector2 _size;
         private Vector2 _scale;
+        
+        //private ItemType _itemType;
 
         protected Items(World world, Texture2D texture, Vector2 position)
         {
             _world = world;
-            _texture = texture;
+            Texture = texture;
 
-            _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
-            _size = new Vector2(_texture.Width  * 0.0234375f, _texture.Height  * 0.0234375f);
-            _scale = _size / new Vector2(_texture.Width, _texture.Height);
+            _textureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+            _size = new Vector2(Texture.Width  * 0.0234375f, Texture.Height  * 0.0234375f);
+            _scale = _size / new Vector2(Texture.Width, Texture.Height);
 
+            
+            //_itemsFixture.Tag = "items";
+        }
+        protected Items(World world, Texture2D texture)
+        {
+            _world = world;
+            Texture = texture;
 
+            
             //_itemsFixture.Tag = "items";
         }
 
@@ -31,17 +42,17 @@ namespace Zchlachten.Entities
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-            _texture,
-            Body.Position,
-            null,
-            Color.White,
-            Body.Rotation,
-            _textureOrigin,
-            _scale,
-            SpriteEffects.FlipVertically,
-            0f
-        );
+            // spriteBatch.Draw(
+            // Texture,
+            // Body.Position,
+            // null,
+            // Color.White,
+            // Body.Rotation,
+            // _textureOrigin,
+            // _scale,
+            // SpriteEffects.FlipVertically,
+            // 0f
+        //);
         }
 
         

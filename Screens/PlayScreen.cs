@@ -80,12 +80,13 @@ namespace Zchlachten.Screens
 
             // Load weapons
             var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
-            // _demonEyeTxr = base.Content.Load<Texture2D>("Weapons/ball");
+            var cursedEyeTxr = base.Content.Load<Texture2D>("Weapons/CursedEye");
             var lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
-            // var _lightSwordTxr = base.Content.Load<Texture2D>("Weapons/ball");
+            var lightChakraTxr = base.Content.Load<Texture2D>("Weapons/LightChakra");
+            var meadTxr = base.Content.Load<Texture2D>("Weapons/Mead");
             _weaponTxrs = new Texture2D[]
             {
-                demonEyeTxr, lightSwordTxr
+                demonEyeTxr, lightSwordTxr, cursedEyeTxr, lightChakraTxr, meadTxr
             };
 
             _weaponManager = new WeaponManager(
@@ -121,13 +122,15 @@ namespace Zchlachten.Screens
             _ground = new Ground(_groundTxr, _world);
 
             // Load Items
-            _ItemTxr = base.Content.Load<Texture2D>("Items/BG_Item");
+            //_ItemTxr = base.Content.Load<Texture2D>("Items/BG_Item");
             // _allItemTxr = new Texture2D[]{
             //     _ItemTxr
             // };
             _itemManager = new ItemManager(
                 _world,
-                _entityManager
+                _entityManager,
+                _playerManager.DemonLord,
+                _playerManager.Brave
             );
             _itemManager.LoadContent(base.Content);
 
@@ -143,12 +146,13 @@ namespace Zchlachten.Screens
             );
             _debugUI.LoadContent();
 
+            _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_weaponManager);
             _entityManager.AddEntry(_debugUI);
-            _entityManager.AddEntry(_ground);
-            _entityManager.AddEntry(_statusEffectManager);
             _entityManager.AddEntry(_itemManager);
+            _entityManager.AddEntry(_statusEffectManager);
+
         }
 
         public override void Update(GameTime gameTime)

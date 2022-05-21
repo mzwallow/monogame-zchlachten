@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
@@ -23,8 +24,8 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
-
         public List<StatusEffect> StatusEffectBag { get; set; } = new List<StatusEffect>();
+        public List<Items> ItemsBag {get; set;} = new List<Items>(3);
 
         protected Player(World world, Texture2D texture, Vector2 position)
         {
@@ -40,6 +41,7 @@ namespace Zchlachten.Entities
             _playerFixture.Tag = "players";
 
             WeaponsBag = new List<Weapon>(2);
+
         }
 
         public abstract void Update(GameTime gameTime);
@@ -61,9 +63,15 @@ namespace Zchlachten.Entities
             Globals.DebugView.DrawShape(_playerFixture, new Transform(Body.Position, Body.Rotation), Color.Crimson);
         }
 
-        public void Hit(int damage)
+        public void HitBy(Weapon weapon)
         {
-            HP -= damage;
+            HP -= weapon.Damage;
+
+            if (weapon.Type == WeaponType.CHARM)
+            {
+                Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
+            }
         }
+
     }
 }

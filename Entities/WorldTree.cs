@@ -6,8 +6,8 @@ namespace Zchlachten.Entities
 {
     public class WorldTree : Items
     {        
-        public WorldTree(World world, Texture2D texture, Vector2 position)
-            : base(world, texture, position)
+        public WorldTree(World world, Texture2D texture)
+            : base(world, texture)
         {
             
         }

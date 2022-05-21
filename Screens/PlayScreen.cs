@@ -78,12 +78,13 @@ namespace Zchlachten.Screens
 
             // Load weapons
             var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
-            // _demonEyeTxr = base.Content.Load<Texture2D>("Weapons/ball");
+            var cursedEyeTxr = base.Content.Load<Texture2D>("Weapons/CursedEye");
             var lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
-            // var _lightSwordTxr = base.Content.Load<Texture2D>("Weapons/ball");
+            var lightChakraTxr = base.Content.Load<Texture2D>("Weapons/LightChakra");
+            var meadTxr = base.Content.Load<Texture2D>("Weapons/Mead");
             _weaponTxrs = new Texture2D[]
             {
-                demonEyeTxr, lightSwordTxr
+                demonEyeTxr, lightSwordTxr, cursedEyeTxr, lightChakraTxr, meadTxr
             };
 
             _weaponManager = new WeaponManager(

@@ -12,6 +12,7 @@ namespace Zchlachten
 
         public static MouseState CurrentMouseState, PreviousMouseState;
         public static KeyboardState CurrentKeyboardState, PreviousKeyboardState;
+        public static MouseCursor MouseCursor;
       
         public static  SoundEffect bgm , soundFX;
         public static SoundEffectInstance _bgmInstance, _soundFXInstance;

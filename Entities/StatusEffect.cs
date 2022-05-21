@@ -30,7 +30,7 @@ namespace Zchlachten.Entities
             
             Body = _world.CreateBody(position);
 
-            var statusEffectFixture = Body.CreateCircle(_texture.Width, 1f);
+            var statusEffectFixture = Body.CreateCircle(_size.X, 1f);
             statusEffectFixture.Tag = "statusEffects";
         }
 

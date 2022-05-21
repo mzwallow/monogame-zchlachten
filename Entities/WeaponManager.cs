@@ -15,7 +15,10 @@ namespace Zchlachten.Entities
         // private const float BRAVE_WEAPON_START_POS_X = 25.76953125f;
         // private const float BRAVE_WEAPON_START_POS_Y = 5.12109375f;
         private const float MIN_FORCE = 2f;
-        private const float MAX_FORCE = 5.5f;
+        private const float MAX_FORCE = 6f;
+        private const float MIN_CHARGE = 0.1f;
+        private const float MAX_CHARGE = 2f;
+        private const float RANGE_FORCE = 0.4f;
         private const float DEMON_LORD_WEAPON_START_POS_X = 5f;
         private const float DEMON_LORD_WEAPON_START_POS_Y = 5f;
         private const float BRAVE_WEAPON_START_POS_X = 25f;
@@ -27,9 +30,13 @@ namespace Zchlachten.Entities
 
         private Texture2D _arrowTxr;
         private Texture2D _demonEyeTxr, _lightSwordTxr;
-        private Texture2D _inHandWeaponTxr, _weaponBagTxr;
+        private Texture2D _inHandWeaponTxr, _weaponBagTxr, _chargeGauge;
 
         private float _rotation;
+        private float _chargeMeter;
+        private float _force = 2f;
+        private float _Xforce = 1f;
+        private bool _isShoot = false;
 
         public WeaponManager(
             World world,
@@ -47,6 +54,8 @@ namespace Zchlachten.Entities
 
             _demonEyeTxr = weaponsTxrs[0];
             _lightSwordTxr = weaponsTxrs[1];
+
+            _chargeMeter = MIN_CHARGE;
         }
 
         public void LoadContent(ContentManager content)
@@ -54,6 +63,7 @@ namespace Zchlachten.Entities
             _arrowTxr = content.Load<Texture2D>("Players/Arrow");
             _inHandWeaponTxr = content.Load<Texture2D>("UI/InHandWeapon");
             _weaponBagTxr = content.Load<Texture2D>("UI/WeaponBag");
+            _chargeGauge = content.Load<Texture2D>("Players/MinChargeGauge");
         }
 
         public void Update(GameTime gameTime)
@@ -80,20 +90,37 @@ namespace Zchlachten.Entities
                         if (_demonLord.InHandWeapon is null)
                             _demonLord.InHandWeapon = new NormalShot(_world, _brave, _demonEyeTxr);
 
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
                         {
+                            if (_chargeMeter > MAX_CHARGE)
+                            {
+                                _Xforce = -1f;
+                            }
+                            else if (_chargeMeter < MIN_CHARGE)
+                            {
+                                _Xforce = 1f;
+                            }
+                            _chargeMeter += (0.1f * _Xforce);
+                            
+
+                        }
+                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed)
+                        {
+                            _isShoot = true;
                             float x = (float)Math.Cos(_rotation);
                             float y = (float)Math.Sin(_rotation);
 
                             _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
-                            _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
+                            _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
 
                             // * Debug                            
                             Debug.WriteLine("Demon lord speed: " + _demonLord.InHandWeapon.Body.LinearVelocity);
 
                             _entityManager.AddEntry(_demonLord.InHandWeapon);
+                            Console.WriteLine((MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)));
+
                         }
+
                     }
                     else
                     {
@@ -110,20 +137,36 @@ namespace Zchlachten.Entities
                         if (_brave.InHandWeapon is null)
                             _brave.InHandWeapon = new NormalShot(_world, _demonLord, _lightSwordTxr);
 
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
                         {
+                            if (_chargeMeter > MAX_CHARGE)
+                            {
+                                _Xforce = -1f;
+                            }
+                            else if (_chargeMeter < MIN_CHARGE)
+                            {
+                                _Xforce = 1f;
+                            }
+                            _chargeMeter += (0.1f * _Xforce);
+
+                        }
+                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed)
+                        {
+                            _isShoot = true;
                             float x = (float)Math.Cos(_rotation);
                             float y = (float)Math.Sin(_rotation);
 
                             _brave.InHandWeapon.CreateBody(weaponStartingPos);
-                            _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
+                            _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
 
                             // * Debug
                             Debug.WriteLine("Brave speed: " + _brave.InHandWeapon.Body.LinearVelocity);
 
                             _entityManager.AddEntry(_brave.InHandWeapon);
+                            Console.WriteLine((MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)));
+
                         }
+
                     }
                     break;
                 case GameState.POST_PLAY:
@@ -184,6 +227,29 @@ namespace Zchlachten.Entities
                     SpriteEffects.None,
                     0f
                 );
+                spriteBatch.Draw(
+                         _chargeGauge,
+                         _demonLord.Body.Position + new Vector2(_demonLord.Size.X - _chargeGauge.Width / 2, _demonLord.Size.Y / 2 + 1f),
+                         null,
+                         Color.White,
+                         MathHelper.ToRadians(90f),
+                         new Vector2(_chargeGauge.Width / 2, _chargeGauge.Height),
+                         new Vector2(0.3f, MAX_CHARGE) / new Vector2(_chargeGauge.Width, _chargeGauge.Height),
+                         SpriteEffects.None,
+                         0f
+                     );
+                if (!_isShoot)
+                    spriteBatch.Draw(
+                         _chargeGauge,
+                         _demonLord.Body.Position + new Vector2(_demonLord.Size.X - _chargeGauge.Width / 2, _demonLord.Size.Y / 2 + 0.5f),
+                         null,
+                         Color.White,
+                         MathHelper.ToRadians(90f),
+                         new Vector2(_chargeGauge.Width / 2, _chargeGauge.Height),
+                         new Vector2(0.3f, _chargeMeter) / new Vector2(_chargeGauge.Width, _chargeGauge.Height),
+                         SpriteEffects.None,
+                         0f
+                     );
             }
             else
             {
@@ -198,6 +264,18 @@ namespace Zchlachten.Entities
                     SpriteEffects.None,
                     0f
                 );
+                if (!_isShoot)
+                    spriteBatch.Draw(
+                        _chargeGauge,
+                        _brave.Body.Position + new Vector2(_brave.Size.X - _chargeGauge.Height / 2, _brave.Size.Y / 2 + 0.5f),
+                        null,
+                        Color.White,
+                        MathHelper.ToRadians(90f),
+                        new Vector2(_chargeGauge.Width / 2, _chargeGauge.Height),
+                        new Vector2(0.3f, _chargeMeter) / new Vector2(_chargeGauge.Width, _chargeGauge.Height),
+                        SpriteEffects.None,
+                        0f
+                    );
             }
 
 

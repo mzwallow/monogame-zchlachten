@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
@@ -61,9 +62,14 @@ namespace Zchlachten.Entities
             Globals.DebugView.DrawShape(_playerFixture, new Transform(Body.Position, Body.Rotation), Color.Crimson);
         }
 
-        public void Hit(int damage)
+        public void HitBy(Weapon weapon)
         {
-            HP -= damage;
+            HP -= weapon.Damage;
+
+            if (weapon.Type == WeaponType.CHARM)
+            {
+                Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
+            }
         }
     }
 }

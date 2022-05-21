@@ -316,6 +316,18 @@
 /processorParam:TextureFormat=Color
 /build:Weapons/ball.png
 
+#begin Weapons/CursedEye.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapons/CursedEye.png
+
 #begin Weapons/DemonEye.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -328,6 +340,18 @@
 /processorParam:TextureFormat=Color
 /build:Weapons/DemonEye.png
 
+#begin Weapons/LightChakra.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapons/LightChakra.png
+
 #begin Weapons/LightSword.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -339,4 +363,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Weapons/LightSword.png
+
+#begin Weapons/Mead.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapons/Mead.PNG
 

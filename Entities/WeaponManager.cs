@@ -10,13 +10,9 @@ namespace Zchlachten.Entities
 {
     public class WeaponManager : IGameEntity
     {
-        // private const float DEMON_LORD_WEAPON_START_POS_X = 4.23046875f;
-        // private const float DEMON_LORD_WEAPON_START_POS_Y = 5.12109375f;
-        // private const float BRAVE_WEAPON_START_POS_X = 25.76953125f;
-        // private const float BRAVE_WEAPON_START_POS_Y = 5.12109375f;
         private const float MIN_FORCE = 2f;
         private const float MAX_FORCE = 6f;
-        private const float MIN_CHARGE = 0.1f;
+        private const float MIN_CHARGE = 0f;
         private const float MAX_CHARGE = 2f;
         private const float RANGE_FORCE = 0.4f;
         private const float DEMON_LORD_WEAPON_START_POS_X = 5f;
@@ -34,9 +30,8 @@ namespace Zchlachten.Entities
 
         private float _rotation;
         private float _chargeMeter;
-        private float _force = 2f;
-        private float _Xforce = 1f;
-        private bool _isShoot = false;
+        private float _MeterControl = 1f;
+        private bool isShooting = false;
 
         public WeaponManager(
             World world,
@@ -69,144 +64,187 @@ namespace Zchlachten.Entities
         public void Update(GameTime gameTime)
         {
             Vector2 relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
-            // Vector2 relativeMousePosition = new Vector2(15f, 15f); // ! For development only
 
             switch (Globals.GameState)
             {
                 case GameState.PLAYING:
-                    // Globals.PlayerTurn = PlayerTurn.DEMON_LORD; // ! For development only
                     Vector2 weaponStartingPos;
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
-                        weaponStartingPos = _demonLord.Body.Position
-                            + new Vector2(_demonLord.Size.X / 2 + 0.5f,
-                            _demonLord.Size.Y / 2 + 0.5f);
-
-                        _rotation = (float)Math.Atan2(
-                            relativeMousePosition.Y - (_demonLord.Body.Position.Y + _demonLord.Size.Y / 2),
-                            relativeMousePosition.X - (_demonLord.Body.Position.X + _demonLord.Size.X / 2)
-                        ); //  + MathHelper.ToRadians(90f)
-
                         if (_demonLord.InHandWeapon is null)
-                            _demonLord.InHandWeapon = new NormalShot(_world, _brave, _demonEyeTxr);
+                            _demonLord.InHandWeapon = new NormalShot(_world, _demonLord, _brave, _demonEyeTxr);
 
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
+                        // Check shootable angle
+                        if (relativeMousePosition.X >= _demonLord.Body.Position.X + _demonLord.Size.X / 2
+                                && relativeMousePosition.Y >= _demonLord.Body.Position.Y + _demonLord.Size.Y / 2)
                         {
-                            if (_chargeMeter > MAX_CHARGE)
-                            {
-                                _Xforce = -1f;
-                            }
-                            else if (_chargeMeter < MIN_CHARGE)
-                            {
-                                _Xforce = 1f;
-                            }
-                            _chargeMeter += (0.1f * _Xforce);
-                            
+                            _rotation = (float)Math.Atan2(
+                                relativeMousePosition.Y - (_demonLord.Body.Position.Y + _demonLord.Size.Y / 2),
+                                relativeMousePosition.X - (_demonLord.Body.Position.X + _demonLord.Size.X / 2)
+                            );
 
+                          
+
+                           
                         }
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed)
-                        {
-                            _isShoot = true;
-                            float x = (float)Math.Cos(_rotation);
-                            float y = (float)Math.Sin(_rotation);
+                          // Adjust Force by Charge Gauage 
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
+                            {
+                                if (_chargeMeter > MAX_CHARGE)
+                                {
+                                    _MeterControl = -1f;
+                                }
+                                else if (_chargeMeter <= MIN_CHARGE)
+                                {
+                                    _MeterControl = 1f;
+                                }
+                                _chargeMeter += (0.05f * _MeterControl);
 
-                            _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
-                            _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
+                            }
 
-                            // * Debug                            
-                            Debug.WriteLine("Demon lord speed: " + _demonLord.InHandWeapon.Body.LinearVelocity);
+                         // Handle shooting
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed
+                                    && !isShooting)
+                            {
+                                float x = (float)Math.Cos(_rotation);
+                                float y = (float)Math.Sin(_rotation);
 
-                            _entityManager.AddEntry(_demonLord.InHandWeapon);
-                            Console.WriteLine((MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)));
+                                weaponStartingPos = new Vector2(
+                                    _demonLord.Body.Position.X + _demonLord.Size.X / 2 + 0.5f,
+                                    _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
+                                );
 
-                        }
+                                _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
+                                _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
+                                Console.WriteLine(MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f));
+
+                                _entityManager.AddEntry(_demonLord.InHandWeapon);
+                                isShooting = true;
+                                _chargeMeter = 0f;
+
+                            }
 
                     }
-                    else
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
-                        weaponStartingPos = new Vector2(
-                            _brave.Body.Position.X - _brave.Size.X / 2 - 0.5f,
-                            _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
-                        );
-
-                        _rotation = (float)Math.Atan2(
-                            relativeMousePosition.Y - (_brave.Body.Position.Y + _brave.Size.Y / 2),
-                            relativeMousePosition.X - (_brave.Body.Position.X - _brave.Size.X / 2)
-                        ); //  + MathHelper.ToRadians(90f)
-
                         if (_brave.InHandWeapon is null)
-                            _brave.InHandWeapon = new NormalShot(_world, _demonLord, _lightSwordTxr);
+                            _brave.InHandWeapon = new NormalShot(_world, _brave, _demonLord, _lightSwordTxr);
 
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
+                        // Check shootable angle
+                        if (relativeMousePosition.X <= _brave.Body.Position.X - _brave.Size.X / 2
+                                && relativeMousePosition.Y >= _brave.Body.Position.Y + _brave.Size.Y / 2)
                         {
-                            if (_chargeMeter > MAX_CHARGE)
-                            {
-                                _Xforce = -1f;
-                            }
-                            else if (_chargeMeter < MIN_CHARGE)
-                            {
-                                _Xforce = 1f;
-                            }
-                            _chargeMeter += (0.1f * _Xforce);
-
+                            _rotation = (float)Math.Atan2(
+                                relativeMousePosition.Y - (_brave.Body.Position.Y + _brave.Size.Y / 2),
+                                relativeMousePosition.X - (_brave.Body.Position.X - _brave.Size.X / 2)
+                            );
                         }
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed)
-                        {
-                            _isShoot = true;
-                            float x = (float)Math.Cos(_rotation);
-                            float y = (float)Math.Sin(_rotation);
 
-                            _brave.InHandWeapon.CreateBody(weaponStartingPos);
-                            _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
+                        // Adjust Force by Charge Gauage 
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed)
+                            {
+                                if (_chargeMeter > MAX_CHARGE)
+                                {
+                                    _MeterControl = -1f;
+                                }
+                                else if (_chargeMeter <= MIN_CHARGE)
+                                {
+                                    _MeterControl = 1f;
+                                }
+                                _chargeMeter += (0.05f * _MeterControl);
 
-                            // * Debug
-                            Debug.WriteLine("Brave speed: " + _brave.InHandWeapon.Body.LinearVelocity);
+                            }
 
-                            _entityManager.AddEntry(_brave.InHandWeapon);
-                            Console.WriteLine((MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)));
+                            // Handle shooting
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Released && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed
+                                    && !isShooting)
+                            {
+                                float x = (float)Math.Cos(_rotation);
+                                float y = (float)Math.Sin(_rotation);
 
-                        }
+                                weaponStartingPos = new Vector2(
+                                    _brave.Body.Position.X - _brave.Size.X / 2 - 0.5f,
+                                    _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
+                                );
+
+                                _brave.InHandWeapon.CreateBody(weaponStartingPos);
+                                _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f))));
+                                Console.WriteLine(MIN_FORCE + RANGE_FORCE * (_chargeMeter / 0.2f));
+
+                                _entityManager.AddEntry(_brave.InHandWeapon);
+                                isShooting = true;
+                                _chargeMeter = 0f;
+
+                            }
 
                     }
                     break;
                 case GameState.POST_PLAY:
-                    /*if (_demonLord.BloodThirstGauge == 2)
+                    if (_demonLord.BloodThirstGauge == 2)
                     {
                         _demonLord.BloodThirstGauge = 0;
 
-                        var newWeapon = RandomWeapon(_demonLord, _demonEyeTxr, _demonLordWeaponStartPos);
+                        var newWeapon = RandomWeapon(_demonLord, _brave, _demonEyeTxr);
                         if (_demonLord.WeaponsBag.Count == 2)
                         {
-                            Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '", newWeapon, "' instead.");
-                            _brave.WeaponsBag.Add(newWeapon);
+                            if (_brave.WeaponsBag.Count < 2)
+                            {
+                                _brave.WeaponsBag.Add(newWeapon);
+                                Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '", newWeapon.Type, "' instead.");
+                            }
                         }
-                        _demonLord.WeaponsBag.Add(newWeapon);
-                        Debug.WriteLine("Demon Lord got ", newWeapon);
+                        else
+                        {
+                            _demonLord.WeaponsBag.Add(newWeapon);
+                            Debug.WriteLine("Demon Lord got ", newWeapon.Type);
+                        }
                     }
                     else if (_brave.BloodThirstGauge == 2)
                     {
                         _brave.BloodThirstGauge = 0;
 
-                        var newWeapon = RandomWeapon(_brave, _lightSwordTxr, _braveWeaponStartPos);
+                        var newWeapon = RandomWeapon(_brave, _demonLord, _lightSwordTxr);
                         if (_brave.WeaponsBag.Count == 2)
                         {
-                            Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '", newWeapon, "' instead.");
-                            _demonLord.WeaponsBag.Add(newWeapon);
+                            if (_demonLord.WeaponsBag.Count < 2)
+                            {
+                                _demonLord.WeaponsBag.Add(newWeapon);
+                                Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '", newWeapon.Type, "' instead.");
+                            }
                         }
-                        _brave.WeaponsBag.Add(newWeapon);
-                        Debug.WriteLine("Brave got ", newWeapon);
-                    }*/
+                        else
+                        {
+                            _brave.WeaponsBag.Add(newWeapon);
+                            Debug.WriteLine("Brave got ", newWeapon.Type);
+                        }
+                    }
+                    Globals.GameState = GameState.PRE_PLAY;
                     break;
             }
 
-            // Remove collided weapon
+            // Remove collided weapon & handle gamestate and player turn
             foreach (Weapon weapon in _entityManager.GetEntitiesOfType<Weapon>())
             {
                 if (weapon.HasCollided)
                 {
-                    Debug.WriteLine("Hit");
+                    // Remove physics body and weapon object
                     _world.Remove(weapon.Body);
                     _entityManager.RemoveEntity(weapon);
+                    isShooting = false;
+
+                    // Clear player's in-hand weapon
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    {
+                        _demonLord.InHandWeapon = null;
+                        Globals.PlayerTurn = PlayerTurn.BRAVE;
+                    }
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    {
+                        _brave.InHandWeapon = null;
+                        Globals.PlayerTurn = PlayerTurn.DEMON_LORD;
+                    }
+
+                    Globals.GameState = GameState.POST_PLAY;
                 }
             }
         }
@@ -227,18 +265,7 @@ namespace Zchlachten.Entities
                     SpriteEffects.None,
                     0f
                 );
-                spriteBatch.Draw(
-                         _chargeGauge,
-                         _demonLord.Body.Position + new Vector2(_demonLord.Size.X - _chargeGauge.Width / 2, _demonLord.Size.Y / 2 + 1f),
-                         null,
-                         Color.White,
-                         MathHelper.ToRadians(90f),
-                         new Vector2(_chargeGauge.Width / 2, _chargeGauge.Height),
-                         new Vector2(0.3f, MAX_CHARGE) / new Vector2(_chargeGauge.Width, _chargeGauge.Height),
-                         SpriteEffects.None,
-                         0f
-                     );
-                if (!_isShoot)
+                if (!isShooting)
                     spriteBatch.Draw(
                          _chargeGauge,
                          _demonLord.Body.Position + new Vector2(_demonLord.Size.X - _chargeGauge.Width / 2, _demonLord.Size.Y / 2 + 0.5f),
@@ -264,7 +291,7 @@ namespace Zchlachten.Entities
                     SpriteEffects.None,
                     0f
                 );
-                if (!_isShoot)
+                if (!isShooting)
                     spriteBatch.Draw(
                         _chargeGauge,
                         _brave.Body.Position + new Vector2(_brave.Size.X - _chargeGauge.Height / 2, _brave.Size.Y / 2 + 0.5f),
@@ -278,47 +305,48 @@ namespace Zchlachten.Entities
                     );
             }
 
-
             // In-hand weapon
             spriteBatch.Draw(
                 _inHandWeaponTxr,
-                new Vector2(40.5f, 682.5f),
+                Globals.Camera.ConvertScreenToWorld(new Vector2(40.5f, 682.5f)),
                 null,
                 Color.White,
                 0f,
                 new Vector2(_inHandWeaponTxr.Width / 2, _inHandWeaponTxr.Height / 2),
-                1f,
-                SpriteEffects.None,
+                0.0234375f,
+                SpriteEffects.FlipVertically,
                 0f
             );
+
+
 
             // Weapon bag 1
             spriteBatch.Draw(
                 _weaponBagTxr,
-                new Vector2(99f, 686f),
+                Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f)),
                 null,
                 Color.White,
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
-                1f,
+                0.0234375f,
                 SpriteEffects.None,
                 0f
             );
             // Weapon bag 2
             spriteBatch.Draw(
                 _weaponBagTxr,
-                new Vector2(138f, 686f),
+                Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f)),
                 null,
                 Color.White,
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
-                1f,
+                0.0234375f,
                 SpriteEffects.None,
                 0f
             );
         }
 
-        private Weapon RandomWeapon(Player player, Texture2D weaponTxr, Vector2 position)
+        private Weapon RandomWeapon(Player player, Player enemy, Texture2D weaponTxr)
         {
             var values = Enum.GetValues(typeof(WeaponType));
             var weaponType = (WeaponType)values.GetValue(new Random().Next(values.Length));
@@ -327,19 +355,13 @@ namespace Zchlachten.Entities
             switch (weaponType)
             {
                 case WeaponType.BIG:
-                    weapon = new BigShot(_world, player, weaponTxr, position);
-                    break;
-                case WeaponType.DOUBLE:
-                    weapon = new DoubleShot(_world, player, weaponTxr, position);
-                    break;
-                case WeaponType.SPLIT:
-                    weapon = new SplitShot(_world, player, weaponTxr, position);
+                    weapon = new BigShot(_world, player, enemy, weaponTxr);
                     break;
                 case WeaponType.CHARM:
-                    weapon = new CharmShot(_world, player, weaponTxr, position);
+                    weapon = new CharmShot(_world, player, enemy, weaponTxr);
                     break;
                 default:
-                    weapon = RandomWeapon(player, weaponTxr, position);
+                    weapon = RandomWeapon(enemy, player, weaponTxr);
                     break;
             }
 

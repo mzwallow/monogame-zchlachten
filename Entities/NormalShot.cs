@@ -8,16 +8,20 @@ namespace Zchlachten.Entities
     {
         private const int NORMAL_SHOT_DAMAGE = 10;
 
-        public NormalShot(World world, Player enemy, Texture2D texture)
-            : base(world, enemy, texture)
+        public NormalShot(World world, Player player, Player enemy, Texture2D texture)
+            : base(world, player, enemy, texture)
         {
+            Type = WeaponType.NORMAL;
             Damage = NORMAL_SHOT_DAMAGE;
         }
 
-        public NormalShot(World world, Player enemy, Texture2D texture, Vector2 position)
-            : base(world, enemy, texture, position)
+        public NormalShot(World world, Player player, Player enemy, Texture2D texture, Vector2 position)
+            : base(world, player, enemy, texture, position)
         {
+            Type = WeaponType.NORMAL;
             Damage = NORMAL_SHOT_DAMAGE;
         }
+
+        public override void Update(GameTime gameTime) { }
     }
 }

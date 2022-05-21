@@ -102,6 +102,8 @@ namespace Zchlachten.Entities
                     );
                     _entityManager.AddEntry(Buff);
                     _entityManager.AddEntry(Buff1);
+
+                    Globals.GameState = GameState.PLAYING;
                     break;
             }
 

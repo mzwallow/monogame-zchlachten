@@ -8,10 +8,20 @@ namespace Zchlachten.Entities
     {
         private const int BIG_SHOT_DAMAGE = 20;
 
-        public BigShot(World world, Player player, Texture2D texture, Vector2 position)
-            : base(world, player, texture, position)
+        public BigShot(World world, Player player, Player enemy, Texture2D texture)
+            : base(world, player, enemy, texture)
         {
+            Type = WeaponType.BIG;
             Damage = BIG_SHOT_DAMAGE;
         }
+
+        public BigShot(World world, Player player, Player enemy, Texture2D texture, Vector2 position)
+            : base(world, player, enemy, texture, position)
+        {
+            Type = WeaponType.BIG;
+            Damage = BIG_SHOT_DAMAGE;
+        }
+
+        public override void Update(GameTime gameTime) { }
     }
 }

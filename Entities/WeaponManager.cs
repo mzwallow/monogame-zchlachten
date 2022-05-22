@@ -12,10 +12,20 @@ namespace Zchlachten.Entities
     {
         private const float MIN_FORCE = 2f;
         private const float MAX_FORCE = 5.5f;
-        private const float DEMON_LORD_WEAPON_START_POS_X = 5f;
-        private const float DEMON_LORD_WEAPON_START_POS_Y = 5f;
-        private const float BRAVE_WEAPON_START_POS_X = 25f;
-        private const float BRAVE_WEAPON_START_POS_Y = 5f;
+
+        private const float DEMON_LORD_IN_HAND_WEAPON_POS_X = 0.8f;
+        private const float DEMON_LORD_IN_HAND_WEAPON_POS_Y = 3.5f;
+        private const float DEMON_LORD_WEAPON_BAG1_POS_X = 0.8f;
+        private const float DEMON_LORD_WEAPON_BAG1_POS_Y = 4.8f;
+        private const float DEMON_LORD_WEAPON_BAG2_POS_X = 0.8f;
+        private const float DEMON_LORD_WEAPON_BAG2_POS_Y = 5.8f;
+
+        private const float BRAVE_IN_HAND_WEAPON_POS_X = 29.2f;
+        private const float BRAVE_IN_HAND_WEAPON_POS_Y = 3.5f;
+        private const float BRAVE_WEAPON_BAG1_POS_X = 29.2f;
+        private const float BRAVE_WEAPON_BAG1_POS_Y = 4.8f;
+        private const float BRAVE_WEAPON_BAG2_POS_X = 29.2f;
+        private const float BRAVE_WEAPON_BAG2_POS_Y = 5.8f;
 
         private readonly World _world;
         private readonly EntityManager _entityManager;
@@ -26,7 +36,6 @@ namespace Zchlachten.Entities
         private Texture2D _inHandWeaponTxr, _weaponBagTxr;
 
         private float _rotation;
-        private bool isShooting = false;
 
         public WeaponManager(
             World world,
@@ -59,6 +68,7 @@ namespace Zchlachten.Entities
         public void Update(GameTime gameTime)
         {
             Vector2 relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
+            Debug.WriteLine(relativeMousePosition);
 
             switch (Globals.GameState)
             {
@@ -81,7 +91,7 @@ namespace Zchlachten.Entities
                             // Handle shooting
                             if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                     && Globals.PreviousMouseState.LeftButton == ButtonState.Released
-                                    && !isShooting)
+                                    && !Globals.IsShooting)
                             {
                                 float x = (float)Math.Cos(_rotation);
                                 float y = (float)Math.Sin(_rotation);
@@ -95,15 +105,15 @@ namespace Zchlachten.Entities
                                 _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
                                 _entityManager.AddEntry(_demonLord.InHandWeapon);
-                                isShooting = true;
+                                Globals.IsShooting = true;
                             }
                         }
 
                         // Handle weapon selection
-                        if (!isShooting)
+                        if (!Globals.IsShooting)
                         {
-                            var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f));
-                            var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f));
+                            var weaponBagOnePosition = new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y);
+                            var weaponBagTwoPosition = new Vector2(DEMON_LORD_WEAPON_BAG2_POS_X, DEMON_LORD_WEAPON_BAG2_POS_Y);
                             if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
                                     && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
@@ -157,7 +167,7 @@ namespace Zchlachten.Entities
                             // Handle shooting
                             if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                     && Globals.PreviousMouseState.LeftButton == ButtonState.Released
-                                    && !isShooting)
+                                    && !Globals.IsShooting)
                             {
                                 float x = (float)Math.Cos(_rotation);
                                 float y = (float)Math.Sin(_rotation);
@@ -171,15 +181,15 @@ namespace Zchlachten.Entities
                                 _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
                                 _entityManager.AddEntry(_brave.InHandWeapon);
-                                isShooting = true;
+                                Globals.IsShooting = true;
                             }
                         }
 
                         // Handle weapon selection
-                        if (!isShooting)
+                        if (!Globals.IsShooting)
                         {
-                            var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f));
-                            var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f));
+                            var weaponBagOnePosition = new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y);
+                            var weaponBagTwoPosition = new Vector2(BRAVE_WEAPON_BAG2_POS_X, BRAVE_WEAPON_BAG2_POS_Y);
                             if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
                                     && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
@@ -268,7 +278,7 @@ namespace Zchlachten.Entities
                     // Remove physics body and weapon object
                     _world.Remove(weapon.Body);
                     _entityManager.RemoveEntity(weapon);
-                    isShooting = false;
+                    Globals.IsShooting = false;
 
                     // Clear player's in-hand weapon
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
@@ -322,7 +332,8 @@ namespace Zchlachten.Entities
             // Demon Lord in-hand weapon
             spriteBatch.Draw(
                 _inHandWeaponTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(40.5f, 682.5f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(40.5f, 682.5f)),
+                new Vector2(DEMON_LORD_IN_HAND_WEAPON_POS_X, DEMON_LORD_IN_HAND_WEAPON_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -335,7 +346,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _demonLord.InHandWeapon.Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(40.5f, 682.5f)),
+                    new Vector2(DEMON_LORD_IN_HAND_WEAPON_POS_X, DEMON_LORD_IN_HAND_WEAPON_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -349,7 +360,8 @@ namespace Zchlachten.Entities
             // Demon Lord weapon bag 1
             spriteBatch.Draw(
                 _weaponBagTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f)),
+                new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -361,7 +373,8 @@ namespace Zchlachten.Entities
             // Demon Lord weapon bag 2
             spriteBatch.Draw(
                 _weaponBagTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f)),
+                new Vector2(DEMON_LORD_WEAPON_BAG2_POS_X, DEMON_LORD_WEAPON_BAG2_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -374,7 +387,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _demonLord.WeaponsBag[0].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f)),
+                    new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -388,7 +401,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _demonLord.WeaponsBag[0].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f)),
+                    new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -399,7 +412,7 @@ namespace Zchlachten.Entities
                 );
                 spriteBatch.Draw(
                     _demonLord.WeaponsBag[1].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f)),
+                    new Vector2(DEMON_LORD_WEAPON_BAG2_POS_X, DEMON_LORD_WEAPON_BAG2_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -413,7 +426,8 @@ namespace Zchlachten.Entities
             // Brave in-hand weapon
             spriteBatch.Draw(
                 _inHandWeaponTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(1241.5f, 682.5f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(1241.5f, 682.5f)),
+                new Vector2(BRAVE_IN_HAND_WEAPON_POS_X, BRAVE_IN_HAND_WEAPON_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -426,7 +440,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _brave.InHandWeapon.Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(1241.5f, 682.5f)),
+                    new Vector2(BRAVE_IN_HAND_WEAPON_POS_X, BRAVE_IN_HAND_WEAPON_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -440,7 +454,8 @@ namespace Zchlachten.Entities
             // Brave weapon bag 1
             spriteBatch.Draw(
                 _weaponBagTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f)),
+                new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -452,7 +467,8 @@ namespace Zchlachten.Entities
             // Brave weapon bag 2
             spriteBatch.Draw(
                 _weaponBagTxr,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f)),
+                // Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f)),
+                new Vector2(BRAVE_WEAPON_BAG2_POS_X, BRAVE_WEAPON_BAG2_POS_Y),
                 null,
                 Color.White,
                 0f,
@@ -465,7 +481,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _brave.WeaponsBag[0].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f)),
+                    new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -479,7 +495,7 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _brave.WeaponsBag[0].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f)),
+                    new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y),
                     null,
                     Color.White,
                     0f,
@@ -490,7 +506,7 @@ namespace Zchlachten.Entities
                 );
                 spriteBatch.Draw(
                     _brave.WeaponsBag[1].Texture,
-                    Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f)),
+                    new Vector2(BRAVE_WEAPON_BAG2_POS_X, BRAVE_WEAPON_BAG2_POS_Y),
                     null,
                     Color.White,
                     0f,

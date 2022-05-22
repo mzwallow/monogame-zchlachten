@@ -100,40 +100,45 @@ namespace Zchlachten.Entities
                         }
 
                         // Handle weapon selection
-                        var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f));
-                        var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f));
-                        if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
-                                && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2)
+                        if (!isShooting)
                         {
-                            Debug.WriteLine("Weapon bag 1");
-                            Mouse.SetCursor(MouseCursor.Hand);
-
-                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                    && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                            var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f));
+                            var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f));
+                            if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
+                                    && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
+                                    && _demonLord.WeaponsBag.Count > 0)
                             {
-                                _demonLord.InHandWeapon = _demonLord.WeaponsBag[0];
-                                _demonLord.WeaponsBag.Remove(_demonLord.WeaponsBag[0]);
-                            }
-                        }
-                        else if (relativeMousePosition.X >= weaponBagTwoPosition.X - _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.X <= weaponBagTwoPosition.X + _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.Y >= weaponBagTwoPosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
-                                && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2)
-                        {
-                            Debug.WriteLine("Weapon bag 2");
-                            Mouse.SetCursor(MouseCursor.Hand);
+                                Debug.WriteLine("Weapon bag 1");
+                                Mouse.SetCursor(MouseCursor.Hand);
 
-                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                    && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
-                            {
-                                _demonLord.InHandWeapon = _demonLord.WeaponsBag[1];
-                                _demonLord.WeaponsBag.Remove(_demonLord.WeaponsBag[1]);
+                                if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
+                                        && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                                {
+                                    _demonLord.InHandWeapon = _demonLord.WeaponsBag[0];
+                                    _demonLord.WeaponsBag.Remove(_demonLord.WeaponsBag[0]);
+                                }
                             }
+                            else if (relativeMousePosition.X >= weaponBagTwoPosition.X - _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.X <= weaponBagTwoPosition.X + _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.Y >= weaponBagTwoPosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
+                                    && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
+                                    && _demonLord.WeaponsBag.Count > 1)
+                            {
+                                Debug.WriteLine("Weapon bag 2");
+                                Mouse.SetCursor(MouseCursor.Hand);
+
+                                if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
+                                        && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                                {
+                                    _demonLord.InHandWeapon = _demonLord.WeaponsBag[1];
+                                    _demonLord.WeaponsBag.Remove(_demonLord.WeaponsBag[1]);
+                                }
+                            }
+                            else
+                                Mouse.SetCursor(MouseCursor.Arrow);
                         }
-                        else
-                            Mouse.SetCursor(MouseCursor.Arrow);
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
@@ -171,40 +176,45 @@ namespace Zchlachten.Entities
                         }
 
                         // Handle weapon selection
-                        var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f));
-                        var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f));
-                        if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
-                                && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2)
+                        if (!isShooting)
                         {
-                            Debug.WriteLine("Weapon bag 1");
-                            Mouse.SetCursor(MouseCursor.Hand);
-
-                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                    && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                            var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f));
+                            var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f));
+                            if (relativeMousePosition.X >= weaponBagOnePosition.X - _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.X <= weaponBagOnePosition.X + _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.Y >= weaponBagOnePosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
+                                    && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
+                                    && _brave.WeaponsBag.Count > 0)
                             {
-                                _brave.InHandWeapon = _brave.WeaponsBag[0];
-                                _brave.WeaponsBag.Remove(_brave.WeaponsBag[0]);
-                            }
-                        }
-                        else if (relativeMousePosition.X >= weaponBagTwoPosition.X - _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.X <= weaponBagTwoPosition.X + _weaponBagTxr.Width * 0.0234375f / 2
-                                && relativeMousePosition.Y >= weaponBagTwoPosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
-                                && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2)
-                        {
-                            Debug.WriteLine("Weapon bag 2");
-                            Mouse.SetCursor(MouseCursor.Hand);
+                                Debug.WriteLine("Weapon bag 1");
+                                Mouse.SetCursor(MouseCursor.Hand);
 
-                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
-                                    && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
-                            {
-                                _brave.InHandWeapon = _brave.WeaponsBag[1];
-                                _brave.WeaponsBag.Remove(_brave.WeaponsBag[1]);
+                                if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
+                                        && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                                {
+                                    _brave.InHandWeapon = _brave.WeaponsBag[0];
+                                    _brave.WeaponsBag.Remove(_brave.WeaponsBag[0]);
+                                }
                             }
+                            else if (relativeMousePosition.X >= weaponBagTwoPosition.X - _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.X <= weaponBagTwoPosition.X + _weaponBagTxr.Width * 0.0234375f / 2
+                                    && relativeMousePosition.Y >= weaponBagTwoPosition.Y - _weaponBagTxr.Height * 0.0234375f / 2
+                                    && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
+                                    && _brave.WeaponsBag.Count > 1)
+                            {
+                                Debug.WriteLine("Weapon bag 2");
+                                Mouse.SetCursor(MouseCursor.Hand);
+
+                                if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
+                                        && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
+                                {
+                                    _brave.InHandWeapon = _brave.WeaponsBag[1];
+                                    _brave.WeaponsBag.Remove(_brave.WeaponsBag[1]);
+                                }
+                            }
+                            else
+                                Mouse.SetCursor(MouseCursor.Arrow);
                         }
-                        else
-                            Mouse.SetCursor(MouseCursor.Arrow);
                     }
                     break;
                 case GameState.POST_PLAY:

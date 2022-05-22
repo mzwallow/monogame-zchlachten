@@ -10,11 +10,13 @@ namespace Zchlachten.Entities
             : base(world, texture, position)
         {
             Remaining = 3;
+            Type = StatusEffectType.FIRE_DRAGON_BLOOD;
         }
         public DebuffDragon(World world, Texture2D texture)
             : base(world, texture)
         {
             Remaining = 3;
+            Type = StatusEffectType.FIRE_DRAGON_BLOOD;
         }
 
         public override void Update(GameTime gameTime) { }

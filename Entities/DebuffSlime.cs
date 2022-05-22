@@ -10,6 +10,7 @@ namespace Zchlachten.Entities
             : base(world, texture, position)
         {
             Remaining = 2;
+            Type = StatusEffectType.SLIME_MUCILAGE;
         }
 
         public override void Update(GameTime gameTime) { }

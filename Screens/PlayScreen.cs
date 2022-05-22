@@ -139,8 +139,8 @@ namespace Zchlachten.Screens
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_corpsesPile);
             _entityManager.AddEntry(_playerManager);
-            _entityManager.AddEntry(_statusEffectManager);
             _entityManager.AddEntry(_weaponManager);
+            _entityManager.AddEntry(_statusEffectManager);
             _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_itemManager);
 

@@ -4,14 +4,15 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class BuffGod : StatusEffect
+    public class BuffAttack : StatusEffect
     {
-        public BuffGod(World world, Texture2D texture, Vector2 position)
+        public BuffAttack(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
+            Type = StatusEffectType.ATTACK;
             Remaining = 2;
         }
-
+        
         public override void Update(GameTime gameTime) { }
     }
 }

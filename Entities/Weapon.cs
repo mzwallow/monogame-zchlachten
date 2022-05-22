@@ -83,7 +83,7 @@ namespace Zchlachten.Entities
 
             if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-                _player.StatusEffectBag.Add(otherTag.StatusEffect);
+                _player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
 
                 return false;
             }
@@ -94,8 +94,24 @@ namespace Zchlachten.Entities
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
 
-                // if(_player.StatusEffectBag.Contains(DebuffDragon)){
-                    
+                if (_player.HoldStatusEffectBag.Count > 0)
+                {
+                    foreach (StatusEffect status in _player.HoldStatusEffectBag)
+                    {
+                        if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
+                            _enemy.StatusEffectBag.Add(status);
+                        else
+                            _player.StatusEffectBag.Add(status);
+                    }
+                }
+
+                // for (int i = _player.HoldStatusEffectBag.Count-1 ; i > -1; --i)
+                // {
+                //     var x = _player.HoldStatusEffectBag[i];
+                //     if (x.HoldRemaining == 0)
+                //     {
+                //         _player.HoldStatusEffectBag.RemoveAt(i);
+                //     }
                 // }
             }
 
@@ -104,6 +120,8 @@ namespace Zchlachten.Entities
 
             return true;
         }
+
+
 
         public void CreateBody(Vector2 position)
         {

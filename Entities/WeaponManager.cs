@@ -26,7 +26,7 @@ namespace Zchlachten.Entities
         private Texture2D _inHandWeaponTxr, _weaponBagTxr;
 
         private float _rotation;
-       
+
 
         public WeaponManager(
             World world,
@@ -216,6 +216,42 @@ namespace Zchlachten.Entities
                                 Mouse.SetCursor(MouseCursor.Arrow);
                         }
                     }
+
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    {
+                        foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                        {
+                            switch (status.Type)
+                            {
+                                case StatusEffectType.ATTACK:
+                                    var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                                    _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                    break;
+                                case StatusEffectType.SLIME_MUCILAGE:
+                                    var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                                    _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                    break;
+                            }
+                        }
+                    }
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    {
+                        foreach (StatusEffect status in _brave.StatusEffectBag)
+                        {
+                            switch (status.Type)
+                            {
+                                case StatusEffectType.ATTACK:
+                                    var tmp = _brave.InHandWeapon.Damage * 1.25f;
+                                    _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                    break;
+                                case StatusEffectType.SLIME_MUCILAGE:
+                                    var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
+                                    _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                    break;
+                            }
+                        }
+                    }
+
                     break;
                 case GameState.POST_PLAY:
                     if (_demonLord.BloodThirstGauge == 2)
@@ -256,10 +292,10 @@ namespace Zchlachten.Entities
                             Debug.WriteLine("Brave got: " + newWeapon.Type);
                         }
                     }
-                      
+
                     Globals.GameState = GameState.PRE_PLAY;
-                   
-                    
+
+
                     break;
             }
 
@@ -285,6 +321,20 @@ namespace Zchlachten.Entities
                         Globals.PlayerTurn = PlayerTurn.DEMON_LORD;
                     }
 
+
+
+
+                    // if (_demonLord.StatusEffectBag.Count > 0)
+                    // {
+                    //     for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                    //     {
+                    //         var x = _demonLord.StatusEffectBag[i];
+                    //         if (x.Remaining == 0)
+                    //         {
+                    //             _demonLord.StatusEffectBag.RemoveAt(i);
+                    //         }
+                    //     }
+                    // }
                     Globals.GameState = GameState.POST_PLAY;
                 }
             }

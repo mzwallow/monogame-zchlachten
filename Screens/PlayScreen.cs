@@ -99,21 +99,12 @@ namespace Zchlachten.Screens
             _weaponManager.LoadContent(base.Content);
 
             // Load buffs & debuffs
-            _buffGod = base.Content.Load<Texture2D>("Controls/blessing_of_god");
-            _buffDevil = base.Content.Load<Texture2D>("Controls/blessing_of_devil");
-            _debuffDragon = base.Content.Load<Texture2D>("Controls/fire_dragon_blood");
-            _debuffGolden = base.Content.Load<Texture2D>("Controls/golden_crow_bile");
-            _debuffSlime = base.Content.Load<Texture2D>("StatusEffects/Buff");
-            // _allStatusEffectTxr = new Texture2D[]{
-            //     _buffGod,
-            //     _buffDevil,
-            //     _debuffDragon,
-            //     _debuffGolden,
-            //     _debuffSlime
-            // };
             _statusEffectManager = new StatusEffectManager(
                 _world,
-                _entityManager
+                _entityManager,
+                _playerManager.DemonLord,
+                _playerManager.Brave
+
             );
             _statusEffectManager.LoadContent(base.Content);
 
@@ -125,10 +116,6 @@ namespace Zchlachten.Screens
             _corpsesPile = new CorpsesPile(_corpsesPileTxr, _world);
 
             // Load Items
-            //_ItemTxr = base.Content.Load<Texture2D>("Items/BG_Item");
-            // _allItemTxr = new Texture2D[]{
-            //     _ItemTxr
-            // };
             _itemManager = new ItemManager(
                 _world,
                 _entityManager,
@@ -152,10 +139,10 @@ namespace Zchlachten.Screens
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_corpsesPile);
             _entityManager.AddEntry(_playerManager);
+            _entityManager.AddEntry(_statusEffectManager);
             _entityManager.AddEntry(_weaponManager);
             _entityManager.AddEntry(_debugUI);
             _entityManager.AddEntry(_itemManager);
-            _entityManager.AddEntry(_statusEffectManager);
 
         }
 

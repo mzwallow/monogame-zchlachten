@@ -24,8 +24,8 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
-        public List<StatusEffect> StatusEffectBag { get; set; } = new List<StatusEffect>();
-        public List<Items> ItemsBag {get; set;} = new List<Items>(3);
+        public List<StatusEffect> StatusEffectBag  = new List<StatusEffect>();
+        public Items[] ItemsBag = new Items[3];
 
         protected Player(World world, Texture2D texture, Vector2 position)
         {

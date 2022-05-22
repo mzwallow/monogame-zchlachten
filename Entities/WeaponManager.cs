@@ -26,7 +26,7 @@ namespace Zchlachten.Entities
         private Texture2D _inHandWeaponTxr, _weaponBagTxr;
 
         private float _rotation;
-        private bool isShooting = false;
+       
 
         public WeaponManager(
             World world,
@@ -81,7 +81,7 @@ namespace Zchlachten.Entities
                             // Handle shooting
                             if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                     && Globals.PreviousMouseState.LeftButton == ButtonState.Released
-                                    && !isShooting)
+                                    && !Globals.IsShooting)
                             {
                                 float x = (float)Math.Cos(_rotation);
                                 float y = (float)Math.Sin(_rotation);
@@ -95,12 +95,12 @@ namespace Zchlachten.Entities
                                 _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
                                 _entityManager.AddEntry(_demonLord.InHandWeapon);
-                                isShooting = true;
+                                Globals.IsShooting = true;
                             }
                         }
 
                         // Handle weapon selection
-                        if (!isShooting)
+                        if (!Globals.IsShooting)
                         {
                             var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(99f, 686f));
                             var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(138f, 686f));
@@ -157,7 +157,7 @@ namespace Zchlachten.Entities
                             // Handle shooting
                             if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                     && Globals.PreviousMouseState.LeftButton == ButtonState.Released
-                                    && !isShooting)
+                                    && !Globals.IsShooting)
                             {
                                 float x = (float)Math.Cos(_rotation);
                                 float y = (float)Math.Sin(_rotation);
@@ -171,12 +171,12 @@ namespace Zchlachten.Entities
                                 _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
                                 _entityManager.AddEntry(_brave.InHandWeapon);
-                                isShooting = true;
+                                Globals.IsShooting = true;
                             }
                         }
 
                         // Handle weapon selection
-                        if (!isShooting)
+                        if (!Globals.IsShooting)
                         {
                             var weaponBagOnePosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1179f, 686f));
                             var weaponBagTwoPosition = Globals.Camera.ConvertScreenToWorld(new Vector2(1140f, 686f));
@@ -256,7 +256,10 @@ namespace Zchlachten.Entities
                             Debug.WriteLine("Brave got: " + newWeapon.Type);
                         }
                     }
+                      
                     Globals.GameState = GameState.PRE_PLAY;
+                   
+                    
                     break;
             }
 
@@ -268,7 +271,7 @@ namespace Zchlachten.Entities
                     // Remove physics body and weapon object
                     _world.Remove(weapon.Body);
                     _entityManager.RemoveEntity(weapon);
-                    isShooting = false;
+                    Globals.IsShooting = false;
 
                     // Clear player's in-hand weapon
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)

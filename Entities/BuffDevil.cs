@@ -9,7 +9,7 @@ namespace Zchlachten.Entities
         public BuffDevil(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            
+            Remaining = 2;
         }
 
         public override void Update(GameTime gameTime) { }

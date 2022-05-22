@@ -9,7 +9,12 @@ namespace Zchlachten.Entities
         public DebuffDragon(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            
+            Remaining = 3;
+        }
+        public DebuffDragon(World world, Texture2D texture)
+            : base(world, texture)
+        {
+            Remaining = 3;
         }
 
         public override void Update(GameTime gameTime) { }

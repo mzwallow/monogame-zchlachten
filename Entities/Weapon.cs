@@ -25,6 +25,7 @@ namespace Zchlachten.Entities
 
         public bool HasCollided = false;
 
+
         protected Weapon(World world, Player player, Player enemy, Texture2D texture)
         {
             _world = world;
@@ -82,7 +83,7 @@ namespace Zchlachten.Entities
 
             if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-
+                _player.StatusEffectBag.Add(otherTag.StatusEffect);
 
                 return false;
             }
@@ -92,11 +93,15 @@ namespace Zchlachten.Entities
                 HasCollided = true;
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
+
+                // if(_player.StatusEffectBag.Contains(DebuffDragon)){
+                    
+                // }
             }
 
             if (otherTag.Type == TagType.ENVIRONMENT)
                 HasCollided = true;
-            
+
             return true;
         }
 

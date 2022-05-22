@@ -20,6 +20,7 @@ namespace Zchlachten.Entities
         private Vector2 _size;
         private Vector2 _scale;
 
+        public int Remaining;
         public StatusEffect(World world, Texture2D texture, Vector2 position)
         {
             _world = world;

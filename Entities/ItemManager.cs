@@ -69,8 +69,8 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            _demonLord.HP += 5;
                             _demonLord.ItemsBag.Remove(_demonLord.ItemsBag[0]);
+                            _demonLord.HP += 45;
                         }
                     }
                     else if (relativeMousePosition.X >= ItemBagTwoPosition.X - _itemsBag.Width * 0.0234375f / 2
@@ -84,8 +84,8 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-
                             _demonLord.ItemsBag.Remove(_demonLord.ItemsBag[1]);
+                            _demonLord.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
                         }
                     }
                     else if (relativeMousePosition.X >= ItemBagThreePosition.X - _itemsBag.Width * 0.0234375f / 2
@@ -99,8 +99,8 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-
                             _demonLord.ItemsBag.Remove(_demonLord.ItemsBag[2]);
+                            _demonLord.StatusEffectBag.Clear();
                         }
                     }
                 }
@@ -120,7 +120,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-
+                            _brave.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
                             _brave.ItemsBag.Remove(_brave.ItemsBag[0]);
                         }
                     }

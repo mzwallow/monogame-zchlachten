@@ -68,7 +68,7 @@ namespace Zchlachten.Screens
         {
             _storyFont = base.Content.Load<SpriteFont>("Fonts/StoryText");
             //this.song = Content.Load<Song>("Sound/Win");
-            MediaPlayer.Play(song);
+            //MediaPlayer.Play(song);
             //  MediaPlayer.ActiveSongChanged += MediaPlayer_ActiveSongChanged;
             // //MediaPlayer.Play(song);
 

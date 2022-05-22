@@ -41,6 +41,27 @@ namespace Zchlachten.Entities
             // Body.Tag = "statusEffects";
             // Body.OnCollision += OnCollisionEventHandler;
         }
+        public StatusEffect(World world, Texture2D texture)
+        {
+            _world = world;
+
+            _texture = texture;
+            // _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+
+            // _size = new Vector2(_texture.Width * 0.0234375f, _texture.Height * 0.0234375f)*1.25f;
+            // _scale = _size / new Vector2(_texture.Width, _texture.Height);
+
+            // Body = _world.CreateBody(position);
+
+            // _statusEffectFixture = Body.CreateCircle(_size.X / 2, 1f);
+            // _statusEffectFixture.Tag = "statusEffects";
+
+            // _statusEffectFixture.OnCollision = OnCollisionEventHandler;
+
+            // Body = _world.CreateCircle(_size.X / 2, 1f, position);
+            // Body.Tag = "statusEffects";
+            // Body.OnCollision += OnCollisionEventHandler;
+        }
 
         public abstract void Update(GameTime gameTime);
 

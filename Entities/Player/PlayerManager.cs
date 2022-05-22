@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
@@ -11,10 +12,11 @@ namespace Zchlachten.Entities
         private const float BRAVE_POS_X = 26.49609375f;
         private const float BRAVE_POS_Y = 3.609375f;
 
-        private readonly EntityManager _entityManager;
         private readonly World _world;
+        private readonly EntityManager _entityManager;
+        public readonly Player DemonLord, Brave;
 
-        public Player DemonLord, Brave;
+        private Texture2D _hpBarTxr;
 
         public PlayerManager(
             World world, 
@@ -40,12 +42,28 @@ namespace Zchlachten.Entities
             _entityManager.AddEntry(Brave);
         }
 
+        public void LoadContent(ContentManager content)
+        {
+            _hpBarTxr = content.Load<Texture2D>("UI/HPBar");
+        }
+
         public void Update(GameTime gameTime)
         {
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(
+                _hpBarTxr,
+                new Vector2(Globals.Camera.Width/2, 1.5f),
+                null,
+                Color.White,
+                0f,
+                new Vector2(_hpBarTxr.Width/2, _hpBarTxr.Height/2),
+                Globals.Camera.Scale,
+                SpriteEffects.FlipVertically,
+                0f
+            );
         }
     }
 }

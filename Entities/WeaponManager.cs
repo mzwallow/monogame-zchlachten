@@ -351,7 +351,7 @@ namespace Zchlachten.Entities
                     Color.White,
                     0f,
                     _demonLord.InHandWeapon.TextureOrigin,
-                    _demonLord.InHandWeapon.Scale,
+                    _demonLord.InHandWeapon.Scale*1.5f,
                     SpriteEffects.FlipVertically,
                     0f
                 );
@@ -367,7 +367,7 @@ namespace Zchlachten.Entities
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
                 0.0234375f,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
             // Demon Lord weapon bag 2
@@ -380,7 +380,7 @@ namespace Zchlachten.Entities
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
                 0.0234375f,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
             if (_demonLord.WeaponsBag.Count == 1)
@@ -445,7 +445,7 @@ namespace Zchlachten.Entities
                     Color.White,
                     0f,
                     _brave.InHandWeapon.TextureOrigin,
-                    _brave.InHandWeapon.Scale,
+                    _brave.InHandWeapon.Scale*1.5f,
                     SpriteEffects.FlipVertically,
                     0f
                 );
@@ -461,7 +461,7 @@ namespace Zchlachten.Entities
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
                 0.0234375f,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
             // Brave weapon bag 2
@@ -474,7 +474,7 @@ namespace Zchlachten.Entities
                 0f,
                 new Vector2(_weaponBagTxr.Width / 2, _weaponBagTxr.Height / 2),
                 0.0234375f,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
             if (_brave.WeaponsBag.Count == 1)

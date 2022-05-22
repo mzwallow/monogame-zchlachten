@@ -33,12 +33,14 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+
             Size = new Vector2(0.9609375f, 2.0625f);
             _scale = Size / new Vector2(_texture.Width, _texture.Height);
 
             Body = _world.CreateBody(position);
+
             _playerFixture = Body.CreateRectangle(Size.X, Size.Y, 1f, Vector2.Zero);
-            _playerFixture.Tag = "players";
+            _playerFixture.Tag = new Tag(TagType.PLAYER);
 
             WeaponsBag = new List<Weapon>(2);
         }
@@ -55,11 +57,9 @@ namespace Zchlachten.Entities
                 Body.Rotation,
                 _textureOrigin,
                 _scale,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
-
-            Globals.DebugView.DrawShape(_playerFixture, new Transform(Body.Position, Body.Rotation), Color.Crimson);
         }
 
         public void HitBy(Weapon weapon)

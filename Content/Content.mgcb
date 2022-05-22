@@ -157,7 +157,7 @@
 /processorParam:TextureFormat=Color
 /build:Controls/shield.PNG
 
-#begin Environments/Ground.png
+#begin Environments/BG.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,7 +167,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Environments/Ground.png
+/build:Environments/BG.PNG
+
+#begin Environments/CorpsesPile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environments/CorpsesPile.png
+
+#begin Environments/Ground.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environments/Ground.PNG
 
 #begin Fonts/Arial.spritefont
 /importer:FontDescriptionImporter
@@ -202,7 +226,7 @@
 /processorParam:TextureFormat=Color
 /build:Players/Arrow.png
 
-#begin Players/Brave.png
+#begin Players/Brave.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -212,9 +236,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Players/Brave.png
+/build:Players/Brave.PNG
 
-#begin Players/DemonLord.png
+#begin Players/DemonLord.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -224,7 +248,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Players/DemonLord.png
+/build:Players/DemonLord.PNG
 
 #begin Sound/BackgroundMusic.mp3
 /importer:Mp3Importer

@@ -33,13 +33,8 @@ namespace Zchlachten.Entities
             Body = _world.CreateBody(position);
 
             _statusEffectFixture = Body.CreateCircle(_size.X / 2, 1f);
-            _statusEffectFixture.Tag = "statusEffects";
-
+            _statusEffectFixture.Tag = new Tag(TagType.STATUS_EFFECT, this);
             _statusEffectFixture.OnCollision = OnCollisionEventHandler;
-
-            // Body = _world.CreateCircle(_size.X / 2, 1f, position);
-            // Body.Tag = "statusEffects";
-            // Body.OnCollision += OnCollisionEventHandler;
         }
         public StatusEffect(World world, Texture2D texture)
         {
@@ -78,13 +73,14 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically,
                 0f
             );
-
-            // Globals.DebugView.DrawShape(_statusEffectFixture, new Transform(Body.Position, Body.Rotation), Color.Red);
         }
 
         private bool OnCollisionEventHandler(Fixture sender, Fixture other, Contact contact)
         {
             HasCollided = true;
+
+            
+
             return false;
         }
     }

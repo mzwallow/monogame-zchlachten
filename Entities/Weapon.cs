@@ -54,8 +54,6 @@ namespace Zchlachten.Entities
 
             Body = _world.CreateBody(position, 0f, BodyType.Dynamic);
             _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
-            _weaponFixture.Restitution = 0.5f;
-            _weaponFixture.Friction = 0.3f;
             _weaponFixture.Tag = "weapons";
 
             _weaponFixture.OnCollision = OnCollisionEventHandler;
@@ -76,26 +74,27 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipHorizontally,
                 0f
             );
-
-            Globals.DebugView.DrawShape(_weaponFixture, new Transform(Body.Position, Body.Rotation), Color.Aqua);
         }
 
         private bool OnCollisionEventHandler(Fixture sender, Fixture other, Contact contact)
         {
-            if ((string)other.Tag == "statusEffects")
+            Tag otherTag = (Tag)other.Tag;
+
+            if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-                Debug.WriteLine("Hit status");
+
+
                 return false;
             }
 
-            if ((string)other.Tag == "players")
+            if (otherTag.Type == TagType.PLAYER)
             {
                 HasCollided = true;
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
             }
 
-            if ((string)other.Tag == "ground")
+            if (otherTag.Type == TagType.ENVIRONMENT)
                 HasCollided = true;
             
             return true;
@@ -110,9 +109,9 @@ namespace Zchlachten.Entities
 
             Body = _world.CreateBody(Position, 0f, BodyType.Dynamic);
             Body.AngularVelocity = 10f;
-            _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
-            _weaponFixture.Tag = "weapons";
 
+            _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
+            _weaponFixture.Tag = new Tag(_player, _enemy, TagType.WEAPON);
             _weaponFixture.OnCollision = OnCollisionEventHandler;
         }
     }

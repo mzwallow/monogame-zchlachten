@@ -38,11 +38,11 @@ namespace Zchlachten.Entities
             _itemsBag = content.Load<Texture2D>("Items/ItemBag");
 
             _demonLord.ItemsBag.Add(new HolyWater(_world, _holyWaterTxr));
-            _demonLord.ItemsBag.Add(new Shield(_world,_shieldTxr));
+            _demonLord.ItemsBag.Add(new Shield(_world, _shieldTxr));
             _demonLord.ItemsBag.Add(new WorldTree(_world, _worldTreeTxr));
-            
+
             _brave.ItemsBag.Add(new WorldTree(_world, _worldTreeTxr));
-            _brave.ItemsBag.Add(new Shield (_world,_shieldTxr));
+            _brave.ItemsBag.Add(new Shield(_world, _shieldTxr));
             _brave.ItemsBag.Add(new HolyWater(_world, _holyWaterTxr));
         }
 
@@ -69,6 +69,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _demonLord.HP += 5;
                             _demonLord.ItemsBag.Remove(_demonLord.ItemsBag[0]);
                         }
                     }
@@ -156,7 +157,7 @@ namespace Zchlachten.Entities
                 }
 
             }
-    
+
         }
 
 
@@ -176,17 +177,20 @@ namespace Zchlachten.Entities
               0f
             );
             //holy water
-            spriteBatch.Draw(
-              _demonLord.ItemsBag[0].Texture,
-              Globals.Camera.ConvertScreenToWorld(new Vector2(428f, 112f)),
-              null,
-              Color.White,
-              0f,
-              new Vector2(_demonLord.ItemsBag[0].Texture.Width / 2, _demonLord.ItemsBag[0].Texture.Height / 2),
-              0.0234375f,
-              SpriteEffects.FlipVertically,
-              0f
-            );
+            if (_demonLord.ItemsBag.Count > 0)
+            {
+                spriteBatch.Draw(
+                  _demonLord.ItemsBag[0].Texture,
+                  Globals.Camera.ConvertScreenToWorld(new Vector2(428f, 112f)),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_demonLord.ItemsBag[0].Texture.Width / 2, _demonLord.ItemsBag[0].Texture.Height / 2),
+                  0.0234375f,
+                  SpriteEffects.FlipVertically,
+                  0f
+                );
+            }
 
             // Demon bag 2
             spriteBatch.Draw(
@@ -200,18 +204,21 @@ namespace Zchlachten.Entities
               SpriteEffects.None,
               0f
             );
-            //shield
-            spriteBatch.Draw(
-               _demonLord.ItemsBag[1].Texture,
-              Globals.Camera.ConvertScreenToWorld(new Vector2(476f, 112f)),
-              null,
-              Color.White,
-              0f,
-              new Vector2( _demonLord.ItemsBag[1].Texture.Width / 2,  _demonLord.ItemsBag[1].Texture.Height / 2),
-              0.0234375f,
-              SpriteEffects.FlipVertically,
-              0f
-            );
+            if (_demonLord.ItemsBag.Count > 1)
+            {
+                //shield
+                spriteBatch.Draw(
+                   _demonLord.ItemsBag[1].Texture,
+                  Globals.Camera.ConvertScreenToWorld(new Vector2(476f, 112f)),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_demonLord.ItemsBag[1].Texture.Width / 2, _demonLord.ItemsBag[1].Texture.Height / 2),
+                  0.0234375f,
+                  SpriteEffects.FlipVertically,
+                  0f
+                );
+            }
             // Demon bag 3
             spriteBatch.Draw(
               _itemsBag,
@@ -224,18 +231,21 @@ namespace Zchlachten.Entities
               SpriteEffects.None,
               0f
             );
-            //worldTree
-            spriteBatch.Draw(
-               _demonLord.ItemsBag[2].Texture,
-              Globals.Camera.ConvertScreenToWorld(new Vector2(524f, 112f)),
-              null,
-              Color.White,
-              0f,
-              new Vector2(_demonLord.ItemsBag[2].Texture.Width / 2, _demonLord.ItemsBag[2].Texture.Height / 2),
-              0.0234375f,
-              SpriteEffects.FlipVertically,
-              0f
-            );
+            if (_demonLord.ItemsBag.Count > 2)
+            {
+                //worldTree
+                spriteBatch.Draw(
+                   _demonLord.ItemsBag[2].Texture,
+                  Globals.Camera.ConvertScreenToWorld(new Vector2(524f, 112f)),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_demonLord.ItemsBag[2].Texture.Width / 2, _demonLord.ItemsBag[2].Texture.Height / 2),
+                  0.0234375f,
+                  SpriteEffects.FlipVertically,
+                  0f
+                );
+            }
 
             // Brave bag
             //Brave bag 4
@@ -250,18 +260,21 @@ namespace Zchlachten.Entities
               SpriteEffects.None,
               0f
             );
-            //worldTree
-            spriteBatch.Draw(
-             _brave.ItemsBag[0].Texture,
-             Globals.Camera.ConvertScreenToWorld(new Vector2(722f, 112f)),
-             null,
-             Color.White,
-             0f,
-             new Vector2(_brave.ItemsBag[0].Texture.Width / 2, _brave.ItemsBag[0].Texture.Height / 2),
-             0.0234375f,
-             SpriteEffects.FlipVertically,
-             0f
-            );
+            if (_brave.ItemsBag.Count > 0)
+            {
+                //worldTree
+                spriteBatch.Draw(
+                 _brave.ItemsBag[0].Texture,
+                 Globals.Camera.ConvertScreenToWorld(new Vector2(722f, 112f)),
+                 null,
+                 Color.White,
+                 0f,
+                 new Vector2(_brave.ItemsBag[0].Texture.Width / 2, _brave.ItemsBag[0].Texture.Height / 2),
+                 0.0234375f,
+                 SpriteEffects.FlipVertically,
+                 0f
+                );
+            }
 
             //Brave bag 5
             spriteBatch.Draw(
@@ -275,18 +288,21 @@ namespace Zchlachten.Entities
               SpriteEffects.None,
               0f
             );
-            //shield
-            spriteBatch.Draw(
-              _brave.ItemsBag[1].Texture,
-              Globals.Camera.ConvertScreenToWorld(new Vector2(770f, 112f)),
-              null,
-              Color.White,
-              0f,
-              new Vector2( _brave.ItemsBag[1].Texture.Width / 2,  _brave.ItemsBag[1].Texture.Height / 2),
-              0.0234375f,
-              SpriteEffects.FlipVertically,
-              0f
-            );
+            if (_brave.ItemsBag.Count > 1)
+            {
+                //shield
+                spriteBatch.Draw(
+                  _brave.ItemsBag[1].Texture,
+                  Globals.Camera.ConvertScreenToWorld(new Vector2(770f, 112f)),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_brave.ItemsBag[1].Texture.Width / 2, _brave.ItemsBag[1].Texture.Height / 2),
+                  0.0234375f,
+                  SpriteEffects.FlipVertically,
+                  0f
+                );
+            }
 
             //Brave bag 6
             spriteBatch.Draw(
@@ -301,17 +317,20 @@ namespace Zchlachten.Entities
               0f
             );
             //holyWater
-            spriteBatch.Draw(
-               _brave.ItemsBag[2].Texture,
-              Globals.Camera.ConvertScreenToWorld(new Vector2(818f, 112f)),
-              null,
-              Color.White,
-              0f,
-              new Vector2(_brave.ItemsBag[2].Texture.Width / 2, _brave.ItemsBag[2].Texture.Height / 2),
-              0.0234375f,
-              SpriteEffects.FlipVertically,
-              0f
-            );
+            if (_brave.ItemsBag.Count > 2)
+            {
+                spriteBatch.Draw(
+                   _brave.ItemsBag[2].Texture,
+                  Globals.Camera.ConvertScreenToWorld(new Vector2(818f, 112f)),
+                  null,
+                  Color.White,
+                  0f,
+                  new Vector2(_brave.ItemsBag[2].Texture.Width / 2, _brave.ItemsBag[2].Texture.Height / 2),
+                  0.0234375f,
+                  SpriteEffects.FlipVertically,
+                  0f
+                );
+            }
         }
     }
 }

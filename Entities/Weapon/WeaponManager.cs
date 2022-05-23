@@ -148,7 +148,6 @@ namespace Zchlachten.Entities
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
-
                         if (_brave.StatusEffectBag.Count > 0)
                         {
                             foreach (StatusEffect status in _brave.StatusEffectBag)
@@ -161,7 +160,7 @@ namespace Zchlachten.Entities
                                 }
                             }
                         }
-                    }
+                    } // End if
 
                     // Globals.GameState = GameState.PLAYING;
                     break;
@@ -494,6 +493,11 @@ namespace Zchlachten.Entities
 
             }
 
+            if (_flag is null)
+            {
+                _flag = new Sprite(_NoWind);
+                _world.Gravity = new Vector2(0, -12f);
+            }
             _flag.Draw(
                 spriteBatch,
                 new Vector2(15.2f, 8.65f)
@@ -693,116 +697,3 @@ namespace Zchlachten.Entities
         }
     }
 }
-
-
-// if (Globals.IsReleased() && !Globals.IsShooting)
-// {
-//     float x = (float)Math.Cos(_rotation);
-//     float y = (float)Math.Sin(_rotation);
-
-//     weaponStartingPos = new Vector2(
-//         _brave.Body.Position.X - _brave.Size.X / 2 - 0.5f,
-//         _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
-//     );
-
-//     foreach (StatusEffect status in _brave.StatusEffectBag)
-//     {
-//         switch (status.Type)
-//         {
-//             case StatusEffectType.ATTACK:
-//                 var tmp = _brave.InHandWeapon.Damage * 1.25f;
-//                 Console.WriteLine("Damage: " + tmp);
-//                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-//                 Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
-//                 break;
-//             case StatusEffectType.SLIME_MUCILAGE:
-//                 var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
-//                 Console.WriteLine("Damage: " + tmp1);
-//                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-//                 Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
-//                 break;
-//         }
-//     }
-//     _brave.InHandWeapon.CreateBody(weaponStartingPos);
-//     _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)), y * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f))));
-//     Console.WriteLine("Force: " + (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)));
-//     _chargeGauge = 0;
-
-//     _entityManager.AddEntry(_brave.InHandWeapon);
-//     Globals.IsShooting = true;
-// }
-
-
-// if (Globals.IsReleased() && !Globals.IsShooting)
-// {
-//     float x = (float)Math.Cos(_rotation);
-//     float y = (float)Math.Sin(_rotation);
-
-//     foreach (StatusEffect status in _demonLord.StatusEffectBag)
-//     {
-//         switch (status.Type)
-//         {
-//             case StatusEffectType.ATTACK:
-//                 var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
-//                 Console.WriteLine("Damage: " + tmp);
-//                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-//                 Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-//                 break;
-//             case StatusEffectType.SLIME_MUCILAGE:
-//                 var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
-//                 Console.WriteLine("Damage: " + tmp1);
-//                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-//                 Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-//                 break;
-//         }
-
-//     }
-
-//     _demonLord.InHandWeapon.CreateBody(weaponPosition);
-//     _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)), y * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f))));
-//     Console.WriteLine("Force: " + (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)));
-//     _chargeGauge = 0;
-
-//     _entityManager.AddEntry(_demonLord.InHandWeapon);
-//     Globals.IsShooting = true;
-// }
-
-
-// if (_demonLord.BloodThirstGauge == 2)
-// {
-//     _demonLord.BloodThirstGauge = 0;
-
-//     var newWeapon = RandomWeapon(_demonLord, _brave);
-//     if (_demonLord.WeaponsBag.Count == 2)
-//     {
-//         if (_brave.WeaponsBag.Count < 2)
-//         {
-//             _brave.WeaponsBag.Add(newWeapon);
-//             Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '" + newWeapon.Type + "' instead.");
-//         }
-//     }
-//     else
-//     {
-//         _demonLord.WeaponsBag.Add(newWeapon);
-//         Debug.WriteLine("Demon Lord got: " + newWeapon.Type);
-//     }
-// }
-// else if (_brave.BloodThirstGauge == 2)
-// {
-//     _brave.BloodThirstGauge = 0;
-
-//     var newWeapon = RandomWeapon(_brave, _demonLord);
-//     if (_brave.WeaponsBag.Count == 2)
-//     {
-//         if (_demonLord.WeaponsBag.Count < 2)
-//         {
-//             _demonLord.WeaponsBag.Add(newWeapon);
-//             Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
-//         }
-//     }
-//     else
-//     {
-//         _brave.WeaponsBag.Add(newWeapon);
-//         Debug.WriteLine("Brave got: " + newWeapon.Type);
-//     }
-// }

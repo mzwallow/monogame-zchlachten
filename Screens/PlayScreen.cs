@@ -144,7 +144,7 @@ namespace Zchlachten.Screens
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_itemManager);
             
-            _entityManager.AddEntry(_debugUI);
+            // _entityManager.AddEntry(_debugUI);
         }
 
         public override void Update(GameTime gameTime)

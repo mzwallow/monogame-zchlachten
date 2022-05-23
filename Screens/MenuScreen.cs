@@ -72,7 +72,7 @@ namespace Zchlachten.Screens
 
         public override void LoadContent()
         {
-            this.song = Content.Load<Song>("Sound/BackgroundMusic");
+            this.song = Content.Load<Song>("Sound/BGM");
             if (MediaPlayer.State != MediaState.Playing)
                 MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;

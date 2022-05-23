@@ -473,47 +473,47 @@
 /processorParam:TextureFormat=Color
 /build:Players/MinChargeGauge.png
 
-#begin Sound/BackgroundMusic.mp3
+#begin Sound/Attacked.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Attacked.mp3
+
+#begin Sound/BGM.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Sound/BackgroundMusic.mp3
+/build:Sound/BGM.mp3
 
-#begin Sound/Btoom.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Sound/Btoom.wav
-
-#begin Sound/Click.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Sound/Click.wav
-
-#begin Sound/Lasergun.mp3
+#begin Sound/BGM_Playing.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Sound/Lasergun.mp3
+/build:Sound/BGM_Playing.mp3
 
-#begin Sound/Pop.wav
-/importer:WavImporter
+#begin Sound/GetItems.mp3
+/importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sound/Pop.wav
+/build:Sound/GetItems.mp3
 
-#begin Sound/Shoot.wav
-/importer:WavImporter
+#begin Sound/Shooting.mp3
+/importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sound/Shoot.wav
+/build:Sound/Shooting.mp3
 
-#begin Sound/Win.wav
-/importer:WavImporter
+#begin Sound/UseItems.mp3
+/importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sound/Win.wav
+/build:Sound/UseItems.mp3
+
+#begin Sound/Winning.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Winning.mp3
 
 #begin StatusEffects/Buff.png
 /importer:TextureImporter

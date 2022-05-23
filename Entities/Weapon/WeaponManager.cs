@@ -95,62 +95,64 @@ namespace Zchlachten.Entities
                                 relativeMousePosition.Y - (_demonLord.Body.Position.Y + _demonLord.Size.Y / 2),
                                 relativeMousePosition.X - (_demonLord.Body.Position.X + _demonLord.Size.X / 2)
                             );
-                        }
-                        // Adjust Force by Charge Gauage 
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed && !Globals.IsShooting)
-                        {
-                            if (_chargeGauge > MAX_CHARGE)
-                            {
-                                _MeterControl = -1f;
 
-                            }
-                            else if (_chargeGauge <= MIN_CHARGE)
+                            // Adjust Force by Charge Gauage 
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed && !Globals.IsShooting)
                             {
-                                _MeterControl = 1f;
-                            }
-                            _chargeGauge += (0.05f * _MeterControl);
-                        }
-                        // Handle shooting
-                        if (Globals.CurrentMouseState.LeftButton == ButtonState.Released
-                                && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed
-                                && !Globals.IsShooting)
-                        {
-                            float x = (float)Math.Cos(_rotation);
-                            float y = (float)Math.Sin(_rotation);
-
-                            weaponStartingPos = new Vector2(
-                                _demonLord.Body.Position.X + _demonLord.Size.X / 2 + 0.5f,
-                                _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
-                            );
-
-                            foreach (StatusEffect status in _demonLord.StatusEffectBag)
-                            {
-                                switch (status.Type)
+                                if (_chargeGauge > MAX_CHARGE)
                                 {
-                                    case StatusEffectType.ATTACK:
-                                        var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
-                                        Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-                                        Console.WriteLine("Damage: " + tmp);
-                                        _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                                        break;
-                                    case StatusEffectType.SLIME_MUCILAGE:
-                                        var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
-                                        Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-                                        Console.WriteLine("Damage: " + tmp1);
-                                        _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                                        break;
+                                    _MeterControl = -1f;
+
+                                }
+                                else if (_chargeGauge <= MIN_CHARGE)
+                                {
+                                    _MeterControl = 1f;
+                                }
+                                _chargeGauge += (0.05f * _MeterControl);
+                            }
+                            // Handle shooting
+                            if (Globals.CurrentMouseState.LeftButton == ButtonState.Released
+                                    && Globals.PreviousMouseState.LeftButton == ButtonState.Pressed
+                                    && !Globals.IsShooting)
+                            {
+                                float x = (float)Math.Cos(_rotation);
+                                float y = (float)Math.Sin(_rotation);
+
+                                weaponStartingPos = new Vector2(
+                                    _demonLord.Body.Position.X + _demonLord.Size.X / 2 + 0.5f,
+                                    _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
+                                );
+
+                                foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                                {
+                                    switch (status.Type)
+                                    {
+                                        case StatusEffectType.ATTACK:
+                                            var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                            break;
+                                        case StatusEffectType.SLIME_MUCILAGE:
+                                            var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp1);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                            break;
+                                    }
+
                                 }
 
+                                _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
+                                _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f))));
+                                Console.WriteLine("Force: " + (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)));
+                                _chargeGauge = 0;
+
+                                _entityManager.AddEntry(_demonLord.InHandWeapon);
+                                Globals.IsShooting = true;
                             }
-
-                            _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
-                            _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f))));
-                            Console.WriteLine("Force: "+(MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)));
-                            _chargeGauge =0;
-
-                            _entityManager.AddEntry(_demonLord.InHandWeapon);
-                            Globals.IsShooting = true;
                         }
+                        else _chargeGauge = 0;
 
                         // Handle weapon selection
                         if (!Globals.IsShooting)
@@ -257,13 +259,15 @@ namespace Zchlachten.Entities
                                 }
                                 _brave.InHandWeapon.CreateBody(weaponStartingPos);
                                 _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)), y * (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f))));
-                                 Console.WriteLine("Force: "+(MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)));
-                                _chargeGauge =0;
+                                Console.WriteLine("Force: " + (MIN_FORCE + RANGE_FORCE * (_chargeGauge / 0.2f)));
+                                _chargeGauge = 0;
 
                                 _entityManager.AddEntry(_brave.InHandWeapon);
                                 Globals.IsShooting = true;
                             }
                         }
+                        else _chargeGauge = 0;
+
 
                         // Handle weapon selection
                         if (!Globals.IsShooting)

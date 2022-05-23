@@ -54,17 +54,6 @@ namespace Zchlachten.Entities
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // spriteBatch.Draw(
-            //     _texture,
-            //     Body.Position,
-            //     null,
-            //     Color.White,
-            //     Body.Rotation,
-            //     _textureOrigin,
-            //     Globals.Camera.Scale,
-            //     SpriteEffects.FlipVertically,
-            //     0f
-            // );
             _sprite.Draw(spriteBatch, Body.Position);
         }
 

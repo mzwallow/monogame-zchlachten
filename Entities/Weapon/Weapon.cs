@@ -100,18 +100,6 @@ namespace Zchlachten.Entities
                         }
                     }
                 }
-                // if (_player.HoldStatusEffectBag.Count > 0)
-                // {
-                //     foreach (StatusEffect status in _player.HoldStatusEffectBag)
-                //     {
-                //         if (status.Type == StatusEffectType.SHIELD || status.Type == StatusEffectType.ATTACK)
-                //             _player.StatusEffectBag.Add(status);
-                //             _player.HoldStatusEffectBag.Remove(status);
-
-                //     }
-
-                // }
-                //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
                 return false;
             }
 
@@ -120,6 +108,13 @@ namespace Zchlachten.Entities
                 HasCollided = true;
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
+                
+                // if(_player.InHandWeapon.Type == WeaponType.CharmShot){
+                //     _enemy.StatusEffectBag
+                // }
+                
+
+                
 
                 if (_player.HoldStatusEffectBag.Count > 0)
                 {
@@ -127,43 +122,21 @@ namespace Zchlachten.Entities
                     {
                         if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
                             _enemy.StatusEffectBag.Add(status);
-                        // else
-                        //     _player.StatusEffectBag.Add(status);
-
-                        //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
                     }
                 }
 
-
-                // foreach (StatusEffect status in _player.StatusEffectBag)
-                // {
-                //     switch (status.Type)
-                //     {
-                //         case StatusEffectType.ATTACK:
-                //             var tmp = _player.InHandWeapon.Damage * 1.25f;
-                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
-                //             Console.WriteLine("Damage: "+tmp);
-                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                //             break;
-                //         case StatusEffectType.SLIME_MUCILAGE:
-                //             var tmp1 = _player.InHandWeapon.Damage * 0.8f;
-                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
-                //             Console.WriteLine("Damage: "+tmp1);
-                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                //             break;
-                //     }
-                // }
-
-
-
-                // for (int i = _player.HoldStatusEffectBag.Count-1 ; i > -1; --i)
-                // {
-                //     var x = _player.HoldStatusEffectBag[i];
-                //     if (x.HoldRemaining == 0)
-                //     {
-                //         _player.HoldStatusEffectBag.RemoveAt(i);
-                //     }
-                // }
+                if (_enemy.StatusEffectBag.Count > 0)
+                {
+                    for (int i = _enemy.StatusEffectBag.Count - 1; i > -1; --i)
+                    {
+                        var x = _enemy.StatusEffectBag[i];
+                        if (x.Type == StatusEffectType.SHIELD)
+                        {
+                            _enemy.HP += _player.InHandWeapon.Damage;
+                            _enemy.StatusEffectBag.RemoveAt(i);
+                        }
+                    }
+                }
             }
 
             if (otherTag.Type == TagType.ENVIRONMENT)

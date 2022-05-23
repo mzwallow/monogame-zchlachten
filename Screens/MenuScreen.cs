@@ -14,6 +14,7 @@ namespace Zchlachten.Screens
         private SpriteFont _buttonFont;
         private Song song;
         private Texture2D _buttonTexture;
+        private Texture2D _backgroundTxr;
         private List<Component> _menuComponents;
         private Button _newGameButton, _tutorialButton, _optionButton, _quitButton;
 
@@ -25,6 +26,7 @@ namespace Zchlachten.Screens
             // rectangle button
             _buttonTexture = base.Content.Load<Texture2D>("Controls/Button");
             _buttonFont = base.Content.Load<SpriteFont>("Fonts/Text");
+            
 
             // Create button each button is 20 pixel aprt
             _newGameButton = new Button(_buttonTexture, _buttonFont)
@@ -96,7 +98,7 @@ namespace Zchlachten.Screens
 
             //if _showOption is false show object in _menuComponents
 
-            // spriteBatch.Draw(_menu_bg, Vector2.Zero, Color.White);
+            //spriteBatch.Draw(_menu_bg, Vector2.Zero, Color.White);
 
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
+using Zchlachten.Graphics;
 
 namespace Zchlachten.Entities
 {
@@ -16,12 +17,12 @@ namespace Zchlachten.Entities
         private readonly EntityManager _entityManager;
         public readonly Player DemonLord, Brave;
 
-        private Texture2D _hpBarTxr;
+        private Sprite _hpBarSprite;
 
         public PlayerManager(
-            World world, 
+            World world,
             EntityManager entityManager,
-            Texture2D demonLordTxr, 
+            Texture2D demonLordTxr,
             Texture2D braveTxr)
         {
             _world = world;
@@ -44,7 +45,7 @@ namespace Zchlachten.Entities
 
         public void LoadContent(ContentManager content)
         {
-            _hpBarTxr = content.Load<Texture2D>("UI/HPBar");
+            _hpBarSprite = new Sprite(content.Load<Texture2D>("UI/HPBar"));
         }
 
         public void Update(GameTime gameTime)
@@ -55,7 +56,8 @@ namespace Zchlachten.Entities
                     if (DemonLord.HP <= 0)
                     {
                         Globals.GameState = GameState.END;
-                    }else if(Brave.HP <= 0)
+                    }
+                    else if (Brave.HP <= 0)
                     {
                         Globals.GameState = GameState.END;
                     }
@@ -65,17 +67,7 @@ namespace Zchlachten.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                _hpBarTxr,
-                new Vector2(Globals.Camera.Width/2, 1.5f),
-                null,
-                Color.White,
-                0f,
-                new Vector2(_hpBarTxr.Width/2, _hpBarTxr.Height/2),
-                Globals.Camera.Scale,
-                SpriteEffects.FlipVertically,
-                0f
-            );
+            _hpBarSprite.Draw(spriteBatch, new Vector2(Globals.Camera.Width / 2, 1.5f));
         }
     }
 }

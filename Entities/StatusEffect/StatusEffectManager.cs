@@ -113,11 +113,6 @@ namespace Zchlachten.Entities
 
                                         }
                                         break;
-                                        // case StatusEffectType.DRUNKEN:
-                                        //     Console.WriteLine("Demon Lord is drunk");
-                                        //     Globals.IsPlayerAffectedByCharm = true;
-                                        //     _demonLord.StatusEffectBag.RemoveAt(i);
-                                        //     break;
                                 }
                             }
                         }
@@ -176,11 +171,6 @@ namespace Zchlachten.Entities
                                             }
                                         }
                                         break;
-                                        // case StatusEffectType.DRUNKEN:
-                                        //     Console.WriteLine("Brave is drunk");
-                                        //     Globals.IsPlayerAffectedByCharm = true;
-                                        //     // _brave.StatusEffectBag.RemoveAt(i);
-                                        //     break;
                                 }
                             }
                         }

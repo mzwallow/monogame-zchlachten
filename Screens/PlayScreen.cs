@@ -195,11 +195,11 @@ namespace Zchlachten.Screens
             // Draw entities
             _entityManager.Draw(gameTime, _spriteBatch);
 
-            foreach (var b in _world.BodyList)
-            {
-                foreach (var f in b.FixtureList)
-                    Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
-            }
+            // foreach (var b in _world.BodyList)
+            // {
+            //     foreach (var f in b.FixtureList)
+            //         Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
+            // }
 
             _spriteBatch.End();
             Globals.DebugView.EndCustomDraw();

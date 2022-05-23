@@ -270,11 +270,10 @@ namespace Zchlachten.Entities
                             Globals.GameState = GameState.POST_PLAY;
                         }
                     }
-                    break;
-                case GameState.POST_PLAY:
                     // Handle player blood thirst gauge
                     BloodThirstGaugeHandler();
-
+                    break;
+                case GameState.POST_PLAY:
                     // Globals.GameState = GameState.PRE_PLAY;
                     break;
             } // End switch

@@ -37,13 +37,13 @@ namespace Zchlachten.Entities
             _worldTreeTxr = content.Load<Texture2D>("Controls/blessing_of_world_tree");
             _itemsBag = content.Load<Texture2D>("Items/ItemBag");
 
-            _demonLord.ItemsBag[0] =new HolyWater(_world, _holyWaterTxr);
-            _demonLord.ItemsBag[1]=new Shield(_world, _shieldTxr);
-            _demonLord.ItemsBag[2]=new WorldTree(_world, _worldTreeTxr);
+            _demonLord.ItemsBag[0] = new HolyWater(_world, _holyWaterTxr);
+            _demonLord.ItemsBag[1] = new Shield(_world, _shieldTxr);
+            _demonLord.ItemsBag[2] = new WorldTree(_world, _worldTreeTxr);
 
-            _brave.ItemsBag[0]= new WorldTree(_world, _worldTreeTxr);
-            _brave.ItemsBag[1]= new Shield(_world, _shieldTxr);
-            _brave.ItemsBag[2]= new HolyWater(_world, _holyWaterTxr);
+            _brave.ItemsBag[0] = new WorldTree(_world, _worldTreeTxr);
+            _brave.ItemsBag[1] = new Shield(_world, _shieldTxr);
+            _brave.ItemsBag[2] = new HolyWater(_world, _holyWaterTxr);
         }
 
         public void Update(GameTime gameTime)
@@ -62,7 +62,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.X <= itemBagOnePosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= itemBagOnePosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= itemBagOnePosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                    && _demonLord.ItemsBag[0]!=null)
+                                    && _demonLord.ItemsBag[0] != null)
                     {
                         Debug.WriteLine("Demon Item bag 1");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -71,7 +71,7 @@ namespace Zchlachten.Entities
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             // if(_demonLord.ItemsBag.Count == )
-                            _demonLord.ItemsBag[0]=null;
+                            _demonLord.ItemsBag[0] = null;
                             _demonLord.HP += 45;
                         }
                     }
@@ -79,7 +79,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.X <= ItemBagTwoPosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= ItemBagTwoPosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= ItemBagTwoPosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                    &&_demonLord.ItemsBag[1]!=null)
+                                    && _demonLord.ItemsBag[1] != null)
                     {
                         Debug.WriteLine("Demon Item bag 2");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -87,7 +87,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            _demonLord.ItemsBag[1]=null;
+                            _demonLord.ItemsBag[1] = null;
                             _demonLord.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
                         }
                     }
@@ -95,7 +95,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.X <= ItemBagThreePosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= ItemBagThreePosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= ItemBagThreePosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                    &&_demonLord.ItemsBag[2]!=null)
+                                    && _demonLord.ItemsBag[2] != null)
                     {
                         Debug.WriteLine("Demon Item bag 3");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -103,7 +103,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            _demonLord.ItemsBag[2]=null;
+                            _demonLord.ItemsBag[2] = null;
                             _demonLord.StatusEffectBag.Clear();
                         }
                     }
@@ -117,7 +117,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.X <= itemBagOnePosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= itemBagOnePosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= itemBagOnePosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                    &&_brave.ItemsBag[0]!=null)
+                                    && _brave.ItemsBag[0] != null)
                     {
                         Debug.WriteLine("Brave Item bag 1");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -125,15 +125,15 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            _demonLord.StatusEffectBag.Clear();
-                            _brave.ItemsBag[0]=null;
+                            _brave.StatusEffectBag.Clear();
+                            _brave.ItemsBag[0] = null;
                         }
                     }
                     else if (relativeMousePosition.X >= ItemBagTwoPosition.X - _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.X <= ItemBagTwoPosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= ItemBagTwoPosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= ItemBagTwoPosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                     &&_brave.ItemsBag[1]!=null)
+                                     && _brave.ItemsBag[1] != null)
                     {
                         Debug.WriteLine("Brave Item bag 2");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -142,14 +142,14 @@ namespace Zchlachten.Entities
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             _brave.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
-                            _brave.ItemsBag[1]=null;
+                            _brave.ItemsBag[1] = null;
                         }
                     }
                     else if (relativeMousePosition.X >= ItemBagThreePosition.X - _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.X <= ItemBagThreePosition.X + _itemsBag.Width * 0.0234375f / 2
                                     && relativeMousePosition.Y >= ItemBagThreePosition.Y - _itemsBag.Height * 0.0234375f / 2
                                     && relativeMousePosition.Y <= ItemBagThreePosition.Y + _itemsBag.Height * 0.0234375f / 2
-                                     &&_brave.ItemsBag[2]!=null)
+                                     && _brave.ItemsBag[2] != null)
                     {
                         Debug.WriteLine("Brave Item bag 3");
                         Mouse.SetCursor(MouseCursor.Hand);
@@ -158,7 +158,7 @@ namespace Zchlachten.Entities
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             _brave.HP += 45;
-                            _brave.ItemsBag[2]=null;
+                            _brave.ItemsBag[2] = null;
 
                         }
                     }

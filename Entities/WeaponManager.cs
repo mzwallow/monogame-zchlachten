@@ -12,10 +12,6 @@ namespace Zchlachten.Entities
     {
         private const float MIN_FORCE = 2f;
         private const float MAX_FORCE = 5.5f;
-        private const float DEMON_LORD_WEAPON_START_POS_X = 5f;
-        private const float DEMON_LORD_WEAPON_START_POS_Y = 5f;
-        private const float BRAVE_WEAPON_START_POS_X = 25f;
-        private const float BRAVE_WEAPON_START_POS_Y = 5f;
 
         private readonly World _world;
         private readonly EntityManager _entityManager;
@@ -26,7 +22,7 @@ namespace Zchlachten.Entities
         private Texture2D _inHandWeaponTxr, _weaponBagTxr;
 
         private float _rotation;
-        private bool _applyBuff = false;
+
 
 
         public WeaponManager(
@@ -64,7 +60,6 @@ namespace Zchlachten.Entities
             switch (Globals.GameState)
             {
                 case GameState.PLAYING:
-                    Console.WriteLine("Apply:" + _applyBuff);
                     Vector2 weaponStartingPos;
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
@@ -92,6 +87,26 @@ namespace Zchlachten.Entities
                                     _demonLord.Body.Position.X + _demonLord.Size.X / 2 + 0.5f,
                                     _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
                                 );
+
+                                foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                                {
+                                    switch (status.Type)
+                                    {
+                                        case StatusEffectType.ATTACK:
+                                            var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                            break;
+                                        case StatusEffectType.SLIME_MUCILAGE:
+                                            var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp1);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                            break;
+                                    }
+
+                                }
 
                                 _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
                                 _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
@@ -169,6 +184,26 @@ namespace Zchlachten.Entities
                                     _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
                                 );
 
+                                foreach (StatusEffect status in _brave.StatusEffectBag)
+                                {
+                                    switch (status.Type)
+                                    {
+                                        case StatusEffectType.ATTACK:
+                                            var tmp = _brave.InHandWeapon.Damage * 1.25f;
+                                            Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp);
+                                            _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                            break;
+                                        case StatusEffectType.SLIME_MUCILAGE:
+                                            var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
+                                            Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp1);
+                                            _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                            break;
+                                    }
+
+                                }
+
                                 _brave.InHandWeapon.CreateBody(weaponStartingPos);
                                 _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
@@ -188,7 +223,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
                                     && _brave.WeaponsBag.Count > 0)
                             {
-                                Debug.WriteLine("Weapon bag 1");
+
                                 Mouse.SetCursor(MouseCursor.Hand);
 
                                 if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -204,7 +239,6 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
                                     && _brave.WeaponsBag.Count > 1)
                             {
-                                Debug.WriteLine("Weapon bag 2");
                                 Mouse.SetCursor(MouseCursor.Hand);
 
                                 if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -218,54 +252,6 @@ namespace Zchlachten.Entities
                                 Mouse.SetCursor(MouseCursor.Arrow);
                         }
                     }
-
-                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD && !_applyBuff)
-                    {
-                        foreach (StatusEffect status in _demonLord.StatusEffectBag)
-                        {
-                            switch (status.Type)
-                            {
-                                case StatusEffectType.ATTACK:
-                                    var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
-                                    Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-                                    Console.WriteLine("Damage: " + tmp);
-                                    _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                                    break;
-                                case StatusEffectType.SLIME_MUCILAGE:
-                                    var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
-                                    Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
-                                    Console.WriteLine("Damage: " + tmp1);
-                                    _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                                    break;
-                            }
-                            _applyBuff = true;
-                        }
-
-                    }
-                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE && !_applyBuff)
-                    {
-                        foreach (StatusEffect status in _brave.StatusEffectBag)
-                        {
-                            switch (status.Type)
-                            {
-                                case StatusEffectType.ATTACK:
-                                    var tmp = _brave.InHandWeapon.Damage * 1.25f;
-                                    Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
-                                    Console.WriteLine("Damage: " + tmp);
-                                    _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                                    break;
-                                case StatusEffectType.SLIME_MUCILAGE:
-                                    var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
-                                    Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
-                                    Console.WriteLine("Damage: " + tmp1);
-                                    _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                                    break;
-                            }
-                            _applyBuff = true;
-                        }
-
-                    }
-
                     break;
                 case GameState.POST_PLAY:
                     if (_demonLord.BloodThirstGauge == 2)
@@ -308,8 +294,6 @@ namespace Zchlachten.Entities
                     }
 
                     Globals.GameState = GameState.PRE_PLAY;
-                    _applyBuff = false;
-
 
                     break;
             }

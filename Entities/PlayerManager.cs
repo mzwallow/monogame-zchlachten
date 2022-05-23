@@ -42,8 +42,18 @@ namespace Zchlachten.Entities
 
         public void Update(GameTime gameTime)
         {
-
-            
+            switch (Globals.GameState)
+            {
+                case GameState.POST_PLAY:
+                    if (DemonLord.HP <= 0)
+                    {
+                        Globals.GameState = GameState.END;
+                    }else if(Brave.HP <= 0)
+                    {
+                        Globals.GameState = GameState.END;
+                    }
+                    break;
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

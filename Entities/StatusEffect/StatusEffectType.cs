@@ -7,7 +7,7 @@ namespace Zchlachten.Entities
         GOLDEN_SERPANT_BILE,
         SLIME_MUCILAGE,
         SHIELD,
-        CHARM
+        DRUNKEN
     }
     
 }

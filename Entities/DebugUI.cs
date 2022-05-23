@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
@@ -9,21 +10,21 @@ namespace Zchlachten.Entities
         private const int TEXTURE_POS_X = 100;
         private const int TEXTURE_POS_Y = 100;
 
-        private readonly ContentManager _content;
+        private readonly World _world;
         private readonly Player _demonLord, _brave;
 
         private Texture2D _texture;
         private SpriteFont _font;
 
         public DebugUI(
-            ContentManager content,
+            World world,
             Texture2D texture,
             SpriteFont font,
             Player demonLord,
             Player brave
         )
         {
-            _content = content;
+            _world = world;
 
             _texture = texture;
             _font = font;
@@ -58,6 +59,19 @@ namespace Zchlachten.Entities
                 _font, 
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 45f)),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                0.0234375f,
+                SpriteEffects.FlipVertically,
+                0f
+            );
+
+            text = "Gravity: " + _world.Gravity;
+            spriteBatch.DrawString(
+                _font, 
+                text,
+                Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 65f)),
                 Color.White,
                 0f,
                 Vector2.Zero,

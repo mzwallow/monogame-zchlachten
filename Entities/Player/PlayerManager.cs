@@ -74,12 +74,12 @@ namespace Zchlachten.Entities
             else if (Brave.HP > 150) Brave.HP = 150;
 
             _DemonCurrentHp = DemonLord.HP / 150f;
-            Console.WriteLine("Current HP: " + _DemonCurrentHp);
+            //Console.WriteLine("Current HP: " + _DemonCurrentHp);
             _BraveCurrentHp = Brave.HP / 150f;
 
             switch (Globals.GameState)
             {
-                case GameState.POST_PLAY:
+                case GameState.PLAYING:
                     if (DemonLord.HP <= 0)
                     {
                         Globals.GameState = GameState.END;
@@ -94,8 +94,8 @@ namespace Zchlachten.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _demonHpSprite.Draw(spriteBatch, new Vector2(8.5f, 0.88f), new Vector2(_DemonCurrentHp, 1f)); // 8.4, 0.8 //0-1  //0-150 //21.44
-            _braveHpSprite.Draw(spriteBatch, new Vector2(21.4f, 0.88f),new Vector2(_BraveCurrentHp,1f));
+            _demonHpSprite.Draw(spriteBatch, new Vector2(4.1f, 0.71f), new Vector2(_DemonCurrentHp, 1f)); 
+            _braveHpSprite.Draw(spriteBatch, new Vector2(25.9f, 0.71f),new Vector2(-_BraveCurrentHp, 1f));
             _hpBarSprite.Draw(spriteBatch, new Vector2(Globals.Camera.Width / 2, 1.5f));
 
             if (DemonLord.BloodThirstGauge == 2)

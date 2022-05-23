@@ -84,7 +84,6 @@ namespace Zchlachten.Entities
 
             if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-
                 _player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
 
                 if (_player.HoldStatusEffectBag.Count > 0)
@@ -108,14 +107,8 @@ namespace Zchlachten.Entities
                 HasCollided = true;
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
-                
-                // if(_player.InHandWeapon.Type == WeaponType.CharmShot){
-                //     _enemy.StatusEffectBag
-                // }
-                
 
                 
-
                 if (_player.HoldStatusEffectBag.Count > 0)
                 {
                     foreach (StatusEffect status in _player.HoldStatusEffectBag)

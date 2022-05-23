@@ -1,8 +1,9 @@
+using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
-using System;
 
 
 namespace Zchlachten.Entities
@@ -62,15 +63,18 @@ namespace Zchlachten.Entities
 
                     Console.WriteLine("totalTurn: " + Globals.TotalTurn);
 
+                    bool isAffectedByCharm = false;
+
                     // Handle status effect
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
-                         // Handle Demon status effect
+                        // Handle Demon status effect
                         if (_demonLord.StatusEffectBag.Count > 0)
                         {
                             for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
                             {
                                 var x = _demonLord.StatusEffectBag[i];
+                                Console.WriteLine("Demon Effect Bag: " + x.Type);
                                 x.Remaining--;
                                 switch (x.Type)
                                 {
@@ -110,10 +114,11 @@ namespace Zchlachten.Entities
 
                                         }
                                         break;
-                                }
-                                if(x.Type ==StatusEffectType.CHARM){
-                                    Globals.GameState = GameState.POST_PLAY;
-
+                                    case StatusEffectType.DRUNKEN:
+                                        Console.WriteLine("Demon Lord is drunk");
+                                        Globals.IsPlayerAffectedByCharm = true;
+                                        _demonLord.StatusEffectBag.RemoveAt(i);
+                                        break;
                                 }
                             }
                         }
@@ -123,6 +128,8 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("Demon Hold Effect: " + status);
                         }
+
+                        
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
@@ -132,6 +139,7 @@ namespace Zchlachten.Entities
                             for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
                             {
                                 var x = _brave.StatusEffectBag[i];
+                                Console.WriteLine("brave Effect Bag: " + x.Type);
                                 x.Remaining--;
                                 switch (x.Type)
                                 {
@@ -171,6 +179,11 @@ namespace Zchlachten.Entities
                                             }
                                         }
                                         break;
+                                    case StatusEffectType.DRUNKEN:
+                                        Console.WriteLine("Brave is drunk");
+                                        Globals.IsPlayerAffectedByCharm = true;
+                                        // _brave.StatusEffectBag.RemoveAt(i);
+                                        break;
                                 }
                             }
                         }
@@ -178,11 +191,11 @@ namespace Zchlachten.Entities
                         foreach (StatusEffect status in _brave.HoldStatusEffectBag)
                         {
                             status.HoldRemaining--;
-                            Console.WriteLine("brave Hold Effect: " + status);
+                            Console.WriteLine("brave Hold Effect: " + status.Type);
                         }
-                    }
 
-                    Globals.GameState = GameState.PLAYING;
+                        Globals.GameState = GameState.PLAYING;
+                    }
                     break;
                 case GameState.POST_PLAY:
                     Globals.TotalTurn++;
@@ -213,6 +226,7 @@ namespace Zchlachten.Entities
                                 }
                             }
                         }
+                        Globals.PlayerTurn = PlayerTurn.BRAVE;
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
@@ -229,6 +243,7 @@ namespace Zchlachten.Entities
                                 }
                             }
                         }
+                        Globals.PlayerTurn = PlayerTurn.DEMON_LORD;
                     }
 
                     if (_demonLord.StatusEffectBag.Count > 0)
@@ -250,6 +265,7 @@ namespace Zchlachten.Entities
                                 _brave.StatusEffectBag.RemoveAt(i);
                         }
                     }
+
                     break;
             }
 

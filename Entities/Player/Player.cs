@@ -24,8 +24,8 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
-        public List<StatusEffect> StatusEffectBag  = new List<StatusEffect>();
-        public List<StatusEffect> HoldStatusEffectBag  = new List<StatusEffect>();
+        public List<StatusEffect> StatusEffectBag = new List<StatusEffect>();
+        public List<StatusEffect> HoldStatusEffectBag = new List<StatusEffect>();
         public Items[] ItemsBag = new Items[3];
 
         private Sprite _sprite;
@@ -63,6 +63,8 @@ namespace Zchlachten.Entities
 
             if (weapon.Type == WeaponType.CHARM)
             {
+                StatusEffectBag.Add(new DebuffDrunken(_world, _texture));
+
                 Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
             }
         }

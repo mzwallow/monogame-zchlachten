@@ -46,7 +46,7 @@ namespace Zchlachten.Entities
         private float _rangeForce = 0.4f;
         private float _chargeGauge;
         private float _MeterControl = 1f;
-        private float _wind = 0f;
+        private int _wind = 0;
 
         public WeaponManager(
             World world,
@@ -96,14 +96,13 @@ namespace Zchlachten.Entities
 
         public void Update(GameTime gameTime)
         {
-
             Vector2 relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
             //Debug.WriteLine(relativeMousePosition);
 
             switch (Globals.GameState)
             {
                 case GameState.PRE_PLAY:
-
+                    _rangeForce = 0.4f;
                     if (Globals.TotalTurn % 3 == 0)
                     {
                         _wind = r.Next(-2, 2);
@@ -129,40 +128,44 @@ namespace Zchlachten.Entities
                             break;
                     }
 
+                    Console.WriteLine("Player Turn: " + Globals.PlayerTurn);
+
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
+
                         if (_demonLord.StatusEffectBag.Count > 0)
                         {
                             foreach (StatusEffect status in _demonLord.StatusEffectBag)
                             {
                                 if (status.Type == StatusEffectType.DRUNKEN)
                                 {
-                                    Console.WriteLine("Charmed");
+                                    Console.WriteLine("Demon Drunken");
                                     _rangeForce = 0.2f;
-                                    break;
+
                                 }
                             }
                         }
                     }
-                    else if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
-                        if (_demonLord.StatusEffectBag.Count > 0)
+
+                        if (_brave.StatusEffectBag.Count > 0)
                         {
                             foreach (StatusEffect status in _brave.StatusEffectBag)
                             {
                                 if (status.Type == StatusEffectType.DRUNKEN)
                                 {
+                                    Console.WriteLine("Brave Drunken");
                                     _rangeForce = 0.2f;
-                                    break;
+
                                 }
                             }
                         }
                     }
 
-                    Globals.GameState = GameState.PLAYING;
+                    // Globals.GameState = GameState.PLAYING;
                     break;
                 case GameState.PLAYING:
-                    Vector2 weaponStartingPos;
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
                         // Handle when in-hand weapon is null
@@ -232,15 +235,21 @@ namespace Zchlachten.Entities
                         else _chargeGauge = 0;
 
                         // Handle weapon selection
-                        var weaponBagOnePosition = new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y);
-                        var weaponBagTwoPosition = new Vector2(BRAVE_WEAPON_BAG2_POS_X, BRAVE_WEAPON_BAG2_POS_Y);
+                        Vector2 weaponBagOnePosition = new Vector2(
+                            BRAVE_WEAPON_BAG1_POS_X,
+                            BRAVE_WEAPON_BAG1_POS_Y
+                        );
+                        Vector2 weaponBagTwoPosition = new Vector2(
+                            BRAVE_WEAPON_BAG2_POS_X,
+                            BRAVE_WEAPON_BAG2_POS_Y
+                        );
                         WeaponSelectionHandler(
                             relativeMousePosition,
                             _brave,
                             weaponBagOnePosition,
                             weaponBagTwoPosition
                         );
-                    }
+                    } // End if
 
                     // Remove collided weapon & handle gamestate and player turn
                     foreach (Weapon weapon in _entityManager.GetEntitiesOfType<Weapon>())
@@ -263,48 +272,12 @@ namespace Zchlachten.Entities
                     }
                     break;
                 case GameState.POST_PLAY:
-                    if (_demonLord.BloodThirstGauge == 2)
-                    {
-                        _demonLord.BloodThirstGauge = 0;
+                    // Handle player blood thirst gauge
+                    BloodThirstGaugeHandler();
 
-                        var newWeapon = RandomWeapon(_demonLord, _brave);
-                        if (_demonLord.WeaponsBag.Count == 2)
-                        {
-                            if (_brave.WeaponsBag.Count < 2)
-                            {
-                                _brave.WeaponsBag.Add(newWeapon);
-                                Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '" + newWeapon.Type + "' instead.");
-                            }
-                        }
-                        else
-                        {
-                            _demonLord.WeaponsBag.Add(newWeapon);
-                            Debug.WriteLine("Demon Lord got: " + newWeapon.Type);
-                        }
-                    }
-                    else if (_brave.BloodThirstGauge == 2)
-                    {
-                        _brave.BloodThirstGauge = 0;
-
-                        var newWeapon = RandomWeapon(_brave, _demonLord);
-                        if (_brave.WeaponsBag.Count == 2)
-                        {
-                            if (_demonLord.WeaponsBag.Count < 2)
-                            {
-                                _demonLord.WeaponsBag.Add(newWeapon);
-                                Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
-                            }
-                        }
-                        else
-                        {
-                            _brave.WeaponsBag.Add(newWeapon);
-                            Debug.WriteLine("Brave got: " + newWeapon.Type);
-                        }
-                    }
-
-                    Globals.GameState = GameState.PRE_PLAY;
+                    // Globals.GameState = GameState.PRE_PLAY;
                     break;
-            }
+            } // End switch
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -541,7 +514,7 @@ namespace Zchlachten.Entities
                         _world,
                         player,
                         enemy,
-                        player.PlayerSide == PlayerSide.BRAVE ? _lightChakra : _cursedEye
+                        player.Side == PlayerSide.BRAVE ? _lightChakra : _cursedEye
                     );
                     break;
                 case WeaponType.CHARM:
@@ -601,7 +574,7 @@ namespace Zchlachten.Entities
         private void InHandWeaponHandler(Player player, Player enemy, Texture2D texture)
         {
             if (player.InHandWeapon is null)
-                player.InHandWeapon = new CharmShot(
+                player.InHandWeapon = new NormalShot(
                     _world,
                     player,
                     enemy,
@@ -669,9 +642,55 @@ namespace Zchlachten.Entities
         }
 
         // Handle player blood thirst gauge
-        private void BloodThirstGauge(Player player)
+        private void BloodThirstGaugeHandler()
         {
+            if (_demonLord.BloodThirstGauge == 2)
+            {
+                _demonLord.BloodThirstGauge = 0;
 
+                var newWeapon = RandomWeapon(_demonLord, _brave);
+                if (_demonLord.WeaponsBag.Count == 2)
+                {
+                    if (_brave.WeaponsBag.Count < 2)
+                    {
+                        newWeapon.Player = _brave;
+                        newWeapon.Enemy = _demonLord;
+                        newWeapon.Texture = _lightChakra;
+
+                        _brave.WeaponsBag.Add(newWeapon);
+                        Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '" + newWeapon.Type + "' instead.");
+                    }
+                }
+                else
+                {
+                    _demonLord.WeaponsBag.Add(newWeapon);
+                    Debug.WriteLine("Demon Lord got: " + newWeapon.Type);
+                }
+            }
+
+            if (_brave.BloodThirstGauge == 2)
+            {
+                _brave.BloodThirstGauge = 0;
+
+                var newWeapon = RandomWeapon(_brave, _demonLord);
+                if (_brave.WeaponsBag.Count == 2)
+                {
+                    if (_demonLord.WeaponsBag.Count < 2)
+                    {
+                        newWeapon.Player = _demonLord;
+                        newWeapon.Enemy = _brave;
+                        newWeapon.Texture = _cursedEye;
+
+                        _demonLord.WeaponsBag.Add(newWeapon);
+                        Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
+                    }
+                }
+                else
+                {
+                    _brave.WeaponsBag.Add(newWeapon);
+                    Debug.WriteLine("Brave got: " + newWeapon.Type);
+                }
+            }
         }
     }
 }
@@ -747,4 +766,44 @@ namespace Zchlachten.Entities
 
 //     _entityManager.AddEntry(_demonLord.InHandWeapon);
 //     Globals.IsShooting = true;
+// }
+
+
+// if (_demonLord.BloodThirstGauge == 2)
+// {
+//     _demonLord.BloodThirstGauge = 0;
+
+//     var newWeapon = RandomWeapon(_demonLord, _brave);
+//     if (_demonLord.WeaponsBag.Count == 2)
+//     {
+//         if (_brave.WeaponsBag.Count < 2)
+//         {
+//             _brave.WeaponsBag.Add(newWeapon);
+//             Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '" + newWeapon.Type + "' instead.");
+//         }
+//     }
+//     else
+//     {
+//         _demonLord.WeaponsBag.Add(newWeapon);
+//         Debug.WriteLine("Demon Lord got: " + newWeapon.Type);
+//     }
+// }
+// else if (_brave.BloodThirstGauge == 2)
+// {
+//     _brave.BloodThirstGauge = 0;
+
+//     var newWeapon = RandomWeapon(_brave, _demonLord);
+//     if (_brave.WeaponsBag.Count == 2)
+//     {
+//         if (_demonLord.WeaponsBag.Count < 2)
+//         {
+//             _demonLord.WeaponsBag.Add(newWeapon);
+//             Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
+//         }
+//     }
+//     else
+//     {
+//         _brave.WeaponsBag.Add(newWeapon);
+//         Debug.WriteLine("Brave got: " + newWeapon.Type);
+//     }
 // }

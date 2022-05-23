@@ -18,7 +18,7 @@ namespace Zchlachten.Entities
         public Body Body;
         private Fixture _playerFixture;
 
-        public PlayerSide PlayerSide;
+        public PlayerSide Side;
         public int HP = 150;
         public int BloodThirstGauge = 0;
 
@@ -65,7 +65,7 @@ namespace Zchlachten.Entities
             {
                 StatusEffectBag.Add(new DebuffDrunken(_world, _texture));
 
-                Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
+                Debug.WriteLine("Player '" + Side + "' has seduced by '" + weapon.Type + "'.");
             }
         }
     }

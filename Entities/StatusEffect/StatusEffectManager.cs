@@ -45,6 +45,7 @@ namespace Zchlachten.Entities
             switch (Globals.GameState)
             {
                 case GameState.PRE_PLAY:
+
                     //Random Bullshit
                     if (Globals.TotalTurn % 5 == 0 || Globals.TotalTurn == 1)
                     {
@@ -62,8 +63,6 @@ namespace Zchlachten.Entities
                     }
 
                     Console.WriteLine("totalTurn: " + Globals.TotalTurn);
-
-                    bool isAffectedByCharm = false;
 
                     // Handle status effect
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
@@ -114,11 +113,11 @@ namespace Zchlachten.Entities
 
                                         }
                                         break;
-                                    case StatusEffectType.DRUNKEN:
-                                        Console.WriteLine("Demon Lord is drunk");
-                                        Globals.IsPlayerAffectedByCharm = true;
-                                        _demonLord.StatusEffectBag.RemoveAt(i);
-                                        break;
+                                        // case StatusEffectType.DRUNKEN:
+                                        //     Console.WriteLine("Demon Lord is drunk");
+                                        //     Globals.IsPlayerAffectedByCharm = true;
+                                        //     _demonLord.StatusEffectBag.RemoveAt(i);
+                                        //     break;
                                 }
                             }
                         }
@@ -128,8 +127,6 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("Demon Hold Effect: " + status);
                         }
-
-                        
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
@@ -179,11 +176,11 @@ namespace Zchlachten.Entities
                                             }
                                         }
                                         break;
-                                    case StatusEffectType.DRUNKEN:
-                                        Console.WriteLine("Brave is drunk");
-                                        Globals.IsPlayerAffectedByCharm = true;
-                                        // _brave.StatusEffectBag.RemoveAt(i);
-                                        break;
+                                        // case StatusEffectType.DRUNKEN:
+                                        //     Console.WriteLine("Brave is drunk");
+                                        //     Globals.IsPlayerAffectedByCharm = true;
+                                        //     // _brave.StatusEffectBag.RemoveAt(i);
+                                        //     break;
                                 }
                             }
                         }
@@ -193,9 +190,9 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("brave Hold Effect: " + status.Type);
                         }
-
-                        Globals.GameState = GameState.PLAYING;
                     }
+
+                    Globals.GameState = GameState.PLAYING;
                     break;
                 case GameState.POST_PLAY:
                     Globals.TotalTurn++;
@@ -219,13 +216,14 @@ namespace Zchlachten.Entities
                             {
                                 var x = _demonLord.HoldStatusEffectBag[i];
                                 Console.WriteLine("HoldRemaining Demon: " + x.HoldRemaining);
-                                if (x.HoldRemaining == 0)
+                                if (x.HoldRemaining <= 0)
                                 {
                                     _demonLord.HoldStatusEffectBag.RemoveAt(i);
                                     Console.WriteLine("Deleted Hold Demon: " + x.Type);
                                 }
                             }
                         }
+                        Console.WriteLine("BRAVE PLS");
                         Globals.PlayerTurn = PlayerTurn.BRAVE;
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
@@ -236,13 +234,14 @@ namespace Zchlachten.Entities
                             {
                                 var x = _brave.HoldStatusEffectBag[i];
                                 Console.WriteLine("HoldRemaining Brave: " + x.HoldRemaining);
-                                if (x.HoldRemaining == 0)
+                                if (x.HoldRemaining <= 0)
                                 {
                                     _brave.HoldStatusEffectBag.RemoveAt(i);
                                     Console.WriteLine("Deleted Hold Brave: " + x.Type);
                                 }
                             }
                         }
+                        Console.WriteLine("DEMON???");
                         Globals.PlayerTurn = PlayerTurn.DEMON_LORD;
                     }
 
@@ -251,7 +250,7 @@ namespace Zchlachten.Entities
                         for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
                         {
                             var x = _demonLord.StatusEffectBag[i];
-                            if (x.Remaining == 0)
+                            if (x.Remaining <= 0)
                                 _demonLord.StatusEffectBag.RemoveAt(i);
                         }
                     }
@@ -261,13 +260,14 @@ namespace Zchlachten.Entities
                         for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
                         {
                             var x = _brave.StatusEffectBag[i];
-                            if (x.Remaining == 0)
+                            if (x.Remaining <= 0)
                                 _brave.StatusEffectBag.RemoveAt(i);
                         }
                     }
 
+                    Globals.GameState = GameState.PRE_PLAY;
                     break;
-            }
+            } // End switch
 
             foreach (StatusEffect status in _entityManager.GetEntitiesOfType<StatusEffect>())
             {

@@ -11,7 +11,7 @@ namespace Zchlachten.Entities
     public abstract class Weapon : IGameEntity
     {
         private readonly World _world;
-        private readonly Player _player, _enemy;
+        public Player Player, Enemy;
 
         public Texture2D Texture;
         public Vector2 TextureOrigin;
@@ -30,8 +30,8 @@ namespace Zchlachten.Entities
         protected Weapon(World world, Player player, Player enemy, Texture2D texture)
         {
             _world = world;
-            _player = player;
-            _enemy = enemy;
+            Player = player;
+            Enemy = enemy;
 
             Texture = texture;
             TextureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
@@ -43,8 +43,8 @@ namespace Zchlachten.Entities
         protected Weapon(World world, Player player, Player enemy, Texture2D texture, Vector2 position)
         {
             _world = world;
-            _player = player;
-            _enemy = enemy;
+            Player = player;
+            Enemy = enemy;
 
             Texture = texture;
             TextureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
@@ -84,18 +84,18 @@ namespace Zchlachten.Entities
 
             if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-                _player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
+                Player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
 
-                if (_player.HoldStatusEffectBag.Count > 0)
+                if (Player.HoldStatusEffectBag.Count > 0)
                 {
-                    for (int i = _player.HoldStatusEffectBag.Count - 1; i > -1; --i)
+                    for (int i = Player.HoldStatusEffectBag.Count - 1; i > -1; --i)
                     {
-                        var x = _player.HoldStatusEffectBag[i];
+                        var x = Player.HoldStatusEffectBag[i];
 
                         if (x.Type == StatusEffectType.SHIELD || x.Type == StatusEffectType.ATTACK)
                         {
-                            _player.StatusEffectBag.Add(x);
-                            _player.HoldStatusEffectBag.RemoveAt(i);
+                            Player.StatusEffectBag.Add(x);
+                            Player.HoldStatusEffectBag.RemoveAt(i);
                         }
                     }
                 }
@@ -105,28 +105,28 @@ namespace Zchlachten.Entities
             if (otherTag.Type == TagType.PLAYER)
             {
                 HasCollided = true;
-                _enemy.HitBy(this);
-                _player.BloodThirstGauge++;
+                Enemy.HitBy(this);
+                Player.BloodThirstGauge++;
 
                 
-                if (_player.HoldStatusEffectBag.Count > 0)
+                if (Player.HoldStatusEffectBag.Count > 0)
                 {
-                    foreach (StatusEffect status in _player.HoldStatusEffectBag)
+                    foreach (StatusEffect status in Player.HoldStatusEffectBag)
                     {
                         if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
-                            _enemy.StatusEffectBag.Add(status);
+                            Enemy.StatusEffectBag.Add(status);
                     }
                 }
 
-                if (_enemy.StatusEffectBag.Count > 0)
+                if (Enemy.StatusEffectBag.Count > 0)
                 {
-                    for (int i = _enemy.StatusEffectBag.Count - 1; i > -1; --i)
+                    for (int i = Enemy.StatusEffectBag.Count - 1; i > -1; --i)
                     {
-                        var x = _enemy.StatusEffectBag[i];
+                        var x = Enemy.StatusEffectBag[i];
                         if (x.Type == StatusEffectType.SHIELD)
                         {
-                            _enemy.HP += _player.InHandWeapon.Damage;
-                            _enemy.StatusEffectBag.RemoveAt(i);
+                            Enemy.HP += Player.InHandWeapon.Damage;
+                            Enemy.StatusEffectBag.RemoveAt(i);
                         }
                     }
                 }
@@ -137,8 +137,6 @@ namespace Zchlachten.Entities
 
             return true;
         }
-
-
 
         public void CreateBody(Vector2 position)
         {
@@ -151,7 +149,7 @@ namespace Zchlachten.Entities
             Body.AngularVelocity = 10f;
 
             _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
-            _weaponFixture.Tag = new Tag(_player, _enemy, TagType.WEAPON);
+            _weaponFixture.Tag = new Tag(Player, Enemy, TagType.WEAPON);
             _weaponFixture.OnCollision = OnCollisionEventHandler;
         }
     }

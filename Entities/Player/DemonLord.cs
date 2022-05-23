@@ -9,7 +9,7 @@ namespace Zchlachten.Entities
         public DemonLord(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            PlayerSide = PlayerSide.DEMON_LORD;
+            Side = PlayerSide.DEMON_LORD;
         }
 
         public override void Update(GameTime gameTime) { }

@@ -31,6 +31,5 @@ namespace Zchlachten
         
         public static DebugView DebugView;
 
-        public static bool IsShooting = false;
     }
 }

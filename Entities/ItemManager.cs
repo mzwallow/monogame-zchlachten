@@ -163,10 +163,7 @@ namespace Zchlachten.Entities
                         }
                     }
                 }
-
-
             }
-
         }
 
 

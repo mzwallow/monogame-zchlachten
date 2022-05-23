@@ -10,10 +10,11 @@ namespace Zchlachten.Screens
 {
     public class OptionScreen : Screen
     {
-        private MouseState _currentMouse, _previousMouse;
+        private MouseState _currentMouse;
         private SpriteBatch _spriteBatch;
         private SpriteFont _buttonFont;
         private Texture2D _buttonTexture, _volumeRect;
+        private Texture2D _backgroundTxr;
         private Rectangle _volumeBar;
         private List<Component> _menuComponents;
         private Button _backToMenuButton;
@@ -25,6 +26,7 @@ namespace Zchlachten.Screens
             _spriteBatch = new SpriteBatch(base.GraphicsDevice);
             _buttonTexture = base.Content.Load<Texture2D>("Controls/Button");
             _buttonFont = base.Content.Load<SpriteFont>("Fonts/Text");
+            _backgroundTxr = base.Content.Load<Texture2D>("Environments/BG_Option");
 
 
             //Volume option Rectangle
@@ -98,9 +100,10 @@ namespace Zchlachten.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            base.GraphicsDevice.Clear(Color.DarkBlue);
+            //base.GraphicsDevice.Clear(Color.DarkBlue);
 
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_backgroundTxr,new Vector2(0,0),Color.White);
             //draw button
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);

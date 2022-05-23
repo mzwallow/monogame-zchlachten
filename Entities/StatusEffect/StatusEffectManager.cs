@@ -15,7 +15,6 @@ namespace Zchlachten.Entities
         private readonly EntityManager _entityManager;
         private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Player _demonLord, _brave;
-        //private StatusEffect DebuffDragon;
 
         public StatusEffectManager(
             World world,
@@ -36,10 +35,8 @@ namespace Zchlachten.Entities
             _buffGod = content.Load<Texture2D>("Controls/blessing_of_god");
             _buffDevil = content.Load<Texture2D>("Controls/blessing_of_devil");
             _debuffDragon = content.Load<Texture2D>("Controls/fire_dragon_blood");
-            _debuffGolden = content.Load<Texture2D>("Controls/golden_crow_bile");
+            _debuffGolden = content.Load<Texture2D>("Controls/GoldenSerpantBile");
             _debuffSlime = content.Load<Texture2D>("Controls/Slime");
-
-            //DebuffDragon = new DebuffDragon(_world, _debuffDragon);
         }
 
         public void Update(GameTime gameTime)
@@ -68,26 +65,57 @@ namespace Zchlachten.Entities
                     // Handle status effect
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
-                        foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                         // Handle Demon status effect
+                        if (_demonLord.StatusEffectBag.Count > 0)
                         {
-                            status.Remaining--;
-                            switch (status.Type)
+                            for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
                             {
-                                case StatusEffectType.FIRE_DRAGON_BLOOD:
-                                    _demonLord.HP -= 10;
-                                    Console.WriteLine("Demon Burning");
-                                    break;
-                                case StatusEffectType.GOLDEN_SERPANT_BILE:
-                                Console.WriteLine("Demon cover serpant bile");
-                                    if (new Random().Next(0, 100) < 20)
-                                    {
-                                        _demonLord.HP /= 2;
-                                        Console.WriteLine("Demon serpant bite");
-                                    }
-                                    break;
-                            }
+                                var x = _demonLord.StatusEffectBag[i];
+                                x.Remaining--;
+                                switch (x.Type)
+                                {
+                                    case StatusEffectType.FIRE_DRAGON_BLOOD:
+                                        if (_demonLord.StatusEffectBag.Count > 0)
+                                        {
+                                            for (int j = _demonLord.StatusEffectBag.Count - 1; j > -1; --j)
+                                            {
+                                                var y = _demonLord.StatusEffectBag[j];
+                                                if (y.Type == StatusEffectType.SHIELD)
+                                                {
+                                                    Console.WriteLine("Burning Blocked by shield");
+                                                    _demonLord.StatusEffectBag.RemoveAt(j);
+                                                    break;
+                                                }
+                                                _demonLord.HP -= 10;
+                                                Console.WriteLine("Demon Burning");
+                                            }
+                                        }
+                                        break;
+                                    case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                        Console.WriteLine("Demon cover serpant bile");
+                                        if (new Random().Next(0, 100) < 20)
+                                        {
+                                            for (int j = _demonLord.StatusEffectBag.Count - 1; j > -1; --j)
+                                            {
+                                                var y = _demonLord.StatusEffectBag[j];
+                                                if (y.Type == StatusEffectType.SHIELD)
+                                                {
+                                                    Console.WriteLine("serpant bite Blocked by shield");
+                                                    _demonLord.StatusEffectBag.RemoveAt(j);
+                                                    break;
+                                                }
+                                                _brave.HP /= 2;
+                                                Console.WriteLine("Demon  serpant bite");
+                                            }
 
-                            Console.WriteLine("Demon Effect bag: " + status+" remain: "+status.Remaining);
+                                        }
+                                        break;
+                                }
+                                if(x.Type ==StatusEffectType.CHARM){
+                                    Globals.GameState = GameState.POST_PLAY;
+
+                                }
+                            }
                         }
 
                         foreach (StatusEffect status in _demonLord.HoldStatusEffectBag)
@@ -95,39 +123,56 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("Demon Hold Effect: " + status);
                         }
-
-                        // if (_demonLord.StatusEffectBag.Count > 0)
-                        // {
-                        //     for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
-                        //     {
-                        //         var x = _demonLord.StatusEffectBag[i];
-                        //         if (x.Remaining == 0)
-                        //             _demonLord.StatusEffectBag.RemoveAt(i);
-                        //     }
-                        // }
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
-                        foreach (StatusEffect status in _brave.StatusEffectBag)
+                        // Handle Brave status effect
+                        if (_brave.StatusEffectBag.Count > 0)
                         {
-                            status.Remaining--;
-                            switch (status.Type)
+                            for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
                             {
-                                case StatusEffectType.FIRE_DRAGON_BLOOD:
-                                    _brave.HP -= 10;
-                                    Console.WriteLine("Brave Burning");
-                                    break;
-                                case StatusEffectType.GOLDEN_SERPANT_BILE:
-                                Console.WriteLine("Brave cover serpant bile");
-                                    if (new Random().Next(0, 100) < 20)
-                                    {
-                                        _brave.HP /= 2;
-                                        Console.WriteLine("Brave  serpant bite");
-                                    }
-                                    break;
-                            }
+                                var x = _brave.StatusEffectBag[i];
+                                x.Remaining--;
+                                switch (x.Type)
+                                {
+                                    case StatusEffectType.FIRE_DRAGON_BLOOD:
+                                        if (_brave.StatusEffectBag.Count > 0)
+                                        {
+                                            for (int j = _brave.StatusEffectBag.Count - 1; j > -1; --j)
+                                            {
+                                                var y = _brave.StatusEffectBag[j];
+                                                if (y.Type == StatusEffectType.SHIELD)
+                                                {
+                                                    Console.WriteLine("Burning Blocked by shield");
+                                                    _brave.StatusEffectBag.RemoveAt(j);
+                                                    break;
+                                                }
+                                                _brave.HP -= 10;
+                                                Console.WriteLine("Demon Burning");
+                                            }
+                                        }
 
-                            Console.WriteLine("brave Effect bag: " + status+" remain: "+status.Remaining);
+                                        break;
+                                    case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                        Console.WriteLine("Brave cover serpant bile");
+                                        if (new Random().Next(0, 100) < 20)
+                                        {
+                                            for (int j = _brave.StatusEffectBag.Count - 1; j > -1; --j)
+                                            {
+                                                var y = _brave.StatusEffectBag[j];
+                                                if (y.Type == StatusEffectType.SHIELD)
+                                                {
+                                                    Console.WriteLine("serpant bite Blocked by shield");
+                                                    _brave.StatusEffectBag.RemoveAt(j);
+                                                    break;
+                                                }
+                                                _brave.HP /= 2;
+                                                Console.WriteLine("Brave  serpant bite");
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
                         }
 
                         foreach (StatusEffect status in _brave.HoldStatusEffectBag)
@@ -135,70 +180,9 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("brave Hold Effect: " + status);
                         }
-
-                        // if (_brave.StatusEffectBag.Count > 0)
-                        // {
-                        //     for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
-                        //     {
-                        //         var x = _brave.StatusEffectBag[i];
-                        //         if (x.Remaining == 0)
-                        //             _brave.StatusEffectBag.RemoveAt(i);
-                        //     }
-                        // }
                     }
 
-
-
-
-
                     Globals.GameState = GameState.PLAYING;
-                    break;
-                case GameState.PLAYING:
-                    // if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
-                    // {
-                    //     foreach (StatusEffect status in _demonLord.StatusEffectBag)
-                    //     {
-                    //         switch (status.Type)
-                    //         {
-                    //             case StatusEffectType.ATTACK:
-                    //                 var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
-                    //                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                    //                 break;
-                    //             case StatusEffectType.SLIME_MUCILAGE:
-                    //                 var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
-                    //                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                    //                 break;
-                    //         }
-                    //     }
-
-                    //     foreach (StatusEffect status in _demonLord.HoldStatusEffectBag)
-                    //     {
-                    //         status.HoldRemaining--;
-                    //     }
-                    // }
-
-                    // if (Globals.PlayerTurn == PlayerTurn.BRAVE)
-                    // {
-                    //     foreach (StatusEffect status in _brave.StatusEffectBag)
-                    //     {
-                    //         switch (status.Type)
-                    //         {
-                    //             case StatusEffectType.ATTACK:
-                    //                 var tmp = _brave.InHandWeapon.Damage * 1.25f;
-                    //                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
-                    //                 break;
-                    //             case StatusEffectType.SLIME_MUCILAGE:
-                    //                 var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
-                    //                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                    //                 break;
-                    //         }
-                    //     }
-
-                    //     foreach (StatusEffect status in _brave.HoldStatusEffectBag)
-                    //     {
-                    //         status.HoldRemaining--;
-                    //     }
-                    // }
                     break;
                 case GameState.POST_PLAY:
                     Globals.TotalTurn++;
@@ -248,24 +232,24 @@ namespace Zchlachten.Entities
                     }
 
                     if (_demonLord.StatusEffectBag.Count > 0)
+                    {
+                        for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
                         {
-                            for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
-                            {
-                                var x = _demonLord.StatusEffectBag[i];
-                                if (x.Remaining == 0)
-                                    _demonLord.StatusEffectBag.RemoveAt(i);
-                            }
+                            var x = _demonLord.StatusEffectBag[i];
+                            if (x.Remaining == 0)
+                                _demonLord.StatusEffectBag.RemoveAt(i);
                         }
+                    }
 
-                        if (_brave.StatusEffectBag.Count > 0)
+                    if (_brave.StatusEffectBag.Count > 0)
+                    {
+                        for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
                         {
-                            for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
-                            {
-                                var x = _brave.StatusEffectBag[i];
-                                if (x.Remaining == 0)
-                                    _brave.StatusEffectBag.RemoveAt(i);
-                            }
+                            var x = _brave.StatusEffectBag[i];
+                            if (x.Remaining == 0)
+                                _brave.StatusEffectBag.RemoveAt(i);
                         }
+                    }
                     break;
             }
 

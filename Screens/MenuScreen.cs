@@ -27,6 +27,7 @@ namespace Zchlachten.Screens
             _buttonTexture = base.Content.Load<Texture2D>("Controls/Button");
             _buttonFont = base.Content.Load<SpriteFont>("Fonts/Text");
             
+            _backgroundTxr = base.Content.Load<Texture2D>("Environments/BG_Menu");
 
             // Create button each button is 20 pixel aprt
             _newGameButton = new Button(_buttonTexture, _buttonFont)
@@ -92,9 +93,10 @@ namespace Zchlachten.Screens
         public override void Draw(GameTime gameTime)
         {
             // TODO: Add your drawing code here
-            base.GraphicsDevice.Clear(Color.DarkSlateBlue);
+            //base.GraphicsDevice.Clear(Color.DarkSlateBlue);
 
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_backgroundTxr,new Vector2(0,0),Color.White);
 
             //if _showOption is false show object in _menuComponents
 

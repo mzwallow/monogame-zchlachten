@@ -49,6 +49,42 @@
 /processorParam:TextureFormat=Color
 /build:Controls/blessing_of_world_tree.PNG
 
+#begin Controls/BraveBloodThirstGauge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/BraveBloodThirstGauge.png
+
+#begin Controls/BraveHp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/BraveHp.png
+
+#begin Controls/BuffAttackIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/BuffAttackIcon.png
+
 #begin Controls/Button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +96,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Controls/Button.png
+
+#begin Controls/DebuffCursedIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/DebuffCursedIcon.png
+
+#begin Controls/DemonBloodThirstGauge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/DemonBloodThirstGauge.png
+
+#begin Controls/DemonHp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/DemonHp.png
 
 #begin Controls/eyeball.PNG
 /importer:TextureImporter
@@ -85,7 +157,7 @@
 /processorParam:TextureFormat=Color
 /build:Controls/fire_dragon_blood.PNG
 
-#begin Controls/golden_crow_bile.PNG
+#begin Controls/GoldenSerpantBile.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -95,7 +167,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Controls/golden_crow_bile.PNG
+/build:Controls/GoldenSerpantBile.PNG
 
 #begin Controls/light_sword.PNG
 /importer:TextureImporter
@@ -181,6 +253,42 @@
 /processorParam:TextureFormat=Color
 /build:Environments/BG.PNG
 
+#begin Environments/BG_Menu.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environments/BG_Menu.PNG
+
+#begin Environments/BG_Option.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environments/BG_Option.PNG
+
+#begin Environments/BG_Story.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environments/BG_Story.PNG
+
 #begin Environments/CorpsesPile.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -204,6 +312,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Environments/Ground.png
+
+#begin Fonts/Angsana.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Angsana.spritefont
 
 #begin Fonts/Arial.spritefont
 /importer:FontDescriptionImporter
@@ -352,6 +467,42 @@
 /processorParam:TextureFormat=Color
 /build:StatusEffects/Buff.png
 
+#begin StatusEffects/Icons/BuffAttackIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:StatusEffects/Icons/BuffAttackIcon.png
+
+#begin StatusEffects/Icons/BuffShieldIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:StatusEffects/Icons/BuffShieldIcon.png
+
+#begin StatusEffects/Icons/DebuffCursedIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:StatusEffects/Icons/DebuffCursedIcon.png
+
 #begin StatusEffects/Icons/DebuffFireIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -376,7 +527,7 @@
 /processorParam:TextureFormat=Color
 /build:StatusEffects/Icons/DebuffSlimeIcon.png
 
-#begin UI/HPBar.png
+#begin UI/HPBar.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -386,7 +537,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UI/HPBar.png
+/build:UI/HPBar.PNG
 
 #begin UI/InHandWeapon.png
 /importer:TextureImporter

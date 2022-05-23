@@ -21,9 +21,8 @@ namespace Zchlachten.Screens
         private SpriteFont _debugFont;
 
         private Texture2D _demonLordTxr, _braveTxr;
-        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
         private Texture2D _groundTxr, _backgroundTxr, _corpsesPileTxr;
-        private Texture2D[] _weaponTxrs, _allStatusEffectTxr;
+        private Texture2D[] _weaponTxrs;
 
         private Ground _ground;
         private CorpsesPile _corpsesPile;
@@ -171,7 +170,6 @@ namespace Zchlachten.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            // base.GraphicsDevice.Clear(Color.DarkOliveGreen);
             Globals.DebugView.BeginCustomDraw(
                 Globals.Camera.Projection, 
                 Globals.Camera.View,
@@ -212,7 +210,6 @@ namespace Zchlachten.Screens
                 foreach (var f in b.FixtureList)
                 {
                     Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
-                    // Debug.WriteLine(f.Tag);
                 }
             }
 

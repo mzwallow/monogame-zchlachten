@@ -6,7 +6,8 @@ namespace Zchlachten.Entities
         FIRE_DRAGON_BLOOD,
         GOLDEN_SERPANT_BILE,
         SLIME_MUCILAGE,
-        SHIELD
+        SHIELD,
+        CHARM
     }
     
 }

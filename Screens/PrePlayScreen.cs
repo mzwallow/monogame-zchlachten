@@ -12,6 +12,7 @@ namespace Zchlachten.Screens
         private SpriteBatch _spriteBatch;
         private SpriteFont _buttonFont, _storyFont;
         private Song song;
+        private Texture2D _backgroundTxr;
         private Texture2D _buttonTexture;
         private List<Component> _menuComponents;
         private Button _playButton, _backToMenuButton, _guideButton;
@@ -24,6 +25,7 @@ namespace Zchlachten.Screens
             _spriteBatch = new SpriteBatch(base.GraphicsDevice);
             _buttonTexture = base.Content.Load<Texture2D>("Controls/Button");
             _buttonFont = base.Content.Load<SpriteFont>("Fonts/Text");
+            _backgroundTxr = base.Content.Load<Texture2D>("Environments/BG_Story");
 
             //play button
             _playButton = new Button(_buttonTexture, _buttonFont)
@@ -66,7 +68,7 @@ namespace Zchlachten.Screens
         }
         public override void LoadContent()
         {
-            _storyFont = base.Content.Load<SpriteFont>("Fonts/StoryText");
+            _storyFont = base.Content.Load<SpriteFont>("Fonts/Angsana");
             // this.song = Content.Load<Song>("Sound/Win");
             // MediaPlayer.Play(song);
             //  MediaPlayer.ActiveSongChanged += MediaPlayer_ActiveSongChanged;
@@ -85,10 +87,11 @@ namespace Zchlachten.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            base.GraphicsDevice.Clear(Color.DarkViolet);
+            //base.GraphicsDevice.Clear(Color.DarkViolet);
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_backgroundTxr,new Vector2(0,0),Color.White);
 
-            _spriteBatch.DrawString(_storyFont, _story, new Vector2((Globals.SCREEN_WIDTH / 2) - _storyFont.MeasureString("   ในโลกแฟนตาซีแห่งหนึ่งมีความขัดแย้งของสองเผ่าพันธุ์มาอย่างยาวนานโดยทั้ง 2 เผ่า").X / 2, 200), Color.Black);
+            _spriteBatch.DrawString(_storyFont, _story, new Vector2((Globals.SCREEN_WIDTH / 2) - _storyFont.MeasureString("   ในโลกแฟนตาซีแห่งหนึ่งมีความขัดแย้งของสองเผ่าพันธุ์มาอย่างยาวนานโดยทั้ง 2 เผ่า").X / 2, 200), Color.White);
 
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);

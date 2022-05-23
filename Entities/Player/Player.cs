@@ -24,8 +24,9 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
-
-        public List<StatusEffect> StatusEffectBag { get; set; } = new List<StatusEffect>();
+        public List<StatusEffect> StatusEffectBag  = new List<StatusEffect>();
+        public List<StatusEffect> HoldStatusEffectBag  = new List<StatusEffect>();
+        public Items[] ItemsBag = new Items[3];
 
         protected Player(World world, Texture2D texture, Vector2 position)
         {
@@ -33,14 +34,17 @@ namespace Zchlachten.Entities
 
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+
             Size = new Vector2(0.9609375f, 2.0625f);
             _scale = Size / new Vector2(_texture.Width, _texture.Height);
 
             Body = _world.CreateBody(position);
+
             _playerFixture = Body.CreateRectangle(Size.X, Size.Y, 1f, Vector2.Zero);
-            _playerFixture.Tag = "players";
+            _playerFixture.Tag = new Tag(TagType.PLAYER);
 
             WeaponsBag = new List<Weapon>(2);
+
         }
 
         public abstract void Update(GameTime gameTime);
@@ -55,11 +59,9 @@ namespace Zchlachten.Entities
                 Body.Rotation,
                 _textureOrigin,
                 _scale,
-                SpriteEffects.None,
+                SpriteEffects.FlipVertically,
                 0f
             );
-
-            Globals.DebugView.DrawShape(_playerFixture, new Transform(Body.Position, Body.Rotation), Color.Crimson);
         }
 
         public void HitBy(Weapon weapon)
@@ -70,6 +72,8 @@ namespace Zchlachten.Entities
             {
                 Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
             }
+            
         }
+
     }
 }

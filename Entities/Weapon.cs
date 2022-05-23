@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,6 +25,7 @@ namespace Zchlachten.Entities
         public int Damage;
 
         public bool HasCollided = false;
+
 
         protected Weapon(World world, Player player, Player enemy, Texture2D texture)
         {
@@ -54,8 +56,6 @@ namespace Zchlachten.Entities
 
             Body = _world.CreateBody(position, 0f, BodyType.Dynamic);
             _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
-            _weaponFixture.Restitution = 0.5f;
-            _weaponFixture.Friction = 0.3f;
             _weaponFixture.Tag = "weapons";
 
             _weaponFixture.OnCollision = OnCollisionEventHandler;
@@ -76,30 +76,103 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipHorizontally,
                 0f
             );
-
-            Globals.DebugView.DrawShape(_weaponFixture, new Transform(Body.Position, Body.Rotation), Color.Aqua);
         }
 
         private bool OnCollisionEventHandler(Fixture sender, Fixture other, Contact contact)
         {
-            if ((string)other.Tag == "statusEffects")
+            Tag otherTag = (Tag)other.Tag;
+
+            if (otherTag.Type == TagType.STATUS_EFFECT)
             {
-                Debug.WriteLine("Hit status");
+
+                _player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
+
+                if (_player.HoldStatusEffectBag.Count > 0)
+                {
+                    for (int i = _player.HoldStatusEffectBag.Count - 1; i > -1; --i)
+                    {
+                        var x = _player.HoldStatusEffectBag[i];
+
+                        if (x.Type == StatusEffectType.SHIELD || x.Type == StatusEffectType.ATTACK)
+                        {
+                            _player.StatusEffectBag.Add(x);
+                            _player.HoldStatusEffectBag.RemoveAt(i);
+                        }
+                    }
+                }
+                // if (_player.HoldStatusEffectBag.Count > 0)
+                // {
+                //     foreach (StatusEffect status in _player.HoldStatusEffectBag)
+                //     {
+                //         if (status.Type == StatusEffectType.SHIELD || status.Type == StatusEffectType.ATTACK)
+                //             _player.StatusEffectBag.Add(status);
+                //             _player.HoldStatusEffectBag.Remove(status);
+
+                //     }
+
+                // }
+                //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
                 return false;
             }
 
-            if ((string)other.Tag == "players")
+            if (otherTag.Type == TagType.PLAYER)
             {
                 HasCollided = true;
                 _enemy.HitBy(this);
                 _player.BloodThirstGauge++;
+
+                if (_player.HoldStatusEffectBag.Count > 0)
+                {
+                    foreach (StatusEffect status in _player.HoldStatusEffectBag)
+                    {
+                        if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
+                            _enemy.StatusEffectBag.Add(status);
+                        // else
+                        //     _player.StatusEffectBag.Add(status);
+
+                        //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
+                    }
+                }
+
+
+                // foreach (StatusEffect status in _player.StatusEffectBag)
+                // {
+                //     switch (status.Type)
+                //     {
+                //         case StatusEffectType.ATTACK:
+                //             var tmp = _player.InHandWeapon.Damage * 1.25f;
+                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
+                //             Console.WriteLine("Damage: "+tmp);
+                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                //             break;
+                //         case StatusEffectType.SLIME_MUCILAGE:
+                //             var tmp1 = _player.InHandWeapon.Damage * 0.8f;
+                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
+                //             Console.WriteLine("Damage: "+tmp1);
+                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                //             break;
+                //     }
+                // }
+
+
+
+                // for (int i = _player.HoldStatusEffectBag.Count-1 ; i > -1; --i)
+                // {
+                //     var x = _player.HoldStatusEffectBag[i];
+                //     if (x.HoldRemaining == 0)
+                //     {
+                //         _player.HoldStatusEffectBag.RemoveAt(i);
+                //     }
+                // }
             }
 
-            if ((string)other.Tag == "ground")
+            if (otherTag.Type == TagType.ENVIRONMENT)
                 HasCollided = true;
-            
+
             return true;
         }
+
+
 
         public void CreateBody(Vector2 position)
         {
@@ -110,9 +183,9 @@ namespace Zchlachten.Entities
 
             Body = _world.CreateBody(Position, 0f, BodyType.Dynamic);
             Body.AngularVelocity = 10f;
-            _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
-            _weaponFixture.Tag = "weapons";
 
+            _weaponFixture = Body.CreateCircle(Size.X / 2, 1f);
+            _weaponFixture.Tag = new Tag(_player, _enemy, TagType.WEAPON);
             _weaponFixture.OnCollision = OnCollisionEventHandler;
         }
     }

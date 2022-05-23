@@ -67,8 +67,8 @@ namespace Zchlachten.Screens
         public override void LoadContent()
         {
             _storyFont = base.Content.Load<SpriteFont>("Fonts/StoryText");
-            //this.song = Content.Load<Song>("Sound/Win");
-            MediaPlayer.Play(song);
+            // this.song = Content.Load<Song>("Sound/Win");
+            // MediaPlayer.Play(song);
             //  MediaPlayer.ActiveSongChanged += MediaPlayer_ActiveSongChanged;
             // //MediaPlayer.Play(song);
 

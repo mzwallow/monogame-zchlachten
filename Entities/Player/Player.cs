@@ -24,8 +24,9 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
-
-        public List<StatusEffect> StatusEffectBag { get; set; } = new List<StatusEffect>();
+        public List<StatusEffect> StatusEffectBag  = new List<StatusEffect>();
+        public List<StatusEffect> HoldStatusEffectBag  = new List<StatusEffect>();
+        public Items[] ItemsBag = new Items[3];
 
         protected Player(World world, Texture2D texture, Vector2 position)
         {
@@ -43,6 +44,7 @@ namespace Zchlachten.Entities
             _playerFixture.Tag = new Tag(TagType.PLAYER);
 
             WeaponsBag = new List<Weapon>(2);
+
         }
 
         public abstract void Update(GameTime gameTime);
@@ -70,6 +72,8 @@ namespace Zchlachten.Entities
             {
                 Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
             }
+            
         }
+
     }
 }

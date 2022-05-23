@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
 using System;
 
@@ -12,75 +13,33 @@ namespace Zchlachten.Entities
         private float positionX, positionY, positionX1, positionY1;
         private readonly World _world;
         private readonly EntityManager _entityManager;
-
-        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime, _test, _test1;
-
-        //private Texture2D buffTxr;
-
-        public StatusEffect Buff, Buff1;
-
+        private Texture2D _buffGod, _buffDevil, _debuffDragon, _debuffGolden, _debuffSlime;
+        private Player _demonLord, _brave;
+        //private StatusEffect DebuffDragon;
 
         public StatusEffectManager(
             World world,
             EntityManager entityManager,
-            params Texture2D[] statusEffectTxrs
+            Player demon,
+            Player brave
         )
         {
-            _buffGod = statusEffectTxrs[0];
-            _buffDevil = statusEffectTxrs[1];
-            _debuffDragon = statusEffectTxrs[2];
-            _debuffGolden = statusEffectTxrs[3];
-            _debuffSlime = statusEffectTxrs[4];
-            //Random bullshit go!!
-            var values = Enum.GetValues(typeof(StatusEffectType));
-            StatusEffectType Type1 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
-            StatusEffectType Type2 = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
-            //Select Buff from random
-            switch (Type1)
-            {
-                case StatusEffectType.GOD_BlESSING:
-                    _test = _buffGod;
-                    break;
-                case StatusEffectType.DEVIL_SIN:
-                    _test = _buffDevil;
-                    break;
-                case StatusEffectType.FIRE_DRAGON_BLOOD:
-                    _test = _debuffDragon;
-                    break;
-                case StatusEffectType.GOLDEN_SERPANT_BILE:
-                    _test = _debuffGolden;
-                    break;
-                case StatusEffectType.SLIME_MUCILAGE:
-                    _test = _debuffSlime;
-                    break;
-            }
-
-            switch (Type2)
-            {
-                case StatusEffectType.GOD_BlESSING:
-                    _test1 = _buffGod;
-                    break;
-                case StatusEffectType.DEVIL_SIN:
-                    _test1 = _buffDevil;
-                    break;
-                case StatusEffectType.FIRE_DRAGON_BLOOD:
-                    _test1 = _debuffDragon;
-                    break;
-                case StatusEffectType.GOLDEN_SERPANT_BILE:
-                    _test1 = _debuffGolden;
-                    break;
-                case StatusEffectType.SLIME_MUCILAGE:
-                    _test1 = _debuffSlime;
-                    break;
-            }
-            positionX = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
-            positionY = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
-            positionX1 = r.Next(Convert.ToInt32(450 * 0.0234375f), Convert.ToInt32(800 * 0.0234375f));
-            positionY1 = r.Next(Convert.ToInt32(370 * 0.0234375f), Convert.ToInt32(620 * 0.0234375f));
-
             _world = world;
             _entityManager = entityManager;
 
+            _brave = brave;
+            _demonLord = demon;
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+            _buffGod = content.Load<Texture2D>("Controls/blessing_of_god");
+            _buffDevil = content.Load<Texture2D>("Controls/blessing_of_devil");
+            _debuffDragon = content.Load<Texture2D>("Controls/fire_dragon_blood");
+            _debuffGolden = content.Load<Texture2D>("Controls/golden_crow_bile");
+            _debuffSlime = content.Load<Texture2D>("Controls/Slime");
+
+            //DebuffDragon = new DebuffDragon(_world, _debuffDragon);
         }
 
         public void Update(GameTime gameTime)
@@ -88,22 +47,225 @@ namespace Zchlachten.Entities
             switch (Globals.GameState)
             {
                 case GameState.PRE_PLAY:
-                    Buff = new Buffs(
-                        _world,
-                        _test,
-                        new Vector2(positionX, positionY)
-                    );
+                    //Random Bullshit
+                    if (Globals.TotalTurn % 5 == 0 || Globals.TotalTurn == 1)
+                    {
+                        positionX = r.Next(Convert.ToInt32((450 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((800 + _buffGod.Width / 2) * 0.0234375f));
+                        positionY = r.Next(Convert.ToInt32((370 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((620 + _buffGod.Width / 2) * 0.0234375f));
+                        positionX1 = r.Next(Convert.ToInt32((450 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((800 + _buffGod.Width / 2) * 0.0234375f));
+                        positionY1 = r.Next(Convert.ToInt32((370 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((620 + _buffGod.Width / 2) * 0.0234375f));
+                        //Random Buff
+                        var newBuff = RandomBuff(new Vector2(positionX, positionY));
+                        var newBuff1 = RandomBuff(new Vector2(positionX1, positionY1));
 
-                    Buff1 = new Buffs(
-                        
-                        _world,
-                        _test1,
-                        new Vector2(positionX1, positionY1)
-                    );
-                    _entityManager.AddEntry(Buff);
-                    _entityManager.AddEntry(Buff1);
+                        _entityManager.AddEntry(newBuff);
+                        _entityManager.AddEntry(newBuff1);
+
+                    }
+
+                    Console.WriteLine("totalTurn: " + Globals.TotalTurn);
+
+                    // Handle status effect
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    {
+                        foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                        {
+                            status.Remaining--;
+                            switch (status.Type)
+                            {
+                                case StatusEffectType.FIRE_DRAGON_BLOOD:
+                                    _demonLord.HP -= 10;
+                                    Console.WriteLine("Demon Burning");
+                                    break;
+                                case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                Console.WriteLine("Demon cover serpant bile");
+                                    if (new Random().Next(0, 100) < 20)
+                                    {
+                                        _demonLord.HP /= 2;
+                                        Console.WriteLine("Demon serpant bite");
+                                    }
+                                    break;
+                            }
+
+                            Console.WriteLine("Demon Effect bag: " + status+" remain: "+status.Remaining);
+                        }
+
+                        foreach (StatusEffect status in _demonLord.HoldStatusEffectBag)
+                        {
+                            status.HoldRemaining--;
+                            Console.WriteLine("Demon Hold Effect: " + status);
+                        }
+
+                        // if (_demonLord.StatusEffectBag.Count > 0)
+                        // {
+                        //     for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                        //     {
+                        //         var x = _demonLord.StatusEffectBag[i];
+                        //         if (x.Remaining == 0)
+                        //             _demonLord.StatusEffectBag.RemoveAt(i);
+                        //     }
+                        // }
+                    }
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    {
+                        foreach (StatusEffect status in _brave.StatusEffectBag)
+                        {
+                            status.Remaining--;
+                            switch (status.Type)
+                            {
+                                case StatusEffectType.FIRE_DRAGON_BLOOD:
+                                    _brave.HP -= 10;
+                                    Console.WriteLine("Brave Burning");
+                                    break;
+                                case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                Console.WriteLine("Brave cover serpant bile");
+                                    if (new Random().Next(0, 100) < 20)
+                                    {
+                                        _brave.HP /= 2;
+                                        Console.WriteLine("Brave  serpant bite");
+                                    }
+                                    break;
+                            }
+
+                            Console.WriteLine("brave Effect bag: " + status+" remain: "+status.Remaining);
+                        }
+
+                        foreach (StatusEffect status in _brave.HoldStatusEffectBag)
+                        {
+                            status.HoldRemaining--;
+                            Console.WriteLine("brave Hold Effect: " + status);
+                        }
+
+                        // if (_brave.StatusEffectBag.Count > 0)
+                        // {
+                        //     for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
+                        //     {
+                        //         var x = _brave.StatusEffectBag[i];
+                        //         if (x.Remaining == 0)
+                        //             _brave.StatusEffectBag.RemoveAt(i);
+                        //     }
+                        // }
+                    }
+
+
+
+
 
                     Globals.GameState = GameState.PLAYING;
+                    break;
+                case GameState.PLAYING:
+                    // if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    // {
+                    //     foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                    //     {
+                    //         switch (status.Type)
+                    //         {
+                    //             case StatusEffectType.ATTACK:
+                    //                 var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                    //                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                    //                 break;
+                    //             case StatusEffectType.SLIME_MUCILAGE:
+                    //                 var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                    //                 _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                    //                 break;
+                    //         }
+                    //     }
+
+                    //     foreach (StatusEffect status in _demonLord.HoldStatusEffectBag)
+                    //     {
+                    //         status.HoldRemaining--;
+                    //     }
+                    // }
+
+                    // if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    // {
+                    //     foreach (StatusEffect status in _brave.StatusEffectBag)
+                    //     {
+                    //         switch (status.Type)
+                    //         {
+                    //             case StatusEffectType.ATTACK:
+                    //                 var tmp = _brave.InHandWeapon.Damage * 1.25f;
+                    //                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                    //                 break;
+                    //             case StatusEffectType.SLIME_MUCILAGE:
+                    //                 var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
+                    //                 _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                    //                 break;
+                    //         }
+                    //     }
+
+                    //     foreach (StatusEffect status in _brave.HoldStatusEffectBag)
+                    //     {
+                    //         status.HoldRemaining--;
+                    //     }
+                    // }
+                    break;
+                case GameState.POST_PLAY:
+                    Globals.TotalTurn++;
+
+                    // Remove status effects when player turns equal 4
+                    foreach (StatusEffect buff in _entityManager.GetEntitiesOfType<StatusEffect>())
+                    {
+                        if (Globals.TotalTurn % 5 == 0)
+                        {
+                            _world.Remove(buff.Body);
+                            _entityManager.RemoveEntity(buff);
+                        }
+                    }
+
+                    // Check if holding status effects are available
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    {
+                        if (_demonLord.HoldStatusEffectBag.Count > 0)
+                        {
+                            for (int i = _demonLord.HoldStatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _demonLord.HoldStatusEffectBag[i];
+                                Console.WriteLine("HoldRemaining Demon: " + x.HoldRemaining);
+                                if (x.HoldRemaining == 0)
+                                {
+                                    _demonLord.HoldStatusEffectBag.RemoveAt(i);
+                                    Console.WriteLine("Deleted Hold Demon: " + x.Type);
+                                }
+                            }
+                        }
+                    }
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    {
+                        if (_brave.HoldStatusEffectBag.Count > 0)
+                        {
+                            for (int i = _brave.HoldStatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _brave.HoldStatusEffectBag[i];
+                                Console.WriteLine("HoldRemaining Brave: " + x.HoldRemaining);
+                                if (x.HoldRemaining == 0)
+                                {
+                                    _brave.HoldStatusEffectBag.RemoveAt(i);
+                                    Console.WriteLine("Deleted Hold Brave: " + x.Type);
+                                }
+                            }
+                        }
+                    }
+
+                    if (_demonLord.StatusEffectBag.Count > 0)
+                        {
+                            for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _demonLord.StatusEffectBag[i];
+                                if (x.Remaining == 0)
+                                    _demonLord.StatusEffectBag.RemoveAt(i);
+                            }
+                        }
+
+                        if (_brave.StatusEffectBag.Count > 0)
+                        {
+                            for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _brave.StatusEffectBag[i];
+                                if (x.Remaining == 0)
+                                    _brave.StatusEffectBag.RemoveAt(i);
+                            }
+                        }
                     break;
             }
 
@@ -117,9 +279,33 @@ namespace Zchlachten.Entities
             }
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch) { }
 
+        private StatusEffect RandomBuff(Vector2 position)
+        {
+            var values = Enum.GetValues(typeof(StatusEffectType));
+            var statusType = (StatusEffectType)values.GetValue(new Random().Next(values.Length));
+
+            StatusEffect status;
+            switch (statusType)
+            {
+                case StatusEffectType.ATTACK:
+                    status = new BuffAttack(_world, _buffGod, position);
+                    break;
+                case StatusEffectType.FIRE_DRAGON_BLOOD:
+                    status = new DebuffDragon(_world, _debuffDragon, position);
+                    break;
+                case StatusEffectType.GOLDEN_SERPANT_BILE:
+                    status = new DebuffGolden(_world, _debuffGolden, position);
+                    break;
+                case StatusEffectType.SLIME_MUCILAGE:
+                    status = new DebuffSlime(_world, _debuffSlime, position);
+                    break;
+                default:
+                    status = RandomBuff(position);
+                    break;
+            }
+            return status;
         }
     }
 }

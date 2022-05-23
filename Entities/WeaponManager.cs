@@ -101,6 +101,26 @@ namespace Zchlachten.Entities
                                     _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
                                 );
 
+                                foreach (StatusEffect status in _demonLord.StatusEffectBag)
+                                {
+                                    switch (status.Type)
+                                    {
+                                        case StatusEffectType.ATTACK:
+                                            var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                            break;
+                                        case StatusEffectType.SLIME_MUCILAGE:
+                                            var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                                            Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp1);
+                                            _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                            break;
+                                    }
+
+                                }
+
                                 _demonLord.InHandWeapon.CreateBody(weaponStartingPos);
                                 _demonLord.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
@@ -177,6 +197,26 @@ namespace Zchlachten.Entities
                                     _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
                                 );
 
+                                foreach (StatusEffect status in _brave.StatusEffectBag)
+                                {
+                                    switch (status.Type)
+                                    {
+                                        case StatusEffectType.ATTACK:
+                                            var tmp = _brave.InHandWeapon.Damage * 1.25f;
+                                            Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp);
+                                            _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                                            break;
+                                        case StatusEffectType.SLIME_MUCILAGE:
+                                            var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
+                                            Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                            Console.WriteLine("Damage: " + tmp1);
+                                            _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                                            break;
+                                    }
+
+                                }
+
                                 _brave.InHandWeapon.CreateBody(weaponStartingPos);
                                 _brave.InHandWeapon.Body.ApplyLinearImpulse(new Vector2(x * MAX_FORCE, y * MAX_FORCE));
 
@@ -196,7 +236,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= weaponBagOnePosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
                                     && _brave.WeaponsBag.Count > 0)
                             {
-                                Debug.WriteLine("Weapon bag 1");
+
                                 Mouse.SetCursor(MouseCursor.Hand);
 
                                 if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -212,7 +252,6 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= weaponBagTwoPosition.Y + _weaponBagTxr.Height * 0.0234375f / 2
                                     && _brave.WeaponsBag.Count > 1)
                             {
-                                Debug.WriteLine("Weapon bag 2");
                                 Mouse.SetCursor(MouseCursor.Hand);
 
                                 if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -266,7 +305,9 @@ namespace Zchlachten.Entities
                             Debug.WriteLine("Brave got: " + newWeapon.Type);
                         }
                     }
+
                     Globals.GameState = GameState.PRE_PLAY;
+
                     break;
             }
 
@@ -292,6 +333,20 @@ namespace Zchlachten.Entities
                         Globals.PlayerTurn = PlayerTurn.DEMON_LORD;
                     }
 
+
+
+
+                    // if (_demonLord.StatusEffectBag.Count > 0)
+                    // {
+                    //     for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                    //     {
+                    //         var x = _demonLord.StatusEffectBag[i];
+                    //         if (x.Remaining == 0)
+                    //         {
+                    //             _demonLord.StatusEffectBag.RemoveAt(i);
+                    //         }
+                    //     }
+                    // }
                     Globals.GameState = GameState.POST_PLAY;
                 }
             }

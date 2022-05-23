@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
-using tainicom.Aether.Physics2D.Common;
+using Zchlachten.Graphics;
 
 namespace Zchlachten.Entities
 {
@@ -28,6 +28,8 @@ namespace Zchlachten.Entities
         public List<StatusEffect> HoldStatusEffectBag  = new List<StatusEffect>();
         public Items[] ItemsBag = new Items[3];
 
+        private Sprite _sprite;
+
         protected Player(World world, Texture2D texture, Vector2 position)
         {
             _world = world;
@@ -45,23 +47,25 @@ namespace Zchlachten.Entities
 
             WeaponsBag = new List<Weapon>(2);
 
+            _sprite = new Sprite(texture);
         }
 
         public abstract void Update(GameTime gameTime);
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                _texture,
-                Body.Position,
-                null,
-                Color.White,
-                Body.Rotation,
-                _textureOrigin,
-                _scale,
-                SpriteEffects.FlipVertically,
-                0f
-            );
+            // spriteBatch.Draw(
+            //     _texture,
+            //     Body.Position,
+            //     null,
+            //     Color.White,
+            //     Body.Rotation,
+            //     _textureOrigin,
+            //     Globals.Camera.Scale,
+            //     SpriteEffects.FlipVertically,
+            //     0f
+            // );
+            _sprite.Draw(spriteBatch, Body.Position);
         }
 
         public void HitBy(Weapon weapon)
@@ -72,8 +76,6 @@ namespace Zchlachten.Entities
             {
                 Debug.WriteLine("Player '" + PlayerSide + "' has seduced by '" + weapon.Type + "'.");
             }
-            
         }
-
     }
 }

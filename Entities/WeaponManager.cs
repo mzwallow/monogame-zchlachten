@@ -26,6 +26,7 @@ namespace Zchlachten.Entities
         private Texture2D _inHandWeaponTxr, _weaponBagTxr;
 
         private float _rotation;
+        private bool _applyBuff = false;
 
 
         public WeaponManager(
@@ -63,6 +64,7 @@ namespace Zchlachten.Entities
             switch (Globals.GameState)
             {
                 case GameState.PLAYING:
+                    Console.WriteLine("Apply:" + _applyBuff);
                     Vector2 weaponStartingPos;
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
@@ -217,7 +219,7 @@ namespace Zchlachten.Entities
                         }
                     }
 
-                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD && !_applyBuff)
                     {
                         foreach (StatusEffect status in _demonLord.StatusEffectBag)
                         {
@@ -225,16 +227,22 @@ namespace Zchlachten.Entities
                             {
                                 case StatusEffectType.ATTACK:
                                     var tmp = _demonLord.InHandWeapon.Damage * 1.25f;
+                                    Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                    Console.WriteLine("Damage: " + tmp);
                                     _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
                                     break;
                                 case StatusEffectType.SLIME_MUCILAGE:
                                     var tmp1 = _demonLord.InHandWeapon.Damage * 0.8f;
+                                    Console.WriteLine("Inhand Damage: " + _demonLord.InHandWeapon.Damage);
+                                    Console.WriteLine("Damage: " + tmp1);
                                     _demonLord.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
                                     break;
                             }
+                            _applyBuff = true;
                         }
+
                     }
-                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE && !_applyBuff)
                     {
                         foreach (StatusEffect status in _brave.StatusEffectBag)
                         {
@@ -242,14 +250,20 @@ namespace Zchlachten.Entities
                             {
                                 case StatusEffectType.ATTACK:
                                     var tmp = _brave.InHandWeapon.Damage * 1.25f;
+                                    Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                    Console.WriteLine("Damage: " + tmp);
                                     _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
                                     break;
                                 case StatusEffectType.SLIME_MUCILAGE:
                                     var tmp1 = _brave.InHandWeapon.Damage * 0.8f;
+                                    Console.WriteLine("Inhand Damage: " + _brave.InHandWeapon.Damage);
+                                    Console.WriteLine("Damage: " + tmp1);
                                     _brave.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
                                     break;
                             }
+                            _applyBuff = true;
                         }
+
                     }
 
                     break;
@@ -294,6 +308,7 @@ namespace Zchlachten.Entities
                     }
 
                     Globals.GameState = GameState.PRE_PLAY;
+                    _applyBuff = false;
 
 
                     break;

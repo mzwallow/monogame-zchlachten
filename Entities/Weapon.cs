@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -83,8 +84,34 @@ namespace Zchlachten.Entities
 
             if (otherTag.Type == TagType.STATUS_EFFECT)
             {
+
                 _player.HoldStatusEffectBag.Add(otherTag.StatusEffect);
 
+                if (_player.HoldStatusEffectBag.Count > 0)
+                {
+                    for (int i = _player.HoldStatusEffectBag.Count - 1; i > -1; --i)
+                    {
+                        var x = _player.HoldStatusEffectBag[i];
+
+                        if (x.Type == StatusEffectType.SHIELD || x.Type == StatusEffectType.ATTACK)
+                        {
+                            _player.StatusEffectBag.Add(x);
+                            _player.HoldStatusEffectBag.RemoveAt(i);
+                        }
+                    }
+                }
+                // if (_player.HoldStatusEffectBag.Count > 0)
+                // {
+                //     foreach (StatusEffect status in _player.HoldStatusEffectBag)
+                //     {
+                //         if (status.Type == StatusEffectType.SHIELD || status.Type == StatusEffectType.ATTACK)
+                //             _player.StatusEffectBag.Add(status);
+                //             _player.HoldStatusEffectBag.Remove(status);
+
+                //     }
+
+                // }
+                //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
                 return false;
             }
 
@@ -100,10 +127,34 @@ namespace Zchlachten.Entities
                     {
                         if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
                             _enemy.StatusEffectBag.Add(status);
-                        else
-                            _player.StatusEffectBag.Add(status);
+                        // else
+                        //     _player.StatusEffectBag.Add(status);
+
+                        //Console.WriteLine("StatusEffect: " + _player.StatusEffectBag);
                     }
                 }
+
+
+                // foreach (StatusEffect status in _player.StatusEffectBag)
+                // {
+                //     switch (status.Type)
+                //     {
+                //         case StatusEffectType.ATTACK:
+                //             var tmp = _player.InHandWeapon.Damage * 1.25f;
+                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
+                //             Console.WriteLine("Damage: "+tmp);
+                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp);
+                //             break;
+                //         case StatusEffectType.SLIME_MUCILAGE:
+                //             var tmp1 = _player.InHandWeapon.Damage * 0.8f;
+                //             Console.WriteLine("Inhand Damage: "+_player.InHandWeapon.Damage);
+                //             Console.WriteLine("Damage: "+tmp1);
+                //             _player.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
+                //             break;
+                //     }
+                // }
+
+
 
                 // for (int i = _player.HoldStatusEffectBag.Count-1 ; i > -1; --i)
                 // {

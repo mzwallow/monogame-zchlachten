@@ -48,7 +48,7 @@ namespace Zchlachten.Entities
             {
                 case GameState.PRE_PLAY:
                     //Random Bullshit
-                    if (Globals.TotalTurn % 4 == 0 || Globals.TotalTurn == 1)
+                    if (Globals.TotalTurn % 5 == 0 || Globals.TotalTurn == 1)
                     {
                         positionX = r.Next(Convert.ToInt32((450 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((800 + _buffGod.Width / 2) * 0.0234375f));
                         positionY = r.Next(Convert.ToInt32((370 + _buffGod.Width / 2) * 0.0234375f), Convert.ToInt32((620 + _buffGod.Width / 2) * 0.0234375f));
@@ -75,16 +75,19 @@ namespace Zchlachten.Entities
                             {
                                 case StatusEffectType.FIRE_DRAGON_BLOOD:
                                     _demonLord.HP -= 10;
+                                    Console.WriteLine("Demon Burning");
                                     break;
                                 case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                Console.WriteLine("Demon cover serpant bile");
                                     if (new Random().Next(0, 100) < 20)
                                     {
                                         _demonLord.HP /= 2;
+                                        Console.WriteLine("Demon serpant bite");
                                     }
                                     break;
                             }
 
-                            Console.WriteLine("Demon Effect bag: " + status);
+                            Console.WriteLine("Demon Effect bag: " + status+" remain: "+status.Remaining);
                         }
 
                         foreach (StatusEffect status in _demonLord.HoldStatusEffectBag)
@@ -92,6 +95,16 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("Demon Hold Effect: " + status);
                         }
+
+                        // if (_demonLord.StatusEffectBag.Count > 0)
+                        // {
+                        //     for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                        //     {
+                        //         var x = _demonLord.StatusEffectBag[i];
+                        //         if (x.Remaining == 0)
+                        //             _demonLord.StatusEffectBag.RemoveAt(i);
+                        //     }
+                        // }
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
@@ -102,16 +115,19 @@ namespace Zchlachten.Entities
                             {
                                 case StatusEffectType.FIRE_DRAGON_BLOOD:
                                     _brave.HP -= 10;
+                                    Console.WriteLine("Brave Burning");
                                     break;
                                 case StatusEffectType.GOLDEN_SERPANT_BILE:
+                                Console.WriteLine("Brave cover serpant bile");
                                     if (new Random().Next(0, 100) < 20)
                                     {
                                         _brave.HP /= 2;
+                                        Console.WriteLine("Brave  serpant bite");
                                     }
                                     break;
                             }
 
-                            Console.WriteLine("brave Effect bag: " + status);
+                            Console.WriteLine("brave Effect bag: " + status+" remain: "+status.Remaining);
                         }
 
                         foreach (StatusEffect status in _brave.HoldStatusEffectBag)
@@ -119,27 +135,21 @@ namespace Zchlachten.Entities
                             status.HoldRemaining--;
                             Console.WriteLine("brave Hold Effect: " + status);
                         }
+
+                        // if (_brave.StatusEffectBag.Count > 0)
+                        // {
+                        //     for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
+                        //     {
+                        //         var x = _brave.StatusEffectBag[i];
+                        //         if (x.Remaining == 0)
+                        //             _brave.StatusEffectBag.RemoveAt(i);
+                        //     }
+                        // }
                     }
 
-                    if (_demonLord.StatusEffectBag.Count > 0)
-                    {
-                        for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
-                        {
-                            var x = _demonLord.StatusEffectBag[i];
-                            if (x.Remaining == 0)
-                                _demonLord.StatusEffectBag.RemoveAt(i);
-                        }
-                    }
-                    
-                    if (_brave.StatusEffectBag.Count > 0)
-                    {
-                        for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
-                        {
-                            var x = _brave.StatusEffectBag[i];
-                            if (x.Remaining == 0)
-                                _brave.StatusEffectBag.RemoveAt(i);
-                        }
-                    }
+
+
+
 
                     Globals.GameState = GameState.PLAYING;
                     break;
@@ -192,11 +202,11 @@ namespace Zchlachten.Entities
                     break;
                 case GameState.POST_PLAY:
                     Globals.TotalTurn++;
-                    
+
                     // Remove status effects when player turns equal 4
                     foreach (StatusEffect buff in _entityManager.GetEntitiesOfType<StatusEffect>())
                     {
-                        if (Globals.TotalTurn % 4 == 0)
+                        if (Globals.TotalTurn % 5 == 0)
                         {
                             _world.Remove(buff.Body);
                             _entityManager.RemoveEntity(buff);
@@ -236,6 +246,26 @@ namespace Zchlachten.Entities
                             }
                         }
                     }
+
+                    if (_demonLord.StatusEffectBag.Count > 0)
+                        {
+                            for (int i = _demonLord.StatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _demonLord.StatusEffectBag[i];
+                                if (x.Remaining == 0)
+                                    _demonLord.StatusEffectBag.RemoveAt(i);
+                            }
+                        }
+
+                        if (_brave.StatusEffectBag.Count > 0)
+                        {
+                            for (int i = _brave.StatusEffectBag.Count - 1; i > -1; --i)
+                            {
+                                var x = _brave.StatusEffectBag[i];
+                                if (x.Remaining == 0)
+                                    _brave.StatusEffectBag.RemoveAt(i);
+                            }
+                        }
                     break;
             }
 

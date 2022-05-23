@@ -9,7 +9,9 @@ namespace Zchlachten.Entities
         public DebuffGolden(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
+             Remaining = 1;
             Type = StatusEffectType.GOLDEN_SERPANT_BILE;
+            
         }
 
         public override void Update(GameTime gameTime) { }

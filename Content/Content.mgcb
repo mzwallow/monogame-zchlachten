@@ -328,7 +328,7 @@
 /processorParam:TextureFormat=Color
 /build:StatusEffects/Buff.png
 
-#begin UI/HpBar.PNG
+#begin UI/HPBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -338,7 +338,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UI/HpBar.PNG
+/build:UI/HPBar.png
 
 #begin UI/InHandWeapon.png
 /importer:TextureImporter

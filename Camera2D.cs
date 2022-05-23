@@ -13,6 +13,7 @@ namespace Zchlachten
 
         public float Width { get; } = 30f;
         public float Height { get; private set; }
+        public float Scale { get; } = 0.0234375f;
 
         public Camera2D(GraphicsDevice graphics)
         {

@@ -77,6 +77,7 @@ namespace Zchlachten.Screens
                 _demonLordTxr,
                 _braveTxr
             );
+            _playerManager.LoadContent(base.Content);
 
             // Load weapons
             var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");

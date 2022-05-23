@@ -30,5 +30,7 @@ namespace Zchlachten
         public static Camera2D Camera;
         
         public static DebugView DebugView;
+
+        public static bool IsShooting = false;
     }
 }

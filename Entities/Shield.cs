@@ -4,10 +4,10 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class Buffs : StatusEffect
-    {
-        public Buffs(World world, Texture2D texture, Vector2 position)
-            : base(world, texture, position)
+    public class Shield : Items
+    {        
+        public Shield(World world, Texture2D texture)
+            : base(world, texture)
         {
             
         }

@@ -6,7 +6,6 @@ namespace Zchlachten.Entities
     public interface IGameEntity
     {
         void Update(GameTime gameTime);
-
         void Draw(GameTime gameTime, SpriteBatch spriteBatch);
     }
 }

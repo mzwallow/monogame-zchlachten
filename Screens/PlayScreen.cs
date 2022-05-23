@@ -32,6 +32,7 @@ namespace Zchlachten.Screens
         private PlayerManager _playerManager;
         private WeaponManager _weaponManager;
         private StatusEffectManager _statusEffectManager;
+        private ItemManager _itemManager;
 
         private DebugUI _debugUI;
 
@@ -76,6 +77,7 @@ namespace Zchlachten.Screens
                 _demonLordTxr,
                 _braveTxr
             );
+            _playerManager.LoadContent(base.Content);
 
             // Load weapons
             var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
@@ -98,23 +100,14 @@ namespace Zchlachten.Screens
             _weaponManager.LoadContent(base.Content);
 
             // Load buffs & debuffs
-            _buffGod = base.Content.Load<Texture2D>("Controls/blessing_of_god");
-            _buffDevil = base.Content.Load<Texture2D>("Controls/blessing_of_devil");
-            _debuffDragon = base.Content.Load<Texture2D>("Controls/fire_dragon_blood");
-            _debuffGolden = base.Content.Load<Texture2D>("Controls/golden_crow_bile");
-            _debuffSlime = base.Content.Load<Texture2D>("StatusEffects/Buff");
-            _allStatusEffectTxr = new Texture2D[]{
-                _buffGod,
-                _buffDevil,
-                _debuffDragon,
-                _debuffGolden,
-                _debuffSlime
-            };
             _statusEffectManager = new StatusEffectManager(
                 _world,
                 _entityManager,
-                _allStatusEffectTxr
+                _playerManager.DemonLord,
+                _playerManager.Brave
+
             );
+            _statusEffectManager.LoadContent(base.Content);
 
             // Load environments
             _backgroundTxr = base.Content.Load<Texture2D>("Environments/BG");
@@ -122,6 +115,17 @@ namespace Zchlachten.Screens
             _ground = new Ground(_groundTxr, _world);
             _corpsesPileTxr = base.Content.Load<Texture2D>("Environments/CorpsesPile");
             _corpsesPile = new CorpsesPile(_corpsesPileTxr, _world);
+
+            // Load Items
+            _itemManager = new ItemManager(
+                _world,
+                _entityManager,
+                _playerManager.DemonLord,
+                _playerManager.Brave
+            );
+            _itemManager.LoadContent(base.Content);
+
+
 
             //Load debug UI
             _debugUI = new DebugUI(
@@ -138,8 +142,9 @@ namespace Zchlachten.Screens
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_weaponManager);
             _entityManager.AddEntry(_statusEffectManager);
-
             _entityManager.AddEntry(_debugUI);
+            _entityManager.AddEntry(_itemManager);
+
         }
 
         public override void Update(GameTime gameTime)

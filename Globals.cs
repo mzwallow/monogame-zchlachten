@@ -24,9 +24,12 @@ namespace Zchlachten
 
         public static GameState GameState;
         public static PlayerTurn PlayerTurn;
+        public static bool IsShooting = false;
+        public static int TotalTurn = 1;
 
         public static Camera2D Camera;
         
         public static DebugView DebugView;
+
     }
 }

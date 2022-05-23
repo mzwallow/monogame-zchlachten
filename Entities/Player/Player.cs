@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using tainicom.Aether.Physics2D.Dynamics;
-using tainicom.Aether.Physics2D.Common;
+using Zchlachten.Graphics;
 
 namespace Zchlachten.Entities
 {
@@ -24,8 +24,11 @@ namespace Zchlachten.Entities
 
         public Weapon InHandWeapon { get; set; }
         public List<Weapon> WeaponsBag { get; set; }
+        public List<StatusEffect> StatusEffectBag  = new List<StatusEffect>();
+        public List<StatusEffect> HoldStatusEffectBag  = new List<StatusEffect>();
+        public Items[] ItemsBag = new Items[3];
 
-        public List<StatusEffect> StatusEffectBag { get; set; } = new List<StatusEffect>();
+        private Sprite _sprite;
 
         protected Player(World world, Texture2D texture, Vector2 position)
         {
@@ -43,23 +46,26 @@ namespace Zchlachten.Entities
             _playerFixture.Tag = new Tag(TagType.PLAYER);
 
             WeaponsBag = new List<Weapon>(2);
+
+            _sprite = new Sprite(texture);
         }
 
         public abstract void Update(GameTime gameTime);
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                _texture,
-                Body.Position,
-                null,
-                Color.White,
-                Body.Rotation,
-                _textureOrigin,
-                _scale,
-                SpriteEffects.FlipVertically,
-                0f
-            );
+            // spriteBatch.Draw(
+            //     _texture,
+            //     Body.Position,
+            //     null,
+            //     Color.White,
+            //     Body.Rotation,
+            //     _textureOrigin,
+            //     Globals.Camera.Scale,
+            //     SpriteEffects.FlipVertically,
+            //     0f
+            // );
+            _sprite.Draw(spriteBatch, Body.Position);
         }
 
         public void HitBy(Weapon weapon)

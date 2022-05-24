@@ -13,12 +13,12 @@ namespace Zchlachten
         public static MouseState CurrentMouseState, PreviousMouseState;
         public static KeyboardState CurrentKeyboardState, PreviousKeyboardState;
         public static MouseCursor MouseCursor;
-      
-        public static  SoundEffect bgm , soundFX;
+
+        public static SoundEffect bgm, soundFX;
         public static SoundEffectInstance _bgmInstance, _soundFXInstance;
         public static string song;
 
-        public static float MusicVolume=0.0f,SoundVolume=0.1f;
+        public static float MusicVolume = 0.0f, SoundVolume = 0.1f;
 
         public static ScreenManager ScreenManager;
 
@@ -28,8 +28,32 @@ namespace Zchlachten
         public static int TotalTurn = 1;
 
         public static Camera2D Camera;
-        
+
         public static DebugView DebugView;
 
+        public static bool IsPlayerAffectedByCharm = false;
+
+        public static bool IsClicked()
+        {
+            if (CurrentMouseState.LeftButton == ButtonState.Pressed
+                    && PreviousMouseState.LeftButton == ButtonState.Released)
+                return true;
+            return false;
+        }
+
+        public static bool IsReleased()
+        {
+            if (CurrentMouseState.LeftButton == ButtonState.Released
+                    && PreviousMouseState.LeftButton == ButtonState.Pressed)
+                return true;
+            return false;
+        }
+
+        public static bool IsHolding()
+        {
+            if (CurrentMouseState.LeftButton == ButtonState.Pressed)
+                return true;
+            return false;
+        }
     }
 }

@@ -15,6 +15,9 @@ namespace Zchlachten.Graphics
         {
             Texture = texture;
             TextureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+
+            Width = Texture.Width * Globals.Camera.Scale;
+            Height = Texture.Height * Globals.Camera.Scale;
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
@@ -40,7 +43,8 @@ namespace Zchlachten.Graphics
                 null,
                 Color.White,
                 0f,
-                TextureOrigin,
+                // TextureOrigin,
+                Vector2.One,
                 Globals.Camera.Scale * scale,
                 SpriteEffects.FlipVertically,
                 0f

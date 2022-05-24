@@ -4,19 +4,19 @@ using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
-    public class BuffCharm : StatusEffect
+    public class DebuffDrunken : StatusEffect
     {
-        public BuffCharm(World world, Texture2D texture, Vector2 position)
+        public DebuffDrunken(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
             Remaining = 1;
-            Type = StatusEffectType.CHARM;
+            Type = StatusEffectType.DRUNKEN;
         }
-        public BuffCharm(World world, Texture2D texture)
+        public DebuffDrunken(World world, Texture2D texture)
             : base(world, texture)
         {
             Remaining = 1;
-            Type = StatusEffectType.CHARM;
+            Type = StatusEffectType.DRUNKEN;
         }
 
         public override void Update(GameTime gameTime) { }

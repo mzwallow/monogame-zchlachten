@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Zchlachten.Entities
 {
@@ -9,21 +10,21 @@ namespace Zchlachten.Entities
         private const int TEXTURE_POS_X = 100;
         private const int TEXTURE_POS_Y = 100;
 
-        private readonly ContentManager _content;
+        private readonly World _world;
         private readonly Player _demonLord, _brave;
 
         private Texture2D _texture;
         private SpriteFont _font;
 
         public DebugUI(
-            ContentManager content,
+            World world,
             Texture2D texture,
             SpriteFont font,
             Player demonLord,
             Player brave
         )
         {
-            _content = content;
+            _world = world;
 
             _texture = texture;
             _font = font;
@@ -42,9 +43,9 @@ namespace Zchlachten.Entities
 
             text = "Play State: " + Globals.GameState;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
-                Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 25f)), 
+                Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 25f)),
                 Color.White,
                 0f,
                 Vector2.Zero,
@@ -55,9 +56,22 @@ namespace Zchlachten.Entities
 
             text = "Player Turn: " + Globals.PlayerTurn;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 45f)),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                0.0234375f,
+                SpriteEffects.FlipVertically,
+                0f
+            );
+
+            text = "Gravity: " + _world.Gravity;
+            spriteBatch.DrawString(
+                _font,
+                text,
+                Globals.Camera.ConvertScreenToWorld(new Vector2(5f, 65f)),
                 Color.White,
                 0f,
                 Vector2.Zero,
@@ -69,7 +83,7 @@ namespace Zchlachten.Entities
             // Demon Lord status
             text = "Demon Lord Position: " + _demonLord.Body.Position;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 100f)),
                 Color.White,
@@ -81,7 +95,7 @@ namespace Zchlachten.Entities
             );
             text = "Demon Lord HP: " + _demonLord.HP;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 120f)),
                 Color.White,
@@ -93,7 +107,7 @@ namespace Zchlachten.Entities
             );
             text = "In-hand weapon: " + _demonLord.InHandWeapon;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 140f)),
                 Color.White,
@@ -116,7 +130,7 @@ namespace Zchlachten.Entities
                     break;
             }
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 160f)),
                 Color.White,
@@ -128,7 +142,7 @@ namespace Zchlachten.Entities
             );
             text = "Blood thirst gauge: " + _demonLord.BloodThirstGauge;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(140f, 180f)),
                 Color.White,
@@ -138,11 +152,29 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically,
                 0f
             );
+            text = "Stats effects bag:";
+            float seBagY = 200f;
+            foreach (StatusEffect status in _demonLord.StatusEffectBag)
+            {
+                text += " " + status.Type;
+                spriteBatch.DrawString(
+                    _font,
+                    text,
+                    Globals.Camera.ConvertScreenToWorld(new Vector2(140f, seBagY)),
+                    Color.White,
+                    0f,
+                    Vector2.Zero,
+                    0.0234375f,
+                    SpriteEffects.FlipVertically,
+                    0f
+                );
+                seBagY += 20f;
+            }
 
             // Brave status
             text = "Brave Position: " + _brave.Body.Position;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 100f)),
                 Color.White,
@@ -154,7 +186,7 @@ namespace Zchlachten.Entities
             );
             text = "Brave HP: " + _brave.HP;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 120f)),
                 Color.White,
@@ -166,7 +198,7 @@ namespace Zchlachten.Entities
             );
             text = "In-hand weapon: " + _brave.InHandWeapon;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 140f)),
                 Color.White,
@@ -189,7 +221,7 @@ namespace Zchlachten.Entities
                     break;
             }
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 160f)),
                 Color.White,
@@ -201,7 +233,7 @@ namespace Zchlachten.Entities
             );
             text = "Blood thirst gauge: " + _brave.BloodThirstGauge;
             spriteBatch.DrawString(
-                _font, 
+                _font,
                 text,
                 Globals.Camera.ConvertScreenToWorld(new Vector2(600f, 180f)),
                 Color.White,
@@ -211,9 +243,27 @@ namespace Zchlachten.Entities
                 SpriteEffects.FlipVertically,
                 0f
             );
+            text = "Stats effects bag:";
+            float seBBagY = 200f;
+            foreach (StatusEffect status in _brave.StatusEffectBag)
+            {
+                text += " " + status.Type;
+                spriteBatch.DrawString(
+                    _font,
+                    text,
+                    Globals.Camera.ConvertScreenToWorld(new Vector2(600f, seBBagY)),
+                    Color.White,
+                    0f,
+                    Vector2.Zero,
+                    0.0234375f,
+                    SpriteEffects.FlipVertically,
+                    0f
+                );
+                seBBagY += 20f;
+            }
 
             // Weapon
-            
+
         }
     }
 }

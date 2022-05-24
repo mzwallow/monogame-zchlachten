@@ -9,7 +9,7 @@ namespace Zchlachten.Entities
         public Brave(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            PlayerSide = PlayerSide.BRAVE;
+            Side = PlayerSide.BRAVE;
         }
 
         public override void Update(GameTime gameTime) { }

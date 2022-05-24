@@ -7,6 +7,7 @@ using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Diagnostics;
 using tainicom.Aether.Physics2D.Common;
 using Zchlachten.Entities;
+using Zchlachten.Graphics;
 
 namespace Zchlachten.Screens
 {
@@ -21,8 +22,9 @@ namespace Zchlachten.Screens
         private SpriteFont _debugFont;
 
         private Texture2D _demonLordTxr, _braveTxr;
-        private Texture2D _groundTxr, _backgroundTxr, _corpsesPileTxr;
+        private Texture2D _groundTxr, _corpsesPileTxr;
         private Texture2D[] _weaponTxrs;
+        private Sprite _backgroundSprite;
 
         private Ground _ground;
         private CorpsesPile _corpsesPile;
@@ -104,18 +106,17 @@ namespace Zchlachten.Screens
                 _entityManager,
                 _playerManager.DemonLord,
                 _playerManager.Brave
-
             );
             _statusEffectManager.LoadContent(base.Content);
 
             // Load environments
-            _backgroundTxr = base.Content.Load<Texture2D>("Environments/BG");
+            _backgroundSprite = new Sprite(base.Content.Load<Texture2D>("Environments/BG"));
             _groundTxr = base.Content.Load<Texture2D>("Environments/Ground");
             _ground = new Ground(_groundTxr, _world);
             _corpsesPileTxr = base.Content.Load<Texture2D>("Environments/CorpsesPile");
             _corpsesPile = new CorpsesPile(_corpsesPileTxr, _world);
 
-            // Load Items
+            // Load items
             _itemManager = new ItemManager(
                 _world,
                 _entityManager,
@@ -124,11 +125,9 @@ namespace Zchlachten.Screens
             );
             _itemManager.LoadContent(base.Content);
 
-
-
             //Load debug UI
             _debugUI = new DebugUI(
-                base.Content,
+                _world,
                 _groundTxr,
                 _debugFont,
                 _playerManager.DemonLord,
@@ -138,12 +137,14 @@ namespace Zchlachten.Screens
 
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_corpsesPile);
-            _entityManager.AddEntry(_playerManager);
+
+
             _entityManager.AddEntry(_weaponManager);
             _entityManager.AddEntry(_statusEffectManager);
-            _entityManager.AddEntry(_debugUI);
+            _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_itemManager);
-
+            
+            // _entityManager.AddEntry(_debugUI);
         }
 
         public override void Update(GameTime gameTime)
@@ -151,19 +152,13 @@ namespace Zchlachten.Screens
             _world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             Globals.Camera.Update();
+
+            // Update entiites
             _entityManager.Update(gameTime);
 
             if (Globals.GameState == GameState.START)
                 Globals.GameState = GameState.PRE_PLAY;
 
-            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.Z))
-                Globals.GameState = GameState.PRE_PLAY;
-            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.X))
-                Globals.GameState = GameState.PLAYING;
-            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.C))
-                Globals.GameState = GameState.POST_PLAY;
-            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.V))
-                Globals.GameState = GameState.END;
             if (Globals.CurrentKeyboardState.IsKeyDown(Keys.G))
                 Globals.DebugView.Enabled = !Globals.DebugView.Enabled;
         }
@@ -171,7 +166,7 @@ namespace Zchlachten.Screens
         public override void Draw(GameTime gameTime)
         {
             Globals.DebugView.BeginCustomDraw(
-                Globals.Camera.Projection, 
+                Globals.Camera.Projection,
                 Globals.Camera.View,
                 null,
                 null,
@@ -192,26 +187,19 @@ namespace Zchlachten.Screens
                 _spriteEffect
             );
 
-            _spriteBatch.Draw(
-                _backgroundTxr, 
-                new Vector2(Globals.Camera.Width/2, Globals.Camera.Height/2), 
-                null,
-                Color.White,
-                0f,
-                new Vector2(_backgroundTxr.Width/2, _backgroundTxr.Height/2),
-                0.0234375f,
-                SpriteEffects.FlipVertically,
-                0f
+            // Draw background
+            _backgroundSprite.Draw(
+                _spriteBatch,
+                new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2)
             );
+            // Draw entities
             _entityManager.Draw(gameTime, _spriteBatch);
 
-            foreach (var b in _world.BodyList)
-            {
-                foreach (var f in b.FixtureList)
-                {
-                    Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
-                }
-            }
+            // foreach (var b in _world.BodyList)
+            // {
+            //     foreach (var f in b.FixtureList)
+            //         Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
+            // }
 
             _spriteBatch.End();
             Globals.DebugView.EndCustomDraw();

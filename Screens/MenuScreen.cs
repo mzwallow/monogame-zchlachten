@@ -68,8 +68,6 @@ namespace Zchlachten.Screens
 
             };
 
-            
-
         }
 
         public override void LoadContent()
@@ -89,7 +87,6 @@ namespace Zchlachten.Screens
             // TODO: Add your update logic here
             foreach (var component in _menuComponents)
                 component.Update(gameTime);
-
         }
 
         public override void Draw(GameTime gameTime)
@@ -107,10 +104,7 @@ namespace Zchlachten.Screens
             foreach (var component in _menuComponents)
                 component.Draw(_spriteBatch);
 
-
             _spriteBatch.End();
-
-
         }
 
         private void newGameButtonClick(object sender, EventArgs e)

@@ -86,7 +86,7 @@ namespace Zchlachten.Screens
                     Globals.SoundVolume = (_currentMouse.X / 64f - 5) * 0.1f;
                     _soundPosition.X = (Globals.SoundVolume * 10 + 5) * 64;
                     SoundEffect.MasterVolume = Globals.SoundVolume;
-                    Globals.soundFX.Play();
+                    
                    
                 }
             }

@@ -6,7 +6,7 @@ namespace Zchlachten.Entities
 {
     public class NormalShot : Weapon
     {
-        private const int NORMAL_SHOT_DAMAGE = 150;
+        private const int NORMAL_SHOT_DAMAGE = 10;
         public NormalShot(World world, Player player, Player enemy, Texture2D texture)
             : base(world, player, enemy, texture)
         {

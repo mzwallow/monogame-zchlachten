@@ -186,7 +186,7 @@ namespace Zchlachten.Screens
             if (Globals.GameState == GameState.END)
 
             {
-                if (relativeMousePosition.Y <= 7.7f && relativeMousePosition.Y >= 6.5f
+                if (relativeMousePosition.Y <= 11.7f && relativeMousePosition.Y >= 10.5f
                 && relativeMousePosition.X >= 11.9f && relativeMousePosition.X <= 18f)
                 {
                     Console.WriteLine("Hover");
@@ -239,16 +239,16 @@ namespace Zchlachten.Screens
 
                 if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                 {
-                    _winBraveSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2));
+                    _winBraveSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2 + 4f));
 
                 }
                 else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                 {
-                    _winDemonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2));
+                    _winDemonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2 + 4f));
 
                 }
-                _buttonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, (Globals.Camera.Height / 2) - 1.3f));//12.1,7.5
-                _spriteBatch.DrawString(_buttonFont, "Back To Menu", new Vector2(12.3f, 6.8f), Color.Black, 0f, new Vector2(0, 0), Globals.Camera.Scale, SpriteEffects.FlipVertically, 0f);
+                _buttonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, (Globals.Camera.Height / 2) + 2.3f));//12.1,7.5
+                _spriteBatch.DrawString(_buttonFont, "Back To Menu", new Vector2(12.3f, 10.4f), Color.Black, 0f, new Vector2(0, 0), Globals.Camera.Scale, SpriteEffects.FlipVertically, 0f);
             }
 
             _spriteBatch.End();

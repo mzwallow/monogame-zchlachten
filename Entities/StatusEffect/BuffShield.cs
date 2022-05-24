@@ -6,17 +6,18 @@ namespace Zchlachten.Entities
 {
     public class BuffShield : StatusEffect
     {
+        private const int SHIELD_REMAINING = 3;
+
         public BuffShield(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            Remaining = 3;
             Type = StatusEffectType.SHIELD;
+            Remaining = SHIELD_REMAINING;
         }
-        public BuffShield(World world, Texture2D texture)
-            : base(world, texture)
+        public BuffShield() : base()
         {
-            Remaining = 3;
             Type = StatusEffectType.SHIELD;
+            Remaining = SHIELD_REMAINING;
         }
 
         public override void Update(GameTime gameTime) { }

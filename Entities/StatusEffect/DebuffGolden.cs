@@ -6,12 +6,20 @@ namespace Zchlachten.Entities
 {
     public class DebuffGolden : StatusEffect
     {
+        private const int GOLDEN_SERPANT_BILE_REMAINING = 1;
+
+        public DebuffGolden() : base()
+        {
+            Type = StatusEffectType.GOLDEN_SERPANT_BILE;
+            Remaining = GOLDEN_SERPANT_BILE_REMAINING;
+        }
+
         public DebuffGolden(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-             Remaining = 1;
             Type = StatusEffectType.GOLDEN_SERPANT_BILE;
-            
+            Remaining = GOLDEN_SERPANT_BILE_REMAINING;
+
         }
 
         public override void Update(GameTime gameTime) { }

@@ -81,7 +81,7 @@ namespace Zchlachten.Entities
             );
 
             // Demon Lord status
-            text = "Demon Lord Position: " + _demonLord.Body.Position;
+            text = "Demon Lord Position: " + _demonLord.Position;
             spriteBatch.DrawString(
                 _font,
                 text,
@@ -172,7 +172,7 @@ namespace Zchlachten.Entities
             }
 
             // Brave status
-            text = "Brave Position: " + _brave.Body.Position;
+            text = "Brave Position: " + _brave.Position;
             spriteBatch.DrawString(
                 _font,
                 text,

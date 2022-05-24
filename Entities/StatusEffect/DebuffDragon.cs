@@ -6,17 +6,19 @@ namespace Zchlachten.Entities
 {
     public class DebuffDragon : StatusEffect
     {
+        private const int FIRE_DRAGON_BLOOD_REMAINING = 2;
+
+        public DebuffDragon() : base()
+        {
+            Type = StatusEffectType.FIRE_DRAGON_BLOOD;
+            Remaining = FIRE_DRAGON_BLOOD_REMAINING;
+        }
+
         public DebuffDragon(World world, Texture2D texture, Vector2 position)
             : base(world, texture, position)
         {
-            Remaining = 3;
             Type = StatusEffectType.FIRE_DRAGON_BLOOD;
-        }
-        public DebuffDragon(World world, Texture2D texture)
-            : base(world, texture)
-        {
-            Remaining = 3;
-            Type = StatusEffectType.FIRE_DRAGON_BLOOD;
+            Remaining = FIRE_DRAGON_BLOOD_REMAINING;
         }
 
         public override void Update(GameTime gameTime) { }

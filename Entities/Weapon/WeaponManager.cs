@@ -108,7 +108,6 @@ namespace Zchlachten.Entities
         public void Update(GameTime gameTime)
         {
             Vector2 relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
-             //Debug.WriteLine(relativeMousePosition);
 
             switch (Globals.GameState)
             {
@@ -118,7 +117,6 @@ namespace Zchlachten.Entities
                     {
                         _wind = r.Next(-2, 2);
                         _world.Gravity = new Vector2(_wind, -9.8f);
-                        Console.WriteLine("Wind: " + _wind);
                     }
                     switch (_wind)
                     {
@@ -526,15 +524,12 @@ namespace Zchlachten.Entities
                     {
                         case StatusEffectType.ATTACK_UP:
                             var tmp1 = player.InHandWeapon.Damage * 1.25f;
-                            Console.WriteLine("Damage: " + tmp1);
                             player.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
 
                             break;
                         case StatusEffectType.SLIME_MUCILAGE:
                             var tmp2 = player.InHandWeapon.Damage * 0.8f;
-                            Console.WriteLine("Damage: " + tmp2);
                             player.InHandWeapon.Damage = (int)Math.Ceiling(tmp2);
-                            Console.WriteLine("Inhand Damage: " + player.InHandWeapon.Damage);
                             break;
                     }
 
@@ -552,10 +547,7 @@ namespace Zchlachten.Entities
                     y * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f))
                     )
              );
-                Console.WriteLine("Force: " + (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)));
-
                 _entityManager.AddEntry(player.InHandWeapon);
-
                 _chargeGauge = 0;
             }
         }
@@ -570,7 +562,6 @@ namespace Zchlachten.Entities
                 {
                     if (status.Type == StatusEffectType.DRUNKEN)
                     {
-                        Console.WriteLine(player +" Drunken");
                         _rangeForce = 0.2f;
                     }
                 }
@@ -599,13 +590,11 @@ namespace Zchlachten.Entities
                         newWeapon.Texture = _lightChakra;
 
                         _brave.WeaponsBag.Add(newWeapon);
-                        Debug.WriteLine("Demon Lord's weapon bag is full. Brave got '" + newWeapon.Type + "' instead.");
                     }
                 }
                 else
                 {
                     _demonLord.WeaponsBag.Add(newWeapon);
-                    Debug.WriteLine("Demon Lord got: " + newWeapon.Type);
                 }
             }
 
@@ -624,15 +613,12 @@ namespace Zchlachten.Entities
                         newWeapon.Texture = _cursedEye;
 
                         _demonLord.WeaponsBag.Add(newWeapon);
-                        Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
                     }
 
                 }
                 else
                 {
-                    _brave.WeaponsBag.Add(newWeapon);
-                    Debug.WriteLine("Brave got: " + newWeapon.Type);
-
+                    _brave.WeaponsBag.Add(newWeapon); 
                 }
             }
         }

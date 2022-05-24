@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 This file contains an xml description of a font, and will be read by the XNA
 Framework Content Pipeline. Follow the comments to customize the appearance
@@ -11,13 +11,13 @@ with.
     <!--
     Modify this string to change the font that will be imported.
     -->
-    <FontName>WR Tish Kid</FontName>
+    <FontName>SOV_KhongMaan</FontName>
 
     <!--
     Size is a float value, measured in points. Modify this value to change
     the size of the font.
     -->
-    <Size>28</Size>
+    <Size>30</Size>
 
     <!--
     Spacing is a float value, measured in pixels. Modify this value to change
@@ -50,14 +50,7 @@ with.
     character set. The characters are ordered according to the Unicode standard.
     See the documentation for more information.
     -->
-    <!-- <CharacterRegions>
-      <CharacterRegion>
-        <Start>&#32;</Start>
-        <End>&#126;</End>
-      </CharacterRegion>
-    </CharacterRegions> -->
-
-<CharacterRegions>
+    <CharacterRegions>
       <CharacterRegion>
         <Start>&#32;</Start>
         <End>&#126;</End>
@@ -67,6 +60,5 @@ with.
          <End>&#3711;</End> 
       </CharacterRegion> 
     </CharacterRegions>
-
   </Asset>
 </XnaContent>

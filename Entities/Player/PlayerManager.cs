@@ -25,8 +25,8 @@ namespace Zchlachten.Entities
         private Sprite _buffShieldSprite, _buffAttackSprite;
         private Sprite _braveBloodThirst, _demonBloodThirst;
 
-        private float _DemonCurrentHp;
-        private float _BraveCurrentHp;
+        private float _DemonCurrentHp,_BraveCurrentHp;
+    
 
         
 
@@ -57,11 +57,11 @@ namespace Zchlachten.Entities
         public void LoadContent(ContentManager content)
         {
             _hpBarSprite = new Sprite(content.Load<Texture2D>("UI/HPBar"));
-            _demonHpSprite = new Sprite(content.Load<Texture2D>("Controls/DemonHp"));
-            _braveHpSprite = new Sprite(content.Load<Texture2D>("Controls/BraveHp"));
+            _demonHpSprite = new Sprite(content.Load<Texture2D>("UI/DemonHp"));
+            _braveHpSprite = new Sprite(content.Load<Texture2D>("UI/BraveHp"));
 
-            _demonBloodThirst = new Sprite(content.Load<Texture2D>("Controls/DemonBloodThirstGauge"));
-            _braveBloodThirst = new Sprite(content.Load<Texture2D>("Controls/BraveBloodThirstGauge"));
+            _demonBloodThirst = new Sprite(content.Load<Texture2D>("UI/DemonBloodThirstGauge"));
+            _braveBloodThirst = new Sprite(content.Load<Texture2D>("UI/BraveBloodThirstGauge"));
 
             _debuffFireSprite = new Sprite(content.Load<Texture2D>("StatusEffects/Icons/DebuffFireIcon"));
             _debuffSlimeSprite = new Sprite(content.Load<Texture2D>("StatusEffects/Icons/DebuffSlimeIcon"));
@@ -83,7 +83,6 @@ namespace Zchlachten.Entities
             else if (Brave.HP > 150) Brave.HP = 150;
 
             _DemonCurrentHp = DemonLord.HP / 150f;
-            //Console.WriteLine("Current HP: " + _DemonCurrentHp);
             _BraveCurrentHp = Brave.HP / 150f;
 
             switch (Globals.GameState)
@@ -103,30 +102,31 @@ namespace Zchlachten.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            _hpBarSprite.Draw(spriteBatch, new Vector2(Globals.Camera.Width / 2, 1.5f));
             _demonHpSprite.TextureOrigin = Vector2.Zero;
             _demonHpSprite.Draw(spriteBatch, new Vector2(4.1f, 0.71f), new Vector2(_DemonCurrentHp, 1f));
             _braveHpSprite.TextureOrigin = Vector2.Zero;
             _braveHpSprite.Draw(spriteBatch, new Vector2(25.9f, 0.71f), new Vector2(-_BraveCurrentHp, 1f));
-            _hpBarSprite.Draw(spriteBatch, new Vector2(Globals.Camera.Width / 2, 1.5f));
+            
 
             if (DemonLord.BloodThirstGauge == 2)
             {
-                _demonBloodThirst.Draw(spriteBatch, new Vector2(3.25f, 0.91f));
-                _demonBloodThirst.Draw(spriteBatch, new Vector2(1.75f, 0.91f));
+                _demonBloodThirst.Draw(spriteBatch, new Vector2(3.25f, 0.9f));
+                _demonBloodThirst.Draw(spriteBatch, new Vector2(1.75f, 0.9f));
             }
             else if (DemonLord.BloodThirstGauge == 1)
             {
-                _demonBloodThirst.Draw(spriteBatch, new Vector2(1.75f, 0.91f));
+                _demonBloodThirst.Draw(spriteBatch, new Vector2(1.75f, 0.9f));
             }
 
             if (Brave.BloodThirstGauge == 2)
             {
-                _braveBloodThirst.Draw(spriteBatch, new Vector2(26.69f, 0.91f));
-                _braveBloodThirst.Draw(spriteBatch, new Vector2(28.14f, 0.91f));
+                _braveBloodThirst.Draw(spriteBatch, new Vector2(26.69f, 0.9f));
+                _braveBloodThirst.Draw(spriteBatch, new Vector2(28.14f, 0.9f));
             }
             else if (Brave.BloodThirstGauge == 1)
             {
-                _braveBloodThirst.Draw(spriteBatch, new Vector2(26.69f, 0.91f));
+                _braveBloodThirst.Draw(spriteBatch, new Vector2(26.69f, 0.9f));
             }
 
             float demonLordStatusEffectIconPosX = 1.2f;

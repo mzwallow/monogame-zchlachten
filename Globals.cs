@@ -15,7 +15,6 @@ namespace Zchlachten
         public static MouseCursor MouseCursor;
 
         public static SoundEffect soundFX;
-        public static SoundEffectInstance _bgmInstance, _soundFXInstance;
         public static string song;
 
         public static float MusicVolume = 0.1f, SoundVolume = 0.1f;

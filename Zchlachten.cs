@@ -47,10 +47,6 @@ namespace Zchlachten
             Globals.PreviousKeyboardState = Globals.CurrentKeyboardState;
             Globals.CurrentKeyboardState = Keyboard.GetState();
 
-            if (Globals.CurrentKeyboardState.IsKeyDown(Keys.O)) // Press 'O' to go to play screen
-                LoadPlayScreen();
-            else if (Keyboard.GetState().IsKeyDown(Keys.P)) // Press 'P' to go to menu screen
-                LoadMenuScreen();
             // * End update logic
 
             Globals.ScreenManager.Update(gameTime);

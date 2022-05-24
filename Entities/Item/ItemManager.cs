@@ -35,19 +35,19 @@ namespace Zchlachten.Entities
 
         public void LoadContent(ContentManager content)
         {
-            _holyWaterTxr = content.Load<Texture2D>("Controls/mystery_potion");
-            _shieldTxr = content.Load<Texture2D>("Controls/shield");
-            _worldTreeTxr = content.Load<Texture2D>("Controls/blessing_of_world_tree");
+            _holyWaterTxr = content.Load<Texture2D>("Items/mystery_potion");
+            _shieldTxr = content.Load<Texture2D>("Items/shield");
+            _worldTreeTxr = content.Load<Texture2D>("Items/blessing_of_world_tree");
             _itemsBag = content.Load<Texture2D>("Items/ItemBag");
 
 
-            _demonLord.ItemsBag[0] = new HolyWater(_world, _holyWaterTxr);
+            _demonLord.ItemsBag[0] = new WorldTree(_world, _worldTreeTxr);
             _demonLord.ItemsBag[1] = new Shield(_world, _shieldTxr);
-            _demonLord.ItemsBag[2] = new WorldTree(_world, _worldTreeTxr);
+            _demonLord.ItemsBag[2] = new HolyWater(_world, _holyWaterTxr);
 
-            _brave.ItemsBag[0] = new WorldTree(_world, _worldTreeTxr);
+            _brave.ItemsBag[0] = new HolyWater(_world, _holyWaterTxr);
             _brave.ItemsBag[1] = new Shield(_world, _shieldTxr);
-            _brave.ItemsBag[2] = new HolyWater(_world, _holyWaterTxr);
+            _brave.ItemsBag[2] = new WorldTree(_world, _worldTreeTxr);
 
             Globals.soundFX = content.Load<SoundEffect>("Sound/UseItems");
             _useItemInstance = Globals.soundFX.CreateInstance();           
@@ -71,7 +71,6 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= itemBagOnePosition.Y + _itemsBag.Height * 0.0234375f / 2
                                     && _demonLord.ItemsBag[0] != null)
                     {
-                        Debug.WriteLine("Demon Item bag 1");
                         Mouse.SetCursor(MouseCursor.Hand);
 
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -89,7 +88,6 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= ItemBagTwoPosition.Y + _itemsBag.Height * 0.0234375f / 2
                                     && _demonLord.ItemsBag[1] != null)
                     {
-                        Debug.WriteLine("Demon Item bag 2");
                         Mouse.SetCursor(MouseCursor.Hand);
 
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -106,7 +104,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= ItemBagThreePosition.Y + _itemsBag.Height * 0.0234375f / 2
                                     && _demonLord.ItemsBag[2] != null)
                     {
-                        Debug.WriteLine("Demon Item bag 3");
+                        
                         Mouse.SetCursor(MouseCursor.Hand);
 
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -129,7 +127,7 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= itemBagOnePosition.Y + _itemsBag.Height * 0.0234375f / 2
                                     && _brave.ItemsBag[0] != null)
                     {
-                        Debug.WriteLine("Brave Item bag 1");
+                       
                         Mouse.SetCursor(MouseCursor.Hand);
 
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
@@ -163,7 +161,6 @@ namespace Zchlachten.Entities
                                     && relativeMousePosition.Y <= ItemBagThreePosition.Y + _itemsBag.Height * 0.0234375f / 2
                                      && _brave.ItemsBag[2] != null)
                     {
-                        Debug.WriteLine("Brave Item bag 3");
                         Mouse.SetCursor(MouseCursor.Hand);
 
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed

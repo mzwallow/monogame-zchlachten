@@ -189,7 +189,6 @@ namespace Zchlachten.Screens
                 if (relativeMousePosition.Y <= 11.7f && relativeMousePosition.Y >= 10.5f
                 && relativeMousePosition.X >= 11.9f && relativeMousePosition.X <= 18f)
                 {
-                    Console.WriteLine("Hover");
                     if (Globals.IsClicked())
                     {
                         MediaPlayer.Stop();

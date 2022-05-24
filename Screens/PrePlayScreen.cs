@@ -40,7 +40,7 @@ namespace Zchlachten.Screens
             _guideButton = new Button(_buttonTexture, _buttonFont)
             {
                 Position = new Vector2((Globals.SCREEN_WIDTH / 2 - _buttonTexture.Width / 2), (Globals.SCREEN_HEIGHT / 2 - _buttonTexture.Height / 2) + 260),
-                Text = "Guide"
+                Text = "Tutorial"
 
             };
             _guideButton.Click += guideButtonClick;
@@ -69,12 +69,6 @@ namespace Zchlachten.Screens
         public override void LoadContent()
         {
             _storyFont = base.Content.Load<SpriteFont>("Fonts/Angsana");
-            // this.song = Content.Load<Song>("Sound/Win");
-            // MediaPlayer.Play(song);
-            //  MediaPlayer.ActiveSongChanged += MediaPlayer_ActiveSongChanged;
-            // //MediaPlayer.Play(song);
-
-
             base.LoadContent();
         }
 

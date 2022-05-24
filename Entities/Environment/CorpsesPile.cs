@@ -27,9 +27,6 @@ namespace Zchlachten.Entities
             _texture = texture;
             _textureOrigin = new Vector2(_texture.Width / 2, _texture.Height / 2);
 
-            // _size = Globals.Camera.ConvertScreenToWorld(new Vector2(_texture.Width, _texture.Height));
-            // Debug.WriteLine("Corpses Pile: " + new Vector2(_texture.Width, _texture.Height));
-            // Debug.WriteLine("Corpses Pile: " + Globals.Camera.ConvertScreenToWorld(new Vector2(_texture.Width, _texture.Height)));
             _size = new Vector2(17.953125f, 5.15625f);
             _scale = _size / new Vector2(_texture.Width, _texture.Height);
 

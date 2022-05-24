@@ -56,10 +56,7 @@ namespace Zchlachten.Screens
         }
         public override void LoadContent()
         {
-
-
             base.LoadContent();
-
         }
 
         public override void Update(GameTime gameTime)
@@ -68,9 +65,7 @@ namespace Zchlachten.Screens
             //draw Button
             foreach (var component in _menuComponents)
                 component.Update(gameTime);
-            Console.WriteLine("MouseX" + _currentMouse.X);
-            Console.WriteLine("MouseY" + _currentMouse.Y);
-            Console.WriteLine(_currentMouse.LeftButton);
+
             //Adjust Volume
             if (_currentMouse.LeftButton == ButtonState.Pressed)
             {
@@ -81,7 +76,7 @@ namespace Zchlachten.Screens
                     Globals.MusicVolume = (_currentMouse.X / 64f - 5) * 0.1f;
                     _musicPosition.X = (Globals.MusicVolume * 10 + 5) * 64;
                     MediaPlayer.Volume = Globals.MusicVolume;
-                    Console.WriteLine(Globals.MusicVolume);
+                    
 
                 }
                 else if (_currentMouse.X > Globals.SCREEN_WIDTH / 2 - ((_volumeBar.Width / 2) + 5) && _currentMouse.X < Globals.SCREEN_WIDTH / 2 + _volumeBar.Width / 2
@@ -91,18 +86,14 @@ namespace Zchlachten.Screens
                     Globals.SoundVolume = (_currentMouse.X / 64f - 5) * 0.1f;
                     _soundPosition.X = (Globals.SoundVolume * 10 + 5) * 64;
                     SoundEffect.MasterVolume = Globals.SoundVolume;
-                    Console.WriteLine(Globals.SoundVolume);
-
-
-
+                    Globals.soundFX.Play();
+                   
                 }
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
-            //base.GraphicsDevice.Clear(Color.DarkBlue);
-
             _spriteBatch.Begin();
             _spriteBatch.Draw(_backgroundTxr,new Vector2(0,0),Color.White);
             //draw button
@@ -117,7 +108,6 @@ namespace Zchlachten.Screens
             _spriteBatch.DrawString(_buttonFont, "SOUNDTRACK", new Vector2((Globals.SCREEN_WIDTH / 2) - _buttonFont.MeasureString("SOUNDTRACK").X / 2, Globals.SCREEN_HEIGHT / 2 + 30), Color.DarkGray);
             _spriteBatch.Draw(_volumeRect, new Rectangle(Globals.SCREEN_WIDTH / 2 - _volumeBar.Width / 2, (Globals.SCREEN_HEIGHT / 2 - _volumeBar.Height / 2) + 120, _volumeBar.Width, _volumeBar.Height), Color.White);
             _spriteBatch.Draw(_volumeRect, new Rectangle((int)_soundPosition.X, (int)_soundPosition.Y, 20, 30), Color.Silver);
-
 
             _spriteBatch.End();
         }

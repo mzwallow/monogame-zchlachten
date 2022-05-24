@@ -42,11 +42,11 @@ namespace Zchlachten.Entities
 
         public void LoadContent(ContentManager content)
         {
-            _buffGod = content.Load<Texture2D>("Controls/blessing_of_god");
-            _buffDevil = content.Load<Texture2D>("Controls/blessing_of_devil");
-            _debuffDragon = content.Load<Texture2D>("Controls/fire_dragon_blood");
-            _debuffGolden = content.Load<Texture2D>("Controls/GoldenSerpantBile");
-            _debuffSlime = content.Load<Texture2D>("Controls/Slime");
+            _buffGod = content.Load<Texture2D>("StatusEffects/blessing_of_god");
+            _buffDevil = content.Load<Texture2D>("StatusEffects/blessing_of_devil");
+            _debuffDragon = content.Load<Texture2D>("StatusEffects/fire_dragon_blood");
+            _debuffGolden = content.Load<Texture2D>("StatusEffects/GoldenSerpantBile");
+            _debuffSlime = content.Load<Texture2D>("StatusEffects/Slime");
 
             Texture2D _holdingDebuffFireIconTxr = content.Load<Texture2D>("StatusEffects/Icons/HoldingDebuffFireIcon");
             _holdingDebuffFireIconSprite = new Sprite(_holdingDebuffFireIconTxr);
@@ -63,8 +63,6 @@ namespace Zchlachten.Entities
             switch (Globals.GameState)
             {
                 case GameState.PRE_PLAY:
-                    Debug.WriteLine("totalTurn: " + Globals.TotalTurn);
-
                     // Random Bullshit Go
                     if (Globals.TotalTurn % 5 == 0 || Globals.TotalTurn == 1)
                     {

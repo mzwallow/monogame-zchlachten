@@ -8,16 +8,23 @@ namespace Zchlachten.Graphics
         public Texture2D Texture { get; set; }
         public Vector2 TextureOrigin { get; set; }
 
-        public float Width { get; set; }
-        public float Height { get; set; }
+        public float Width => Texture.Width * Globals.Camera.Scale * _defaultScale.X;
+        public float Height => Texture.Height * Globals.Camera.Scale * _defaultScale.Y;
+
+        private Vector2 _defaultScale = Vector2.One;
 
         public Sprite(Texture2D texture)
         {
             Texture = texture;
             TextureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+        }
 
-            Width = Texture.Width * Globals.Camera.Scale;
-            Height = Texture.Height * Globals.Camera.Scale;
+        public Sprite(Texture2D texture, Vector2 scale)
+        {
+            Texture = texture;
+            TextureOrigin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+
+            _defaultScale = scale;
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
@@ -29,7 +36,7 @@ namespace Zchlachten.Graphics
                 Color.White,
                 0f,
                 TextureOrigin,
-                Globals.Camera.Scale,
+                Globals.Camera.Scale * _defaultScale,
                 SpriteEffects.FlipVertically,
                 0f
             );
@@ -43,9 +50,8 @@ namespace Zchlachten.Graphics
                 null,
                 Color.White,
                 0f,
-                // TextureOrigin,
-                Vector2.One,
-                Globals.Camera.Scale * scale,
+                TextureOrigin,
+                Globals.Camera.Scale * _defaultScale * scale,
                 SpriteEffects.FlipVertically,
                 0f
             );

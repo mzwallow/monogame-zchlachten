@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace Zchlachten.Entities
@@ -13,21 +14,23 @@ namespace Zchlachten.Entities
         private readonly World _world;
         private readonly Player _demonLord, _brave;
         private readonly EntityManager _entityManager;
+
         private Texture2D _worldTreeTxr, _shieldTxr, _holyWaterTxr;
         private Texture2D _itemsBag;
+        private SoundEffectInstance _useItemInstance;
 
         public ItemManager(
             World world,
             EntityManager entityManager,
-            Player demonlord,
+            Player demonLord,
             Player brave
         )
         {
             _world = world;
             _entityManager = entityManager;
-            _demonLord = demonlord;
-            _brave = brave;
 
+            _demonLord = demonLord;
+            _brave = brave;
         }
 
         public void LoadContent(ContentManager content)
@@ -37,6 +40,7 @@ namespace Zchlachten.Entities
             _worldTreeTxr = content.Load<Texture2D>("Controls/blessing_of_world_tree");
             _itemsBag = content.Load<Texture2D>("Items/ItemBag");
 
+
             _demonLord.ItemsBag[0] = new HolyWater(_world, _holyWaterTxr);
             _demonLord.ItemsBag[1] = new Shield(_world, _shieldTxr);
             _demonLord.ItemsBag[2] = new WorldTree(_world, _worldTreeTxr);
@@ -44,6 +48,9 @@ namespace Zchlachten.Entities
             _brave.ItemsBag[0] = new WorldTree(_world, _worldTreeTxr);
             _brave.ItemsBag[1] = new Shield(_world, _shieldTxr);
             _brave.ItemsBag[2] = new HolyWater(_world, _holyWaterTxr);
+
+            Globals.soundFX = content.Load<SoundEffect>("Sound/UseItems");
+            _useItemInstance = Globals.soundFX.CreateInstance();           
         }
 
         public void Update(GameTime gameTime)
@@ -70,6 +77,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _useItemInstance.Play();
                             // if(_demonLord.ItemsBag.Count == )
                             _demonLord.ItemsBag[0] = null;
                             _demonLord.HP += 45;
@@ -87,8 +95,9 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _useItemInstance.Play();
                             _demonLord.ItemsBag[1] = null;
-                            _demonLord.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
+                            _demonLord.StatusEffectBag.Add(new BuffShield());
                         }
                     }
                     else if (relativeMousePosition.X >= ItemBagThreePosition.X - _itemsBag.Width * 0.0234375f / 2
@@ -103,6 +112,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _useItemInstance.Play();
                             _demonLord.ItemsBag[2] = null;
                             _demonLord.StatusEffectBag.Clear();
                         }
@@ -125,6 +135,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _useItemInstance.Play();
                             _brave.StatusEffectBag.Clear();
                             _brave.ItemsBag[0] = null;
                         }
@@ -141,7 +152,8 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            _brave.StatusEffectBag.Add(new BuffShield(_world, _shieldTxr));
+                            _useItemInstance.Play();
+                            _brave.StatusEffectBag.Add(new BuffShield());
                             _brave.ItemsBag[1] = null;
                         }
                     }
@@ -157,6 +169,7 @@ namespace Zchlachten.Entities
                         if (Globals.CurrentMouseState.LeftButton == ButtonState.Pressed
                                 && Globals.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
+                            _useItemInstance.Play();
                             _brave.HP += 45;
                             _brave.ItemsBag[2] = null;
 

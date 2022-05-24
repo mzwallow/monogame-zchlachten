@@ -6,8 +6,11 @@ using Microsoft.Xna.Framework.Input;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Diagnostics;
 using tainicom.Aether.Physics2D.Common;
+using Microsoft.Xna.Framework.Media;
 using Zchlachten.Entities;
 using Zchlachten.Graphics;
+using Microsoft.Xna.Framework.Audio;
+using Zchlachten.Components;
 
 namespace Zchlachten.Screens
 {
@@ -19,12 +22,12 @@ namespace Zchlachten.Screens
 
         private World _world;
 
-        private SpriteFont _debugFont;
+        private SpriteFont _debugFont, _buttonFont;
 
         private Texture2D _demonLordTxr, _braveTxr;
-        private Texture2D _groundTxr, _corpsesPileTxr;
+        private Texture2D _groundTxr, _corpsesPileTxr, _buttonTexture;
         private Texture2D[] _weaponTxrs;
-        private Sprite _backgroundSprite;
+        private Sprite _backgroundSprite, _winBraveSprite, _winDemonSprite, _backgroundWinSprite, _buttonSprite;
 
         private Ground _ground;
         private CorpsesPile _corpsesPile;
@@ -32,10 +35,15 @@ namespace Zchlachten.Screens
         private EntityManager _entityManager;
         private PlayerManager _playerManager;
         private WeaponManager _weaponManager;
+        private Player _player;
         private StatusEffectManager _statusEffectManager;
         private ItemManager _itemManager;
 
+
         private DebugUI _debugUI;
+        private Vector2 relativeMousePosition;
+        private SoundEffectInstance _endSFX;
+        private Song song;
 
         public PlayScreen(Zchlachten game) : base(game)
         {
@@ -58,6 +66,7 @@ namespace Zchlachten.Screens
             Globals.GameState = GameState.START;
             var values = Enum.GetValues(typeof(PlayerTurn));
             Globals.PlayerTurn = (PlayerTurn)values.GetValue(new Random().Next(values.Length));
+
         }
 
         public override void LoadContent()
@@ -68,6 +77,10 @@ namespace Zchlachten.Screens
 
             // Load fonts
             _debugFont = base.Content.Load<SpriteFont>("Fonts/Arial");
+
+            // Load SoundEffectInstanceWin
+            Globals.soundFX = base.Content.Load<SoundEffect>("Sound/Winning");
+            _endSFX = Globals.soundFX.CreateInstance();
 
             // Load players
             _demonLordTxr = base.Content.Load<Texture2D>("Players/DemonLord");
@@ -80,23 +93,16 @@ namespace Zchlachten.Screens
             );
             _playerManager.LoadContent(base.Content);
 
-            // Load weapons
-            var demonEyeTxr = base.Content.Load<Texture2D>("Weapons/DemonEye");
-            var cursedEyeTxr = base.Content.Load<Texture2D>("Weapons/CursedEye");
-            var lightSwordTxr = base.Content.Load<Texture2D>("Weapons/LightSword");
-            var lightChakraTxr = base.Content.Load<Texture2D>("Weapons/LightChakra");
-            var meadTxr = base.Content.Load<Texture2D>("Weapons/Mead");
-            _weaponTxrs = new Texture2D[]
-            {
-                demonEyeTxr, lightSwordTxr, cursedEyeTxr, lightChakraTxr, meadTxr
-            };
+            // Load BGM
+            song = Content.Load<Song>("Sound/BGM_Playing");
+            MediaPlayer.Play(song);
 
+            // Load weapons
             _weaponManager = new WeaponManager(
                 _world,
                 _entityManager,
                 _playerManager.DemonLord,
-                _playerManager.Brave,
-                _weaponTxrs
+                _playerManager.Brave
             );
             _weaponManager.LoadContent(base.Content);
 
@@ -133,22 +139,37 @@ namespace Zchlachten.Screens
                 _playerManager.DemonLord,
                 _playerManager.Brave
             );
+            // Load button 
+            _buttonTexture = base.Content.Load<Texture2D>("Controls/Button");
+            _buttonFont = base.Content.Load<SpriteFont>("Fonts/Text");
+            _buttonSprite = new Sprite(_buttonTexture);
+
+            //Load WinPlayerSide
+            Texture2D _winBrave = base.Content.Load<Texture2D>("UI/BraveWin");
+            Texture2D _winDemon = base.Content.Load<Texture2D>("UI/DemonWin");
+            _winBraveSprite = new Sprite(_winBrave);
+            _winDemonSprite = new Sprite(_winDemon);
+
+            Texture2D _winBg = base.Content.Load<Texture2D>("UI/BgTransparent");
+            _backgroundWinSprite = new Sprite(_winBg);
+
             _debugUI.LoadContent();
 
             _entityManager.AddEntry(_ground);
             _entityManager.AddEntry(_corpsesPile);
 
-
             _entityManager.AddEntry(_weaponManager);
             _entityManager.AddEntry(_statusEffectManager);
             _entityManager.AddEntry(_playerManager);
             _entityManager.AddEntry(_itemManager);
-            
+
             // _entityManager.AddEntry(_debugUI);
         }
 
         public override void Update(GameTime gameTime)
         {
+            relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
+
             _world.Step((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             Globals.Camera.Update();
@@ -161,6 +182,22 @@ namespace Zchlachten.Screens
 
             if (Globals.CurrentKeyboardState.IsKeyDown(Keys.G))
                 Globals.DebugView.Enabled = !Globals.DebugView.Enabled;
+
+            if (Globals.GameState == GameState.END)
+
+            {
+                if (relativeMousePosition.Y <= 11.7f && relativeMousePosition.Y >= 10.5f
+                && relativeMousePosition.X >= 11.9f && relativeMousePosition.X <= 18f)
+                {
+                    Console.WriteLine("Hover");
+                    if (Globals.IsClicked())
+                    {
+                        MediaPlayer.Stop();
+                        Globals.ScreenManager.LoadScreen(new MenuScreen(base.Game));
+                    }
+                }
+                _endSFX.Play();
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -195,14 +232,34 @@ namespace Zchlachten.Screens
             // Draw entities
             _entityManager.Draw(gameTime, _spriteBatch);
 
-            // foreach (var b in _world.BodyList)
-            // {
-            //     foreach (var f in b.FixtureList)
-            //         Globals.DebugView.DrawShape(f, new Transform(b.Position, b.Rotation), Color.Aqua);
-            // }
+            //Draw EndGame Window
+            if (Globals.GameState == GameState.END)
+            {
+                _backgroundWinSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2));
+
+                if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
+                {
+                    _winBraveSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2 + 4f));
+
+                }
+                else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
+                {
+                    _winDemonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, Globals.Camera.Height / 2 + 4f));
+
+                }
+                _buttonSprite.Draw(_spriteBatch, new Vector2(Globals.Camera.Width / 2, (Globals.Camera.Height / 2) + 2.3f));//12.1,7.5
+                _spriteBatch.DrawString(_buttonFont, "Back To Menu", new Vector2(12.3f, 10.4f), Color.Black, 0f, new Vector2(0, 0), Globals.Camera.Scale, SpriteEffects.FlipVertically, 0f);
+            }
 
             _spriteBatch.End();
             Globals.DebugView.EndCustomDraw();
         }
+
+        private void backToMenuButtonClick(object sender, EventArgs e)
+        {
+            MediaPlayer.Stop();
+            Globals.ScreenManager.LoadScreen(new MenuScreen(base.Game));
+        }
+
     }
 }

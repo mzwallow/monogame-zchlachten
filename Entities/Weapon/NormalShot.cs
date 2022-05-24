@@ -12,17 +12,6 @@ namespace Zchlachten.Entities
         {
             Type = WeaponType.NORMAL;
             Damage = NORMAL_SHOT_DAMAGE;
-           
-            
-            
-        }
-
-        public NormalShot(World world, Player player, Player enemy, Texture2D texture, Vector2 position)
-            : base(world, player, enemy, texture, position)
-        {
-            Type = WeaponType.NORMAL;
-            Damage = NORMAL_SHOT_DAMAGE;
-          
         }
 
         public override void Update(GameTime gameTime){}

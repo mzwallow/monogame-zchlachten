@@ -92,7 +92,7 @@ namespace Zchlachten.Entities
                     {
                         var x = Player.HoldStatusEffectBag[i];
 
-                        if (x.Type == StatusEffectType.SHIELD || x.Type == StatusEffectType.ATTACK)
+                        if (x.Type == StatusEffectType.SHIELD || x.Type == StatusEffectType.ATTACK_UP)
                         {
                             Player.StatusEffectBag.Add(x);
                             Player.HoldStatusEffectBag.RemoveAt(i);
@@ -113,7 +113,7 @@ namespace Zchlachten.Entities
                 {
                     foreach (StatusEffect status in Player.HoldStatusEffectBag)
                     {
-                        if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK)
+                        if (status.Type != StatusEffectType.SHIELD && status.Type != StatusEffectType.ATTACK_UP)
                             Enemy.StatusEffectBag.Add(status);
                     }
                 }

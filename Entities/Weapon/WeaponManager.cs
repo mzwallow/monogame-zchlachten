@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using tainicom.Aether.Physics2D.Dynamics;
+using Microsoft.Xna.Framework.Audio;
+
 using Zchlachten.Graphics;
 
 namespace Zchlachten.Entities
@@ -38,11 +40,15 @@ namespace Zchlachten.Entities
         private Texture2D _demonEyeTxr, _lightSwordTxr, _cursedEye, _lightChakra, _mead;
         private Texture2D _flagLittleLeft, _flagLittleRight, _flagFullRight, _flagFullLeft, _NoWind;
         private Texture2D _inHandWeaponTxr, _weaponBagTxr, _chargeGaugetxr;
+
         private Sprite _inHandWeaponBGSprite, _weaponBagBGSprite, _flag;
+        private Sprite _inHandWeaponSprite, _weaponInBagSprite;
+
+        private SoundEffectInstance _shootingSFXInstance, _addWeaponInstance, _useItemInstance;
 
         static Random r = new Random();
 
-        private float _rotation;
+        private float _weaponRotation;
         private float _rangeForce = 0.4f;
         private float _chargeGauge;
         private float _MeterControl = 1f;
@@ -52,8 +58,7 @@ namespace Zchlachten.Entities
             World world,
             EntityManager entityManager,
             Player demonLord,
-            Player brave,
-            Texture2D[] weaponsTxrs
+            Player brave
         )
         {
             _world = world;
@@ -61,12 +66,6 @@ namespace Zchlachten.Entities
 
             _demonLord = demonLord;
             _brave = brave;
-
-            _demonEyeTxr = weaponsTxrs[0];
-            _lightSwordTxr = weaponsTxrs[1];
-            _cursedEye = weaponsTxrs[2];
-            _lightChakra = weaponsTxrs[3];
-            _mead = weaponsTxrs[4];
 
             _chargeGauge = MIN_CHARGE;
         }
@@ -77,6 +76,12 @@ namespace Zchlachten.Entities
             _inHandWeaponTxr = content.Load<Texture2D>("UI/InHandWeapon");
             _weaponBagTxr = content.Load<Texture2D>("UI/WeaponBag");
             _chargeGaugetxr = content.Load<Texture2D>("Players/MinChargeGauge");
+
+            _demonEyeTxr = content.Load<Texture2D>("Weapons/DemonEye");
+            _cursedEye = content.Load<Texture2D>("Weapons/CursedEye");
+            _lightSwordTxr = content.Load<Texture2D>("Weapons/LightSword");
+            _lightChakra = content.Load<Texture2D>("Weapons/LightChakra");
+            _mead = content.Load<Texture2D>("Weapons/Mead");
 
             Texture2D inHandWeaponBGTxr = content.Load<Texture2D>("UI/InHandWeapon");
             _inHandWeaponBGSprite = new Sprite(inHandWeaponBGTxr);
@@ -92,12 +97,18 @@ namespace Zchlachten.Entities
             _flagLittleRight = content.Load<Texture2D>("Environments/LittleWindRight");
             _flagFullRight = content.Load<Texture2D>("Environments/FullWindRight");
 
+            Globals.soundFX = content.Load<SoundEffect>("Sound/Shooting");
+            _shootingSFXInstance = Globals.soundFX.CreateInstance();
+            Globals.soundFX = content.Load<SoundEffect>("Sound/GetItems");
+            _addWeaponInstance = Globals.soundFX.CreateInstance();
+            Globals.soundFX = content.Load<SoundEffect>("Sound/UseItems");
+            _useItemInstance = Globals.soundFX.CreateInstance();
         }
 
         public void Update(GameTime gameTime)
         {
             Vector2 relativeMousePosition = Globals.Camera.ConvertScreenToWorld(Globals.CurrentMouseState.Position);
-            //Debug.WriteLine(relativeMousePosition);
+             //Debug.WriteLine(relativeMousePosition);
 
             switch (Globals.GameState)
             {
@@ -106,7 +117,7 @@ namespace Zchlachten.Entities
                     if (Globals.TotalTurn % 3 == 0)
                     {
                         _wind = r.Next(-2, 2);
-                        _world.Gravity = new Vector2(_wind, -12f);
+                        _world.Gravity = new Vector2(_wind, -9.8f);
                         Console.WriteLine("Wind: " + _wind);
                     }
                     switch (_wind)
@@ -128,55 +139,25 @@ namespace Zchlachten.Entities
                             break;
                     }
 
-                    Console.WriteLine("Player Turn: " + Globals.PlayerTurn);
-
-                    if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
-                    {
-
-                        if (_demonLord.StatusEffectBag.Count > 0)
-                        {
-                            foreach (StatusEffect status in _demonLord.StatusEffectBag)
-                            {
-                                if (status.Type == StatusEffectType.DRUNKEN)
-                                {
-                                    Console.WriteLine("Demon Drunken");
-                                    _rangeForce = 0.2f;
-
-                                }
-                            }
-                        }
-                    }
-                    else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
-                    {
-                        if (_brave.StatusEffectBag.Count > 0)
-                        {
-                            foreach (StatusEffect status in _brave.StatusEffectBag)
-                            {
-                                if (status.Type == StatusEffectType.DRUNKEN)
-                                {
-                                    Console.WriteLine("Brave Drunken");
-                                    _rangeForce = 0.2f;
-
-                                }
-                            }
-                        }
-                    } // End if
-
-                    // Globals.GameState = GameState.PLAYING;
                     break;
                 case GameState.PLAYING:
+                    //set Range of Force
+                    _rangeForce = 0.4f;
                     if (Globals.PlayerTurn == PlayerTurn.DEMON_LORD)
                     {
+                        //Handle Apply Drunken
+                        ApplyDrunken(_demonLord);
+                      
                         // Handle when in-hand weapon is null
                         InHandWeaponHandler(_demonLord, _brave, _demonEyeTxr);
 
                         // Check shootable angle
-                        if (relativeMousePosition.X >= _demonLord.Body.Position.X + _demonLord.Size.X / 2
-                                && relativeMousePosition.Y >= _demonLord.Body.Position.Y + _demonLord.Size.Y / 2)
+                        if (relativeMousePosition.X >= _demonLord.Position.X + _demonLord.Width / 2
+                                && relativeMousePosition.Y >= _demonLord.Position.Y + _demonLord.Height / 2)
                         {
-                            _rotation = (float)Math.Atan2(
-                                relativeMousePosition.Y - (_demonLord.Body.Position.Y + _demonLord.Size.Y / 2),
-                                relativeMousePosition.X - (_demonLord.Body.Position.X + _demonLord.Size.X / 2)
+                            _weaponRotation = (float)Math.Atan2(
+                                relativeMousePosition.Y - (_demonLord.Position.Y + _demonLord.Height / 2),
+                                relativeMousePosition.X - (_demonLord.Position.X + _demonLord.Width / 2)
                             );
 
                             // Handle shooting force when holding mouse
@@ -184,10 +165,10 @@ namespace Zchlachten.Entities
 
                             // Handle shooting when mouse released
                             Vector2 weaponPosition = new Vector2(
-                                _demonLord.Body.Position.X + _demonLord.Size.X / 2 + 0.5f,
-                                _demonLord.Body.Position.Y + _demonLord.Size.Y / 2 + 0.5f
+                                _demonLord.Position.X + _demonLord.Width / 2 + 0.5f,
+                                _demonLord.Position.Y + _demonLord.Height / 2 + 0.5f
                             );
-                            ShootingHandler(_demonLord, _rotation, weaponPosition);
+                            ShootingHandler(_demonLord, _weaponRotation, weaponPosition);
                         }
                         else _chargeGauge = 0;
 
@@ -209,16 +190,19 @@ namespace Zchlachten.Entities
                     }
                     else if (Globals.PlayerTurn == PlayerTurn.BRAVE)
                     {
+                        //Handle Apply Drunken
+                        ApplyDrunken(_brave);
+                    
                         // Handle when in-hand weapon is null
                         InHandWeaponHandler(_brave, _demonLord, _lightSwordTxr);
 
                         // Check shootable angle
-                        if (relativeMousePosition.X <= _brave.Body.Position.X - _brave.Size.X / 2
-                                && relativeMousePosition.Y >= _brave.Body.Position.Y + _brave.Size.Y / 2)
+                        if (relativeMousePosition.X <= _brave.Position.X - _brave.Width / 2
+                                && relativeMousePosition.Y >= _brave.Position.Y + _brave.Height / 2)
                         {
-                            _rotation = (float)Math.Atan2(
-                                relativeMousePosition.Y - (_brave.Body.Position.Y + _brave.Size.Y / 2),
-                                relativeMousePosition.X - (_brave.Body.Position.X - _brave.Size.X / 2)
+                            _weaponRotation = (float)Math.Atan2(
+                                relativeMousePosition.Y - (_brave.Position.Y + _brave.Height / 2),
+                                relativeMousePosition.X - (_brave.Position.X - _brave.Width / 2)
                             );
 
                             // Handle shooting force when holding mouse
@@ -226,10 +210,10 @@ namespace Zchlachten.Entities
 
                             // Handle shooting when mouse released
                             Vector2 weaponPosition = new Vector2(
-                                _brave.Body.Position.X - _brave.Size.X / 2 - 0.5f,
-                                _brave.Body.Position.Y + _brave.Size.Y / 2 + 0.5f
+                                _brave.Position.X - _brave.Width / 2 - 0.5f,
+                                _brave.Position.Y + _brave.Height / 2 + 0.5f
                             );
-                            ShootingHandler(_brave, _rotation, weaponPosition);
+                            ShootingHandler(_brave, _weaponRotation, weaponPosition);
                         }
                         else _chargeGauge = 0;
 
@@ -285,10 +269,10 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _arrowTxr,
-                    _demonLord.Body.Position + new Vector2(_demonLord.Size.X / 2, _demonLord.Size.Y / 2),
+                    _demonLord.Position + new Vector2(_demonLord.Width / 2, _demonLord.Height / 2),
                     null,
                     Color.White,
-                    _rotation + MathHelper.ToRadians(90f),
+                    _weaponRotation + MathHelper.ToRadians(90f),
                     new Vector2(_arrowTxr.Width / 2, _arrowTxr.Height),
                     new Vector2(0.05f, 1f) / new Vector2(_arrowTxr.Width, _arrowTxr.Height),
                     SpriteEffects.None,
@@ -297,7 +281,7 @@ namespace Zchlachten.Entities
                 if (!Globals.IsShooting)
                     spriteBatch.Draw(
                          _chargeGaugetxr,
-                         _demonLord.Body.Position + new Vector2(_demonLord.Size.X - _chargeGaugetxr.Width / 2, _demonLord.Size.Y / 2 + 0.5f),
+                         _demonLord.Position + new Vector2(_demonLord.Width - _chargeGaugetxr.Width / 2, _demonLord.Height / 2 + 0.5f),
                          null,
                          Color.White,
                          MathHelper.ToRadians(90f),
@@ -311,10 +295,10 @@ namespace Zchlachten.Entities
             {
                 spriteBatch.Draw(
                     _arrowTxr,
-                    new Vector2(_brave.Body.Position.X - _brave.Size.X / 2, _brave.Body.Position.Y + _brave.Size.Y / 2),
+                    new Vector2(_brave.Position.X - _brave.Width / 2, _brave.Position.Y + _brave.Height / 2),
                     null,
                     Color.White,
-                    _rotation + MathHelper.ToRadians(90f),
+                    _weaponRotation + MathHelper.ToRadians(90f),
                     new Vector2(_arrowTxr.Width / 2, _arrowTxr.Height),
                     new Vector2(0.05f, 1f) / new Vector2(_arrowTxr.Width, _arrowTxr.Height),
                     SpriteEffects.None,
@@ -323,7 +307,7 @@ namespace Zchlachten.Entities
                 if (!Globals.IsShooting)
                     spriteBatch.Draw(
                         _chargeGaugetxr,
-                        _brave.Body.Position + new Vector2(_brave.Size.X - _chargeGaugetxr.Height / 2, _brave.Size.Y / 2 + 0.5f),
+                        _brave.Position + new Vector2(_brave.Width - _chargeGaugetxr.Height / 2, _brave.Height / 2 + 0.5f),
                         null,
                         Color.White,
                         MathHelper.ToRadians(90f),
@@ -334,7 +318,7 @@ namespace Zchlachten.Entities
                     );
             }
 
-            // Demon Lord in-hand weapon
+            // Draw Demon Lord in-hand weapon
             _inHandWeaponBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -344,20 +328,15 @@ namespace Zchlachten.Entities
             );
             if (_demonLord.InHandWeapon != null)
             {
-                spriteBatch.Draw(
-                    _demonLord.InHandWeapon.Texture,
+                _inHandWeaponSprite = new Sprite(_demonLord.InHandWeapon.Texture);
+                _inHandWeaponSprite.Draw(
+                    spriteBatch,
                     new Vector2(DEMON_LORD_IN_HAND_WEAPON_POS_X, DEMON_LORD_IN_HAND_WEAPON_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _demonLord.InHandWeapon.TextureOrigin,
-                    _demonLord.InHandWeapon.Scale * 1.5f,
-                    SpriteEffects.FlipVertically,
-                    0f
+                    new Vector2(1.5f)
                 );
             }
 
-            // Demon Lord weapon bag 1
+            // Draw Demon Lord weapon bag 1
             _weaponBagBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -365,7 +344,7 @@ namespace Zchlachten.Entities
                     DEMON_LORD_WEAPON_BAG1_POS_Y
                 )
             );
-            // Demon Lord weapon bag 2
+            // Draw Demon Lord weapon bag 2
             _weaponBagBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -373,47 +352,15 @@ namespace Zchlachten.Entities
                     DEMON_LORD_WEAPON_BAG2_POS_Y
                 )
             );
-            if (_demonLord.WeaponsBag.Count == 1)
+            var demonLordWeaponInBagPosY = DEMON_LORD_WEAPON_BAG1_POS_Y;
+            foreach (Weapon weapon in _demonLord.WeaponsBag)
             {
-                spriteBatch.Draw(
-                    _demonLord.WeaponsBag[0].Texture,
-                    new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _demonLord.WeaponsBag[0].TextureOrigin,
-                    _demonLord.WeaponsBag[0].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
-            }
-            if (_demonLord.WeaponsBag.Count == 2)
-            {
-                spriteBatch.Draw(
-                    _demonLord.WeaponsBag[0].Texture,
-                    new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, DEMON_LORD_WEAPON_BAG1_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _demonLord.WeaponsBag[0].TextureOrigin,
-                    _demonLord.WeaponsBag[0].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
-                spriteBatch.Draw(
-                    _demonLord.WeaponsBag[1].Texture,
-                    new Vector2(DEMON_LORD_WEAPON_BAG2_POS_X, DEMON_LORD_WEAPON_BAG2_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _demonLord.WeaponsBag[1].TextureOrigin,
-                    _demonLord.WeaponsBag[1].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
+                _inHandWeaponSprite = new Sprite(weapon.Texture);
+                _inHandWeaponSprite.Draw(spriteBatch, new Vector2(DEMON_LORD_WEAPON_BAG1_POS_X, demonLordWeaponInBagPosY));
+                demonLordWeaponInBagPosY += 1f;
             }
 
-            // Brave in-hand weapon
+            // Draw Brave in-hand weapon
             _inHandWeaponBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -423,20 +370,15 @@ namespace Zchlachten.Entities
             );
             if (_brave.InHandWeapon != null)
             {
-                spriteBatch.Draw(
-                    _brave.InHandWeapon.Texture,
+                _inHandWeaponSprite = new Sprite(_brave.InHandWeapon.Texture);
+                _inHandWeaponSprite.Draw(
+                    spriteBatch,
                     new Vector2(BRAVE_IN_HAND_WEAPON_POS_X, BRAVE_IN_HAND_WEAPON_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _brave.InHandWeapon.TextureOrigin,
-                    _brave.InHandWeapon.Scale * 1.5f,
-                    SpriteEffects.FlipVertically,
-                    0f
+                    new Vector2(1.5f)
                 );
             }
 
-            // Brave weapon bag 1
+            // Draw Brave weapon bag 1
             _weaponBagBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -444,7 +386,7 @@ namespace Zchlachten.Entities
                     BRAVE_WEAPON_BAG1_POS_Y
                 )
             );
-            // Brave weapon bag 2
+            // Draw Brave weapon bag 2
             _weaponBagBGSprite.Draw(
                 spriteBatch,
                 new Vector2(
@@ -452,51 +394,19 @@ namespace Zchlachten.Entities
                     BRAVE_WEAPON_BAG2_POS_Y
                 )
             );
-            if (_brave.WeaponsBag.Count == 1)
+            var braveWeaponInBagPosY = BRAVE_WEAPON_BAG1_POS_Y;
+            foreach (Weapon weapon in _brave.WeaponsBag)
             {
-                spriteBatch.Draw(
-                    _brave.WeaponsBag[0].Texture,
-                    new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _brave.WeaponsBag[0].TextureOrigin,
-                    _brave.WeaponsBag[0].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
-            }
-            if (_brave.WeaponsBag.Count == 2)
-            {
-                spriteBatch.Draw(
-                    _brave.WeaponsBag[0].Texture,
-                    new Vector2(BRAVE_WEAPON_BAG1_POS_X, BRAVE_WEAPON_BAG1_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _brave.WeaponsBag[0].TextureOrigin,
-                    _brave.WeaponsBag[0].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
-                spriteBatch.Draw(
-                    _brave.WeaponsBag[1].Texture,
-                    new Vector2(BRAVE_WEAPON_BAG2_POS_X, BRAVE_WEAPON_BAG2_POS_Y),
-                    null,
-                    Color.White,
-                    0f,
-                    _brave.WeaponsBag[1].TextureOrigin,
-                    _brave.WeaponsBag[1].Scale,
-                    SpriteEffects.FlipVertically,
-                    0f
-                );
-
+                _inHandWeaponSprite = new Sprite(weapon.Texture);
+                _inHandWeaponSprite.Draw(spriteBatch, new Vector2(BRAVE_WEAPON_BAG1_POS_X, braveWeaponInBagPosY));
+                braveWeaponInBagPosY += 1f;
             }
 
+            // Draw a war flag
             if (_flag is null)
             {
                 _flag = new Sprite(_NoWind);
-                _world.Gravity = new Vector2(0, -12f);
+                _world.Gravity = new Vector2(0, -9.8f);
             }
             _flag.Draw(
                 spriteBatch,
@@ -512,16 +422,16 @@ namespace Zchlachten.Entities
             Weapon weapon;
             switch (weaponType)
             {
-                case WeaponType.BIG:
-                    weapon = new BigShot(
+                case WeaponType.POWER:
+                    weapon = new PowerShot(
                         _world,
                         player,
                         enemy,
                         player.Side == PlayerSide.BRAVE ? _lightChakra : _cursedEye
                     );
                     break;
-                case WeaponType.CHARM:
-                    weapon = new CharmShot(_world, player, enemy, _mead);
+                case WeaponType.DRUNK:
+                    weapon = new DrunkShot(_world, player, enemy, _mead);
                     break;
                 default:
                     weapon = RandomWeapon(player, enemy);
@@ -551,6 +461,7 @@ namespace Zchlachten.Entities
 
                     if (Globals.IsClicked())
                     {
+                        _useItemInstance.Play();
                         player.InHandWeapon = player.WeaponsBag[0];
                         player.WeaponsBag.Remove(player.WeaponsBag[0]);
                     }
@@ -565,6 +476,7 @@ namespace Zchlachten.Entities
 
                     if (Globals.IsClicked())
                     {
+                        _useItemInstance.Play();
                         player.InHandWeapon = player.WeaponsBag[1];
                         player.WeaponsBag.Remove(player.WeaponsBag[1]);
                     }
@@ -604,17 +516,19 @@ namespace Zchlachten.Entities
         {
             if (Globals.IsReleased() && !Globals.IsShooting)
             {
+                _shootingSFXInstance.Play(); ;
+
                 Globals.IsShooting = true;
 
                 foreach (StatusEffect status in player.StatusEffectBag)
                 {
                     switch (status.Type)
                     {
-                        case StatusEffectType.ATTACK:
+                        case StatusEffectType.ATTACK_UP:
                             var tmp1 = player.InHandWeapon.Damage * 1.25f;
                             Console.WriteLine("Damage: " + tmp1);
                             player.InHandWeapon.Damage = (int)Math.Ceiling(tmp1);
-                            Console.WriteLine("Inhand Damage: " + player.InHandWeapon.Damage);
+
                             break;
                         case StatusEffectType.SLIME_MUCILAGE:
                             var tmp2 = player.InHandWeapon.Damage * 0.8f;
@@ -623,6 +537,7 @@ namespace Zchlachten.Entities
                             Console.WriteLine("Inhand Damage: " + player.InHandWeapon.Damage);
                             break;
                     }
+
 
                 }
 
@@ -633,9 +548,10 @@ namespace Zchlachten.Entities
                 player.InHandWeapon.Body.ApplyLinearImpulse(
                     new Vector2(
                         x * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)),
-                        y * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f))
+
+                    y * (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f))
                     )
-                );
+             );
                 Console.WriteLine("Force: " + (MIN_FORCE + _rangeForce * (_chargeGauge / 0.2f)));
 
                 _entityManager.AddEntry(player.InHandWeapon);
@@ -644,16 +560,38 @@ namespace Zchlachten.Entities
             }
         }
 
+        //Handle Apply Drunken
+        private void ApplyDrunken(Player player)
+        {
+
+            if (player.StatusEffectBag.Count > 0)
+            {
+                foreach (StatusEffect status in player.StatusEffectBag)
+                {
+                    if (status.Type == StatusEffectType.DRUNKEN)
+                    {
+                        Console.WriteLine(player +" Drunken");
+                        _rangeForce = 0.2f;
+                    }
+                }
+            }
+        }
+
+
+
+
         // Handle player blood thirst gauge
         private void BloodThirstGaugeHandler()
         {
             if (_demonLord.BloodThirstGauge == 2)
             {
-                _demonLord.BloodThirstGauge = 0;
+                _addWeaponInstance.Play();
 
+                _demonLord.BloodThirstGauge = 0;
                 var newWeapon = RandomWeapon(_demonLord, _brave);
                 if (_demonLord.WeaponsBag.Count == 2)
                 {
+
                     if (_brave.WeaponsBag.Count < 2)
                     {
                         newWeapon.Player = _brave;
@@ -673,8 +611,9 @@ namespace Zchlachten.Entities
 
             if (_brave.BloodThirstGauge == 2)
             {
-                _brave.BloodThirstGauge = 0;
+                _addWeaponInstance.Play();
 
+                _brave.BloodThirstGauge = 0;
                 var newWeapon = RandomWeapon(_brave, _demonLord);
                 if (_brave.WeaponsBag.Count == 2)
                 {
@@ -687,13 +626,17 @@ namespace Zchlachten.Entities
                         _demonLord.WeaponsBag.Add(newWeapon);
                         Debug.WriteLine("Brave's weapon bag is full. Demon Lord got '" + newWeapon.Type + "' instead.");
                     }
+
                 }
                 else
                 {
                     _brave.WeaponsBag.Add(newWeapon);
                     Debug.WriteLine("Brave got: " + newWeapon.Type);
+
                 }
             }
         }
     }
 }
+
+

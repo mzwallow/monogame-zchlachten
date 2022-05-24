@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using Zchlachten.Components;
 
@@ -49,16 +50,16 @@ namespace Zchlachten.Screens
                 _backToMenuButton
             };
 
-            // Globals._bgmInstance.Resume();
 
 
             base.Initialize();
         }
         public override void LoadContent()
         {
-            
+
 
             base.LoadContent();
+
         }
 
         public override void Update(GameTime gameTime)
@@ -89,7 +90,7 @@ namespace Zchlachten.Screens
                     //Adjust SoundFX Volume
                     Globals.SoundVolume = (_currentMouse.X / 64f - 5) * 0.1f;
                     _soundPosition.X = (Globals.SoundVolume * 10 + 5) * 64;
-                    //MediaPlayer.Volume = Globals.SoundVolume;
+                    SoundEffect.MasterVolume = Globals.SoundVolume;
                     Console.WriteLine(Globals.SoundVolume);
 
 

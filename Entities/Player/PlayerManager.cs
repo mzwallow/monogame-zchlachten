@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using tainicom.Aether.Physics2D.Dynamics;
 using Zchlachten.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Zchlachten.Entities
 {
@@ -27,6 +28,8 @@ namespace Zchlachten.Entities
         private float _DemonCurrentHp;
         private float _BraveCurrentHp;
 
+        
+
         public PlayerManager(
             World world,
             EntityManager entityManager,
@@ -35,7 +38,7 @@ namespace Zchlachten.Entities
         {
             _world = world;
             _entityManager = entityManager;
-
+            
             DemonLord = new DemonLord(
                     _world,
                     demonLordTxr,
@@ -49,7 +52,6 @@ namespace Zchlachten.Entities
 
             _entityManager.AddEntry(DemonLord);
             _entityManager.AddEntry(Brave);
-
         }
 
         public void LoadContent(ContentManager content)
@@ -68,6 +70,11 @@ namespace Zchlachten.Entities
 
             _buffShieldSprite = new Sprite(content.Load<Texture2D>("StatusEffects/Icons/BuffShieldIcon"));
             _buffAttackSprite = new Sprite(content.Load<Texture2D>("StatusEffects/Icons/BuffAttackIcon"));
+
+            SoundEffect attackSFX = content.Load<SoundEffect>("Sound/Attacked");
+            SoundEffectInstance attackSFXInstance = attackSFX.CreateInstance();
+            DemonLord.AttackSFXInstance = attackSFXInstance;
+            Brave.AttackSFXInstance = attackSFXInstance;
         }
 
         public void Update(GameTime gameTime)
@@ -96,7 +103,9 @@ namespace Zchlachten.Entities
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            _demonHpSprite.TextureOrigin = Vector2.Zero;
             _demonHpSprite.Draw(spriteBatch, new Vector2(4.1f, 0.71f), new Vector2(_DemonCurrentHp, 1f));
+            _braveHpSprite.TextureOrigin = Vector2.Zero;
             _braveHpSprite.Draw(spriteBatch, new Vector2(25.9f, 0.71f), new Vector2(-_BraveCurrentHp, 1f));
             _hpBarSprite.Draw(spriteBatch, new Vector2(Globals.Camera.Width / 2, 1.5f));
 
@@ -140,7 +149,7 @@ namespace Zchlachten.Entities
                     case StatusEffectType.SHIELD:
                         _buffShieldSprite.Draw(spriteBatch, new Vector2(demonLordStatusEffectIconPosX, 1.8f));
                         break;
-                    case StatusEffectType.ATTACK:
+                    case StatusEffectType.ATTACK_UP:
                         _buffAttackSprite.Draw(spriteBatch, new Vector2(demonLordStatusEffectIconPosX, 1.8f));
                         break;
                 }
@@ -167,7 +176,7 @@ namespace Zchlachten.Entities
                     case StatusEffectType.SHIELD:
                         _buffShieldSprite.Draw(spriteBatch, new Vector2(braveStatusEffectIconPosX, 1.8f));
                         break;
-                    case StatusEffectType.ATTACK:
+                    case StatusEffectType.ATTACK_UP:
                         _buffAttackSprite.Draw(spriteBatch, new Vector2(braveStatusEffectIconPosX, 1.8f));
                         break;
                 }
